@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Klondike Table Prototype",
-    "slug": "klondike-table-prototype",
+    "slug": "solitare",
     "version": "0.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -12,9 +12,12 @@
       "backgroundColor": "#1f6b45"
     },
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.solitare.klondiketable.prototype"
     },
     "android": {
+      "package": "com.solitare.klondiketable.prototype",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#1f6b45",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -24,6 +27,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5680ab48-15d5-4bcb-babe-31a91e55492e"
+      }
     }
   }
 }

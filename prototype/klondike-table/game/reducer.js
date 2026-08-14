@@ -83,9 +83,13 @@ function canDrop(moving, onto, state) {
   return canStackOnTableau(head, target);
 }
 
-function applyDrop(state, onto) {
-  if (!state.selection) return state;
+function applyDrop(state, onto, from, cardIndex) {
   const next = cloneState(state);
+  // Drag can name the source directly; tap→tap uses existing selection.
+  if (from) {
+    next.selection = { from, cardIndex: cardIndex ?? 0 };
+  }
+  if (!next.selection) return state;
   const sel = next.selection;
   if (samePile(sel.from, onto)) {
     next.selection = null;
@@ -120,6 +124,42 @@ function applySelect(state, pile, cardIndex) {
   return { ...state, selection: { from: pile, cardIndex: idx } };
 }
 
+function applyAutoMove(state, from, cardIndex) {
+  if (from.area === 'stock') return state;
+  const cards = getPile(state, from);
+  if (cards.length === 0) return { ...state, selection: null };
+
+  let idx = cardIndex;
+  if (from.area === 'waste' || from.area === 'foundation') {
+    idx = cards.length - 1;
+  } else {
+    idx = cardIndex ?? cards.length - 1;
+    if (idx < 0 || idx >= cards.length || !cards[idx].faceUp) {
+      return { ...state, selection: null };
+    }
+    if (!tableauRunIsLegal(cards, idx)) return { ...state, selection: null };
+  }
+
+  const moving = takeSelection(state, { from, cardIndex: idx });
+  if (!moving) return { ...state, selection: null };
+
+  // Prefer Foundations (e.g. 2 → matching Ace), then any legal Tableau.
+  for (let i = 0; i < 4; i++) {
+    const onto = { area: 'foundation', index: i };
+    if (canDrop(moving, onto, state)) {
+      return applyDrop(state, onto, from, idx);
+    }
+  }
+  for (let i = 0; i < 7; i++) {
+    const onto = { area: 'tableau', index: i };
+    if (from.area === 'tableau' && from.index === i) continue;
+    if (canDrop(moving, onto, state)) {
+      return applyDrop(state, onto, from, idx);
+    }
+  }
+  return { ...state, selection: null };
+}
+
 function applyTap(state, pile, cardIndex) {
   if (pile.area === 'stock') return reduce(state, { type: 'DRAW' });
   if (state.selection) return applyDrop(state, pile);
@@ -129,7 +169,17 @@ function applyTap(state, pile, cardIndex) {
 function draw(state) {
   const next = cloneState(state);
   next.selection = null;
-  if (next.stock.length === 0) return next; // USPC: one pass, no redeal
+  if (next.stock.length === 0) {
+    // Computer Klondike: recycle Waste → Stock (unlimited passes).
+    // Flip the Waste pile face-down onto the Stock so drawing continues.
+    if (next.waste.length === 0) return next;
+    next.stock = next.waste
+      .slice()
+      .reverse()
+      .map((c) => ({ ...c, faceUp: false }));
+    next.waste = [];
+    return next;
+  }
   const card = next.stock.pop();
   next.waste.push({ ...card, faceUp: true });
   return next;
@@ -146,7 +196,9 @@ export function reduce(state, action) {
     case 'SELECT':
       return applySelect(state, action.pile, action.cardIndex);
     case 'DROP':
-      return applyDrop(state, action.onto);
+      return applyDrop(state, action.onto, action.from, action.cardIndex);
+    case 'AUTO_MOVE':
+      return applyAutoMove(state, action.pile, action.cardIndex);
     case 'CLEAR_SELECTION':
       return { ...state, selection: null };
     default:

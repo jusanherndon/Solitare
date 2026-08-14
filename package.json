@@ -3,6 +3,16 @@
   "private": true,
   "scripts": {
     "prototype:table": "npm --prefix prototype/klondike-table start",
+    "prototype:table:apk": "bash scripts/build-prototype-apk.sh eas",
+    "prototype:table:apk:local": "bash scripts/build-prototype-apk.sh local",
+    "prototype:table:apk:help": "bash scripts/build-prototype-apk.sh help",
     "bootstrap:vendor": "bash scripts/bootstrap-vendor.sh"
+  },
+  "scriptsHelp": {
+    "prototype:table": "Run the Klondike table prototype (web / Expo Go).",
+    "prototype:table:apk": "Build a phone-installable Android APK via EAS cloud. Runs in prototype/klondike-table (needs Expo login). If expo is missing: npm run bootstrap:vendor first.",
+    "prototype:table:apk:local": "Build the APK on this machine (needs ANDROID_HOME / Android SDK). Writes prototype/klondike-table/dist/klondike-table-prototype.apk.",
+    "prototype:table:apk:help": "Print APK build + phone install steps.",
+    "bootstrap:vendor": "Install vendored Expo package deps (first clone / after vendor refresh)."
   }
 }

@@ -8,7 +8,19 @@
     "start": "expo start --web",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "apk": "bash ../../scripts/build-prototype-apk.sh eas",
+    "apk:local": "bash ../../scripts/build-prototype-apk.sh local",
+    "apk:help": "bash ../../scripts/build-prototype-apk.sh help",
+    "eas-build-pre-install": "bash ../../scripts/eas-bootstrap-vendor.sh",
+    "eas-build-post-install": "bash ../../scripts/eas-bootstrap-vendor.sh"
+  },
+  "scriptsHelp": {
+    "apk": "Build sideloadable Android APK via EAS cloud → install on phone (Expo login once).",
+    "apk:local": "Build APK with local Android SDK (ANDROID_HOME) into dist/.",
+    "apk:help": "How to build the APK and install it on a phone.",
+    "eas-build-pre-install": "EAS: install vendored Expo deps before npm ci.",
+    "eas-build-post-install": "EAS: reinstall vendored Expo deps after npm ci (gitignored locally)."
   },
   "dependencies": {
     "expo": "file:../../vendor/expo",
