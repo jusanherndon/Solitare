@@ -1,0 +1,8 @@
+{
+  "name": "solitare",
+  "private": true,
+  "scripts": {
+    "prototype:table": "npm --prefix prototype/klondike-table start",
+    "bootstrap:vendor": "bash scripts/bootstrap-vendor.sh"
+  }
+}
