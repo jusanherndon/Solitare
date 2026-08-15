@@ -20,23 +20,21 @@ const noSelect = {
 
 export function CardView({ card, width, height, emptyLabel, selected }: Props) {
   const pad = Math.max(3, width * 0.05);
-  const corner = Math.max(22, Math.round(width * 0.4));
-  const empty = Math.max(22, Math.round(width * 0.34));
-  const wantedCenter = Math.max(36, Math.round(width * 0.8));
-  const center = Math.min(
-    wantedCenter,
-    Math.max(12, Math.round(height - pad * 2 - corner - 4)),
-  );
+  const inner = Math.max(8, width - pad * 2);
+  const corner = Math.min(inner, Math.max(18, Math.round(width * 0.42)));
+  const empty = Math.min(inner, Math.max(16, Math.round(width * 0.34)));
   const radius = Math.max(6, Math.round(width * 0.1));
+  const type = {
+    includeFontPadding: false as const,
+  };
 
   if (!card) {
     return (
       <View style={[styles.slot, { width, height, borderRadius: radius }]}>
         {emptyLabel ? (
           <Text
-            style={[styles.emptyLabel, { fontSize: empty, lineHeight: empty, includeFontPadding: false }]}
+            style={[styles.emptyLabel, { fontSize: empty, lineHeight: empty, ...type }]}
             selectable={false}
-            numberOfLines={1}
           >
             {emptyLabel}
           </Text>
@@ -61,6 +59,10 @@ export function CardView({ card, width, height, emptyLabel, selected }: Props) {
   const color = isRed(card.suit) ? '#c62828' : '#1a1a1a';
   const rankLabel = (RANK_LABEL as Record<number, string>)[card.rank];
   const suitGlyph = (SUIT_GLYPH as Record<string, string>)[card.suit];
+  const cornerBlock = corner * 2;
+  const remainH = height - pad * 2 - cornerBlock - 2;
+  const center = remainH >= 18 && inner >= 18 ? Math.min(Math.round(inner * 0.85), remainH) : 0;
+
   return (
     <View
       style={[
@@ -69,25 +71,16 @@ export function CardView({ card, width, height, emptyLabel, selected }: Props) {
         selected && styles.selected,
       ]}
     >
-      <Text
-        style={[
-          styles.corner,
-          { color, fontSize: corner, lineHeight: corner, includeFontPadding: false },
-        ]}
-        selectable={false}
-        numberOfLines={1}
-      >
+      <Text style={[styles.corner, { color, fontSize: corner, lineHeight: corner, ...type }]} selectable={false}>
         {rankLabel}
+      </Text>
+      <Text style={[styles.corner, { color, fontSize: corner, lineHeight: corner, ...type }]} selectable={false}>
         {suitGlyph}
       </Text>
-      {center >= 12 ? (
+      {center >= 18 ? (
         <Text
-          style={[
-            styles.center,
-            { color, fontSize: center, lineHeight: center, includeFontPadding: false },
-          ]}
+          style={[styles.center, { color, fontSize: center, lineHeight: center, ...type }]}
           selectable={false}
-          numberOfLines={1}
         >
           {suitGlyph}
         </Text>

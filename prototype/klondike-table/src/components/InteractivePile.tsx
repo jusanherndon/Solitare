@@ -54,6 +54,7 @@ function pagePoint(e: any) {
   return {
     pageX: n.pageX ?? n.clientX ?? 0,
     pageY: n.pageY ?? n.clientY ?? 0,
+    locationX: n.locationX ?? 0,
     locationY: n.locationY ?? 0,
   };
 }
@@ -226,15 +227,16 @@ export function InteractivePile({
 
   const onResponderGrant = (e: any) => {
     if (typeof window !== 'undefined') window.getSelection?.()?.removeAllRanges?.();
-    const { pageX, pageY, locationY } = pagePoint(e);
+    const { pageX, pageY, locationX, locationY } = pagePoint(e);
+    // Don't wait for measureInWindow — Android often hides the source before it fires.
     gesture.current = {
       startX: pageX,
       startY: pageY,
       cardIndex: pickCardIndex(locationY),
       dragging: false,
-      pileX: 0,
-      pileY: 0,
-      measured: false,
+      pileX: pageX - locationX,
+      pileY: pageY - locationY,
+      measured: true,
       dx: 0,
       dy: 0,
     };
@@ -244,8 +246,6 @@ export function InteractivePile({
       if (!g) return;
       g.pileX = x;
       g.pileY = y;
-      g.measured = true;
-      // Drag may have started before measure finished — place the ghost now.
       if (g.dragging) {
         beginOverlay(g.cardIndex, g.dx, g.dy, x, y);
       }
@@ -327,16 +327,23 @@ export function InteractivePile({
         ) : (
           cards.map((card, i) => {
             const lifting = !!(drag && i >= drag.cardIndex);
+            const ghostUp = lifting && !!overlay.visual;
             return (
               <View
                 key={card.id}
                 pointerEvents="none"
+                collapsable={false}
                 style={{
                   position: 'absolute',
                   top: i * fanOffset,
                   left: 0,
-                  zIndex: i + 1,
-                  opacity: lifting ? 0 : 1,
+                  zIndex: lifting ? 100 + i : i + 1,
+                  elevation: lifting && !ghostUp ? 40 : 0,
+                  opacity: ghostUp ? 0 : 1,
+                  transform:
+                    lifting && !ghostUp
+                      ? [{ translateX: drag!.dx }, { translateY: drag!.dy }]
+                      : undefined,
                 }}
               >
                 <CardView
@@ -362,7 +369,18 @@ export function InteractivePile({
       {...webData}
       {...responder}
     >
-      <View pointerEvents="none" style={{ opacity: drag ? 0 : 1 }}>
+      <View
+        pointerEvents="none"
+        collapsable={false}
+        style={{
+          opacity: drag && overlay.visual ? 0 : 1,
+          transform:
+            drag && !overlay.visual
+              ? [{ translateX: drag.dx }, { translateY: drag.dy }]
+              : undefined,
+          elevation: drag && !overlay.visual ? 40 : 0,
+        }}
+      >
         <CardView
           card={top}
           width={size.width}

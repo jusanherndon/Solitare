@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { CardView } from './CardView';
 
@@ -35,11 +35,20 @@ export function useDragOverlay(): DragOverlayApi {
 }
 
 export function DragOverlayProvider({ children }: { children: ReactNode }) {
+  const hostRef = useRef<View>(null);
+  const hostAt = useRef({ x: 0, y: 0 });
   const [visual, setVisualState] = useState<DragVisual | null>(null);
 
-  const setVisual = useCallback((next: DragVisual | null) => {
-    setVisualState(next);
+  const measureHost = useCallback(() => {
+    hostRef.current?.measureInWindow((x, y) => {
+      hostAt.current = { x, y };
+    });
   }, []);
+
+  const setVisual = useCallback((next: DragVisual | null) => {
+    if (next) measureHost();
+    setVisualState(next);
+  }, [measureHost]);
 
   const updateOffset = useCallback((dx: number, dy: number) => {
     setVisualState((prev) => (prev ? { ...prev, dx, dy } : prev));
@@ -50,26 +59,36 @@ export function DragOverlayProvider({ children }: { children: ReactNode }) {
     [visual, setVisual, updateOffset],
   );
 
+  const ox = hostAt.current.x;
+  const oy = hostAt.current.y;
+
   return (
     <DragOverlayContext.Provider value={api}>
-      <View style={styles.host}>
+      <View
+        ref={hostRef}
+        collapsable={false}
+        style={styles.host}
+        onLayout={measureHost}
+      >
         {children}
         {visual ? (
           <View
             pointerEvents="none"
+            collapsable={false}
             style={styles.layer}
-            // @ts-expect-error RN web dataset
-            dataSet={{ dragging: '1' }}
           >
             {visual.cards.map((card, i) => (
               <View
                 key={card.id}
                 pointerEvents="none"
+                collapsable={false}
                 style={{
                   position: 'absolute',
-                  left: visual.originX + visual.dx,
-                  top: visual.originY + visual.dy + i * visual.fanOffset,
-                  zIndex: i + 1,
+                  left: visual.originX - ox,
+                  top: visual.originY - oy + i * visual.fanOffset,
+                  transform: [{ translateX: visual.dx }, { translateY: visual.dy }],
+                  elevation: 80 + i,
+                  zIndex: 80 + i,
                 }}
               >
                 <CardView card={card} width={visual.width} height={visual.height} />
@@ -88,7 +107,9 @@ const styles = StyleSheet.create({
   },
   layer: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: 100000,
-    elevation: 100000,
+    zIndex: 80,
+    elevation: 80,
+    overflow: 'visible',
+    backgroundColor: 'transparent',
   },
 });

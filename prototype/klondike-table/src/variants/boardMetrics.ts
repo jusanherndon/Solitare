@@ -82,11 +82,11 @@ export function useBoardMetrics() {
   const availW = Math.max(0, width - insets.left - insets.right - pad * 2);
   const availH = Math.max(0, height - chromeH);
 
-  // Peek must clear the corner rank+suit (CardView uses ~0.4×width plus inset).
+  // Peek must clear rank + suit on two lines (CardView stacks them).
   const fanFor = (w: number) => {
-    const label = Math.max(22, Math.round(w * 0.4));
+    const label = Math.min(Math.max(8, w - 6), Math.max(18, Math.round(w * 0.42)));
     const inset = Math.max(3, Math.round(w * 0.05));
-    const readable = label + inset + 16;
+    const readable = label * 2 + inset + 6;
     return Math.max(readable, Math.round(w * CARD_RATIO * fanRatio));
   };
 
