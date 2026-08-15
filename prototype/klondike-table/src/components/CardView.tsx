@@ -21,8 +21,9 @@ const noSelect = {
 export function CardView({ card, width, height, emptyLabel, selected }: Props) {
   const pad = Math.max(3, width * 0.05);
   const inner = Math.max(8, width - pad * 2);
-  const corner = Math.min(inner, Math.max(18, Math.round(width * 0.42)));
-  const empty = Math.min(inner, Math.max(16, Math.round(width * 0.34)));
+  // Rank + suit in the peek: small enough that both lines fit on a stacked card.
+  const corner = Math.min(Math.round(inner * 0.7), Math.max(11, Math.round(width * 0.24)));
+  const empty = Math.min(inner, Math.max(11, Math.round(width * 0.17)));
   const radius = Math.max(6, Math.round(width * 0.1));
   const type = {
     includeFontPadding: false as const,
