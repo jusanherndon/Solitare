@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsetsApprox } from './safeArea';
+import { selectedCardIds } from '../../game/reducer.js';
 import { useBoardMetrics } from './boardMetrics';
 import { InteractivePile, StockPile } from '../components/InteractivePile';
 import { useHitRegistry } from '../components/useHitRegistry';
@@ -71,10 +71,11 @@ function WinBanner({ visible, uiScale }: { visible: boolean; uiScale: number }) 
 
 /** Classic top row: Stock/Waste left, Foundations right, Tableau below. */
 export function KlondikeTable({ game }: { game: Game }) {
-  const insets = useSafeAreaInsetsApprox();
   const m = useBoardMetrics();
+  const insets = m.insets;
   const { state, tap, autoMove, drop, draw } = game;
   const { registerHit, hitTest, refresh } = useHitRegistry();
+  const selectedIds = selectedCardIds(state);
 
   return (
     <View
@@ -114,6 +115,7 @@ export function KlondikeTable({ game }: { game: Game }) {
             registerHit={registerHit}
             hitTest={hitTest}
             refreshHits={refresh}
+            selectedIds={selectedIds}
           />
           <View style={{ width: Math.max(12, m.topCardW * 0.35) }} />
           {state.foundations.map((pile: any[], index: number) => (
@@ -129,10 +131,11 @@ export function KlondikeTable({ game }: { game: Game }) {
               registerHit={registerHit}
               hitTest={hitTest}
               refreshHits={refresh}
+              selectedIds={selectedIds}
             />
           ))}
         </View>
-        <View style={[styles.row, { gap: m.gap, alignItems: 'flex-start', flex: 1 }]}>
+        <View style={[styles.row, { gap: m.gap, alignItems: 'flex-start', flex: 1, overflow: 'visible' }]}>
           {state.tableau.map((pile: any[], index: number) => (
             <InteractivePile
               key={index}
@@ -147,6 +150,7 @@ export function KlondikeTable({ game }: { game: Game }) {
               registerHit={registerHit}
               hitTest={hitTest}
               refreshHits={refresh}
+              selectedIds={selectedIds}
             />
           ))}
         </View>
@@ -157,7 +161,7 @@ export function KlondikeTable({ game }: { game: Game }) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#1f6b45' },
+  root: { flex: 1, backgroundColor: '#1f6b45', overflow: 'visible' },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  row: { flexDirection: 'row' },
+  row: { flexDirection: 'row', overflow: 'visible' },
   newGame: {
     backgroundColor: 'rgba(0,0,0,0.35)',
     borderRadius: 8,

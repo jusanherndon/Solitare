@@ -1,44 +1,121 @@
-import { Platform, useWindowDimensions } from 'react-native';
+import { useEffect, useState } from 'react';
+import { PixelRatio, Platform, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsetsApprox } from './safeArea';
+
+const CARD_RATIO = 1.4;
+/** Chrome (buttons, hint) is sized relative to this phone-ish card width. */
+const REF_CARD_W = 64;
+
+function coarsePointer(): boolean {
+  if (Platform.OS !== 'web') return true;
+  return typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches;
+}
+
+function readWebViewport(): { width: number; height: number } | null {
+  if (typeof window === 'undefined') return null;
+  const vp = window.visualViewport;
+  return {
+    width: Math.round(vp?.width ?? window.innerWidth),
+    height: Math.round(vp?.height ?? window.innerHeight),
+  };
+}
 
 /**
- * Native (Expo Go / APK): fill the phone.
- * Web: dampen size so large monitors don’t blow up the table (old 0.5× feel).
+ * Visible CSS box + density + text scale from the device.
+ * Native: RN window. Web: visualViewport (browser chrome / pinch-zoom).
+ */
+function useViewport() {
+  const win = useWindowDimensions();
+  const [web, setWeb] = useState(readWebViewport);
+
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+    const sync = () => setWeb(readWebViewport());
+    sync();
+    window.addEventListener('resize', sync);
+    window.visualViewport?.addEventListener('resize', sync);
+    return () => {
+      window.removeEventListener('resize', sync);
+      window.visualViewport?.removeEventListener('resize', sync);
+    };
+  }, []);
+
+  if (Platform.OS !== 'web') return win;
+  return {
+    width: web?.width || win.width,
+    height: web?.height || win.height,
+    scale: win.scale,
+    fontScale: win.fontScale,
+  };
+}
+
+/**
+ * Phone: fill the device.
+ * Desktop: a centered table with a comfortable card cap — not wall-to-wall.
  */
 export function useBoardMetrics() {
-  const { width, height } = useWindowDimensions();
+  const { width, height, fontScale } = useViewport();
+  const insets = useSafeAreaInsetsApprox();
+  const touch = coarsePointer();
   const landscape = width > height;
   const short = Math.min(width, height);
-  const long = Math.max(width, height);
-  const isWeb = Platform.OS === 'web';
-  const webScale = isWeb ? 0.5 : 1;
 
-  // ~780px short side ≈ phone landscape / small laptop; 1440p short ≈ 1440 → ~1.85×
-  const uiScale = Math.min(2.25, Math.max(1, short / 780)) * webScale;
+  const fanRatio = landscape ? (touch ? 0.3 : 0.34) : touch ? 0.45 : 0.36;
+  const minCard = touch ? 32 : 28;
+  // Mouse/desktop: ~playing-card-on-a-table. Grows a little on tall monitors, never fills them.
+  const maxCard = touch
+    ? 100
+    : Math.round(Math.min(84, Math.max(68, short * 0.055)));
 
-  const boardMax = Math.round(
-    (landscape
-      ? Math.min(width - 24, Math.round(Math.min(long * 0.88, short * 1.55)))
-      : Math.min(width - 16, Math.round(short * 0.98))) * (isWeb ? webScale : 1),
-  );
+  const pad = touch ? 8 : 20;
+  const gap = touch ? 6 : 10;
+  const chromeH =
+    insets.top +
+    insets.bottom +
+    8 +
+    12 +
+    Math.round(48 * Math.min(fontScale, 1.3)) +
+    10 +
+    (landscape ? 12 : 16) +
+    (touch ? 56 : 32);
 
-  const gap = Math.max(isWeb ? 2 : 4, Math.round((landscape ? 8 : 6) * uiScale));
-  const pad = Math.max(isWeb ? 5 : 6, Math.round(10 * uiScale));
-  const avail = boardMax - pad * 2;
+  const availW = Math.max(0, width - insets.left - insets.right - pad * 2);
+  const availH = Math.max(0, height - chromeH);
 
-  // Fill the row — seven Tableau columns drive card width.
-  const minCard = isWeb ? 24 : 40;
-  const cardW = Math.max(minCard, Math.floor((avail - gap * 6) / 7));
-  const cardH = Math.round(cardW * 1.4);
-  const topCardW = Math.min(cardW, Math.floor((avail - gap * 5) / 6));
-  const topCardH = Math.round(topCardW * 1.4);
-  // Peek enough that face-down stacks read as separate cards on phones.
-  const fan = Math.max(isWeb ? 7 : 18, Math.round(cardH * (isWeb ? 0.2 : 0.3)));
+  // Peek must clear the corner rank+suit (CardView uses ~0.4×width plus inset).
+  const fanFor = (w: number) => {
+    const label = Math.max(22, Math.round(w * 0.4));
+    const inset = Math.max(3, Math.round(w * 0.05));
+    const readable = label + inset + 16;
+    return Math.max(readable, Math.round(w * CARD_RATIO * fanRatio));
+  };
+
+  const heightFor = (w: number) => {
+    const h = w * CARD_RATIO;
+    return h + h + fanFor(w) * 6;
+  };
+
+  let cardW = Math.floor((availW - gap * 6) / 7);
+  cardW = Math.min(cardW, maxCard);
+  while (cardW > minCard && heightFor(cardW) > availH) cardW -= 1;
+  cardW = Math.max(minCard, Math.min(maxCard, cardW));
+  cardW = PixelRatio.roundToNearestPixel(cardW);
+
+  const cardH = PixelRatio.roundToNearestPixel(cardW * CARD_RATIO);
+  const maxFan = Math.floor((availH - cardH - cardH) / 6);
+  const fan = Math.max(8, Math.min(fanFor(cardW), maxFan > 0 ? maxFan : fanFor(cardW)));
+  const topCardW = cardW;
+  const topCardH = cardH;
+  const boardMax = 7 * cardW + 6 * gap + pad * 2;
+  const chromeScale = Math.max(0.9, Math.min(touch ? 1.15 : 1.05, cardW / REF_CARD_W));
+  const uiScale = chromeScale * fontScale;
 
   return {
     width,
     height,
     landscape,
     uiScale,
+    fontScale,
     boardMax,
     gap,
     pad,
@@ -47,5 +124,6 @@ export function useBoardMetrics() {
     topCardW,
     topCardH,
     fan,
+    insets,
   };
 }

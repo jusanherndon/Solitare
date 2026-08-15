@@ -6,6 +6,7 @@ type Props = {
   width: number;
   height: number;
   emptyLabel?: string;
+  selected?: boolean;
 };
 
 const noSelect = {
@@ -17,17 +18,26 @@ const noSelect = {
   WebkitTouchCallout: 'none',
 } as const;
 
-export function CardView({ card, width, height, emptyLabel }: Props) {
-  const corner = Math.max(11, Math.round(width * 0.2));
-  const center = Math.max(18, Math.round(width * 0.4));
-  const empty = Math.max(11, Math.round(width * 0.17));
+export function CardView({ card, width, height, emptyLabel, selected }: Props) {
+  const pad = Math.max(3, width * 0.05);
+  const corner = Math.max(22, Math.round(width * 0.4));
+  const empty = Math.max(22, Math.round(width * 0.34));
+  const wantedCenter = Math.max(36, Math.round(width * 0.8));
+  const center = Math.min(
+    wantedCenter,
+    Math.max(12, Math.round(height - pad * 2 - corner - 4)),
+  );
   const radius = Math.max(6, Math.round(width * 0.1));
 
   if (!card) {
     return (
       <View style={[styles.slot, { width, height, borderRadius: radius }]}>
         {emptyLabel ? (
-          <Text style={[styles.emptyLabel, { fontSize: empty }]} selectable={false}>
+          <Text
+            style={[styles.emptyLabel, { fontSize: empty, lineHeight: empty, includeFontPadding: false }]}
+            selectable={false}
+            numberOfLines={1}
+          >
             {emptyLabel}
           </Text>
         ) : null}
@@ -40,7 +50,7 @@ export function CardView({ card, width, height, emptyLabel }: Props) {
       <View
         style={[
           styles.back,
-          { width, height, borderRadius: radius, padding: Math.max(3, width * 0.05) },
+          { width, height, borderRadius: radius, padding: pad, overflow: 'hidden' },
         ]}
       >
         <View style={styles.backInner} />
@@ -55,16 +65,33 @@ export function CardView({ card, width, height, emptyLabel }: Props) {
     <View
       style={[
         styles.face,
-        { width, height, borderRadius: radius, padding: Math.max(3, width * 0.05) },
+        { width, height, borderRadius: radius, padding: pad, overflow: 'hidden' },
+        selected && styles.selected,
       ]}
     >
-      <Text style={[styles.corner, { color, fontSize: corner }]} selectable={false}>
+      <Text
+        style={[
+          styles.corner,
+          { color, fontSize: corner, lineHeight: corner, includeFontPadding: false },
+        ]}
+        selectable={false}
+        numberOfLines={1}
+      >
         {rankLabel}
         {suitGlyph}
       </Text>
-      <Text style={[styles.center, { color, fontSize: center }]} selectable={false}>
-        {suitGlyph}
-      </Text>
+      {center >= 12 ? (
+        <Text
+          style={[
+            styles.center,
+            { color, fontSize: center, lineHeight: center, includeFontPadding: false },
+          ]}
+          selectable={false}
+          numberOfLines={1}
+        >
+          {suitGlyph}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -102,6 +129,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#cfc6b4',
     ...noSelect,
+  },
+  selected: {
+    borderWidth: 2,
+    borderColor: '#ffd54f',
+    backgroundColor: '#fff8e1',
   },
   corner: {
     fontWeight: '700',

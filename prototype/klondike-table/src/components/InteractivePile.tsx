@@ -18,6 +18,7 @@ type Props = {
   registerHit?: (pile: PileId, ref: View | null) => void;
   hitTest?: (x: number, y: number) => PileId | null;
   refreshHits?: () => void;
+  selectedIds?: Set<string>;
 };
 
 const DRAG_THRESHOLD = 14;
@@ -99,6 +100,7 @@ export function InteractivePile({
   registerHit,
   hitTest,
   refreshHits,
+  selectedIds,
 }: Props) {
   const wrapRef = useRef<View>(null);
   const cardsRef = useRef(cards);
@@ -310,7 +312,13 @@ export function InteractivePile({
       <View
         ref={wrapRef}
         onLayout={onLayout}
-        style={{ width: size.width, height, zIndex: drag ? 20 : 1, elevation: drag ? 20 : 0 }}
+        style={{
+          width: size.width,
+          height,
+          zIndex: drag ? 20 : 1,
+          elevation: drag ? 20 : 0,
+          overflow: 'visible',
+        }}
         {...webData}
         {...responder}
       >
@@ -331,7 +339,12 @@ export function InteractivePile({
                   opacity: lifting ? 0 : 1,
                 }}
               >
-                <CardView card={card} width={size.width} height={size.height} />
+                <CardView
+                  card={card}
+                  width={size.width}
+                  height={size.height}
+                  selected={selectedIds?.has(card.id)}
+                />
               </View>
             );
           })
@@ -355,6 +368,7 @@ export function InteractivePile({
           width={size.width}
           height={size.height}
           emptyLabel={emptyLabel}
+          selected={!!top && selectedIds?.has(top.id)}
         />
       </View>
     </View>

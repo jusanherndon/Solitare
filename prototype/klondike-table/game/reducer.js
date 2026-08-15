@@ -162,6 +162,16 @@ function applyAutoMove(state, from, cardIndex) {
 
 function applyTap(state, pile, cardIndex) {
   if (pile.area === 'stock') return reduce(state, { type: 'DRAW' });
+  if (state.selection && samePile(state.selection.from, pile)) {
+    const cards = getPile(state, pile);
+    const idx =
+      pile.area === 'waste' || pile.area === 'foundation'
+        ? cards.length - 1
+        : cardIndex ?? cards.length - 1;
+    // Same card again → cancel. A different card in this column → re-select.
+    if (idx === state.selection.cardIndex) return { ...state, selection: null };
+    return applySelect(state, pile, cardIndex);
+  }
   if (state.selection) return applyDrop(state, pile);
   return applySelect(state, pile, cardIndex);
 }

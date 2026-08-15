@@ -3,16 +3,14 @@
  * Expo is vendored at ../../vendor/expo (ADR-0001).
  */
 import { useEffect, useReducer } from 'react';
-import { Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { initMeta, reduceMeta } from './game/history.js';
 import { DragOverlayProvider } from './src/components/DragOverlay';
+import { useBoardMetrics } from './src/variants/boardMetrics';
 import { KlondikeTable } from './src/variants/Layouts';
 
 export default function App() {
-  const { width, height } = useWindowDimensions();
-  const webScale = Platform.OS === 'web' ? 0.5 : 1;
-  const uiScale =
-    Math.min(2.25, Math.max(1, Math.min(width, height) / 780)) * webScale;
+  const { uiScale } = useBoardMetrics();
   const [meta, dispatch] = useReducer(reduceMeta, undefined, () => initMeta(42));
   const state = meta.present;
 
