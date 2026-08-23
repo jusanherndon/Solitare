@@ -1,8 +1,7 @@
-/// Board sizing — phone fills the screen; desktop stays a compact table.
+/// Board sizing — phone fills the screen.
 library;
 
 import 'dart:math' as math;
-import 'dart:ui' show FlutterView;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -57,14 +56,9 @@ class BoardMetrics {
   final bool touch;
 }
 
-bool coarsePointer(FlutterView view) {
-  if (!kIsWeb) {
-    return defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS;
-  }
-  // Web: treat a short viewport as a phone; desktops get the compact table.
-  final size = view.physicalSize / view.devicePixelRatio;
-  return math.min(size.width, size.height) < 700;
+bool coarsePointer() {
+  return defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS;
 }
 
 BoardMetrics computeBoardMetrics({

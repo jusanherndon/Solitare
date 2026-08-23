@@ -30,10 +30,11 @@ class CardView extends StatelessWidget {
     final height = size.height;
     final pad = math.max(3.0, width * 0.05);
     final inner = math.max(8.0, width - pad * 2);
-    final corner = math.min(
+    final cornerRank = math.min(
       (inner * 0.7).roundToDouble(),
-      math.max(11.0, (width * 0.24).roundToDouble()),
+      math.max(22.0, (width * 0.48).roundToDouble()),
     );
+    final cornerSuit = math.max(11.0, (cornerRank * 0.45).roundToDouble());
     final empty = math.min(inner, math.max(11.0, (width * 0.17).roundToDouble()));
     final radius = math.max(6.0, (width * 0.1).roundToDouble());
 
@@ -84,7 +85,7 @@ class CardView extends StatelessWidget {
         isRed(card!.suit) ? const Color(0xFFC62828) : const Color(0xFF1A1A1A);
     final rank = rankLabel[card!.rank] ?? '?';
     final glyph = suitGlyph[card!.suit] ?? '';
-    final remainH = height - pad * 2 - corner * 2 - 2;
+    final remainH = height - pad * 2 - cornerRank - cornerSuit - 2;
     final center = remainH >= 18 && inner >= 18
         ? math.min((inner * 0.85).roundToDouble(), remainH)
         : 0.0;
@@ -106,7 +107,7 @@ class CardView extends StatelessWidget {
             rank,
             style: TextStyle(
               color: color,
-              fontSize: corner,
+              fontSize: cornerRank,
               height: 1,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -116,7 +117,7 @@ class CardView extends StatelessWidget {
             glyph,
             style: TextStyle(
               color: color,
-              fontSize: corner,
+              fontSize: cornerSuit,
               height: 1,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,

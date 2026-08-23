@@ -43,12 +43,11 @@ class _KlondikeTableState extends State<KlondikeTable> {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
-    final view = View.of(context);
     final metrics = computeBoardMetrics(
       size: media.size,
       padding: media.padding,
       fontScale: media.textScaler.scale(1),
-      touch: coarsePointer(view),
+      touch: coarsePointer(),
     );
     final selected = selectedCardIds(_state);
     final card = CardSize(metrics.cardW, metrics.cardH);

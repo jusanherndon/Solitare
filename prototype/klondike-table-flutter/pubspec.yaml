@@ -1,5 +1,5 @@
 name: klondike_table
-description: Throwaway phone/desktop/web prototype for #6 — Flutter SDK only.
+description: Throwaway phone prototype for #6 — Flutter SDK only (Android APK + iOS).
 publish_to: none
 version: 0.0.0
 
