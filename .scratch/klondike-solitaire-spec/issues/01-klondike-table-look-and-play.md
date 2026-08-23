@@ -132,3 +132,28 @@ npm run prototype:table:apk
 ```
 
 Ticket stays open for further layout/feel reactions.
+
+### cursor-agent — 2026-08-23T14:20:00Z
+
+Started a Flutter/Dart twin on branch `prototype_fultter` so we can compare the same table with a much smaller dependency surface (Flutter SDK only, no Expo/React Native vendor tree).
+
+**Not runnable until you scaffold platforms.** From the repo root:
+
+```bash
+cd prototype/klondike-table-flutter
+flutter create . --platforms=linux,web,android,ios --project-name klondike_table --org com.solitare
+```
+
+That only writes project files. APK later: `flutter build apk` (Android SDK). iOS later: `flutter build ios` (macOS + Xcode).
+
+If `flutter create` adds `cupertino_icons` (or any other pub package) to `pubspec.yaml`, delete those extras.
+
+Then:
+
+```bash
+flutter run -d linux
+# or: flutter run -d chrome
+```
+
+Same locked layout A (classic top row), draw-one + Waste recycle, tap→tap, drag, double-click auto-move, Undo, New Game. Placeholder cards. Phone vs desktop sizing copied from the Expo table.
+
