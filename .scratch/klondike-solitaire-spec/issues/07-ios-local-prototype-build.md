@@ -8,16 +8,26 @@ Supports [How should the Klondike table look and play on a phone in portrait and
 
 ## Question
 
-Can we produce a Simulator- or device-installable iOS build of the Klondike table prototype on a local machine, without EAS cloud?
+Can we produce a Simulator- or device-installable iOS build of the Flutter Klondike table prototype on a local machine?
 
-[Which one-codebase toolkit should a beginner use to ship Klondike Solitaire?](https://github.com/jusanherndon/Solitare/issues/2) chose Expo in part so iOS *shipping* can use EAS cloud (no Mac required). This ticket is the on-machine path: local iOS compilation needs macOS and Xcode.
+The comparison prototype is `prototype/klondike-table-flutter` (see `01`). Starting point: `flutter build ios` / `flutter run` on a Simulator. Local iOS compilation needs macOS and Xcode — the owner override of [#2](https://github.com/jusanherndon/Solitare/issues/2) (Flutter instead of Expo) dropped the EAS cloud path that avoided a Mac.
 
 This ticket is done when repo docs name the command, the machine requirements, and where the `.ipa` or Simulator app lands, and a successful local build has been demonstrated.
 
-Not store submission, not CI, and not the product app — a local prototype artifact only.
+Not store submission, not CI, and not the product app — a local prototype artifact only. Do not use Expo / EAS.
 
 ## Done when
 
-- One documented command produces a local iOS build (prebuild + Xcode / `expo run:ios` / `eas build --local --platform ios`, whichever fits ADR-0001).
-- README / `scriptsHelp` states that macOS + Xcode are required, and where the artifact is written.
+- One documented command produces a local iOS build from `prototype/klondike-table-flutter` (`flutter build ios` / `flutter run` on Simulator is the starting point).
+- README states that macOS + Xcode are required, and where the artifact is written.
 - A successful local build has been demonstrated (Simulator is enough).
+
+## Comments
+
+### jusanherndon — 2026-08-23T20:34:00Z
+
+Owner chose Flutter over Expo after comparing prototypes ([#22](https://github.com/jusanherndon/Solitare/pull/22) merged; [#17](https://github.com/jusanherndon/Solitare/pull/17) closed). The Expo “no Mac for iOS” rationale from #2 no longer applies to this ticket: Flutter’s official iOS path still needs macOS + Xcode.
+
+### jusanherndon — 2026-08-23T20:56:00Z
+
+iOS local builds wait until the owner buys a MacBook. Android is done on `06`. Do not treat EAS/cloud iOS as a substitute. Ticket stays open.

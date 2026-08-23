@@ -1,7 +1,7 @@
 # How should the Klondike table look and play on a phone in portrait and landscape?
 
 Type: prototype
-Status: open
+Status: resolved
 GitHub: #6 — https://github.com/jusanherndon/Solitare/issues/6
 
 ## Question
@@ -156,4 +156,37 @@ flutter run -d linux
 ```
 
 Same locked layout A (classic top row), draw-one + Waste recycle, tap→tap, drag, double-click auto-move, Undo, New Game. Placeholder cards. Phone vs desktop sizing copied from the Expo table.
+
+### jusanherndon — 2026-08-23T20:34:00Z
+
+**Comparison decided — Flutter is the table prototype going forward.**
+
+[#22](https://github.com/jusanherndon/Solitare/pull/22) (Flutter twin) merged. [#17](https://github.com/jusanherndon/Solitare/pull/17) (Expo table) closed: the Expo prototype is worse to use and buggier than the Flutter one.
+
+Reasons: nicer to build with, took less time to build, smaller APK. This overrides the [#2](https://github.com/jusanherndon/Solitare/issues/2) Expo research recommendation for the spec.
+
+**React to:** `prototype/klondike-table-flutter` (`flutter run` / `flutter build apk`). Layout A (classic top row) and play (draw-one + Waste recycle, tap→tap, drag, double-click auto-move, Undo, New Game) still locked. Ticket stays open until portrait/landscape look-and-play answers are captured.
+
+## Answer
+
+v1 uses **layout A — classic top row** in both portrait and landscape. Same arrangement when rotated; not a second layout.
+
+**Table**
+- Felt green. **Undo** and **New Game** top-right.
+- Top row: Stock then Waste on the left, four Foundations on the right, with a gap between Waste and Foundations.
+- Tableau: seven columns below. Face-down cards stack; face-up cards fan so the rank/suit peek.
+- Empty Foundations are unlabeled dashed slots — any Ace may start any empty pile. Empty Waste is labeled; empty Stock shows a recycle glyph when the Waste can return.
+- Placeholder cards for this prototype: cream face, navy back, rank + suit glyphs. Fomin/Atlas art is a later product choice (`#3`).
+
+**Phone vs landscape vs desktop**
+- On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit.
+- Portrait fans the Tableau more so stacked cards stay readable. Landscape tightens the fan and uses the extra width; chrome stays top-right.
+- Desktop/web (prototype only) caps card size so a large monitor does not blow up the table.
+
+**Play locked with this table** (depth of Undo, resume-after-leave, and how tap/drag combine are still grilled on `02`)
+- Tap a card, then tap a destination — or drag. Dragged cards follow the pointer in a root overlay so they stay above other piles. No selection highlight.
+- Double-tap / double-click auto-moves: Foundation first, then any legal Tableau.
+- Draw-one. Tap empty Stock to recycle the Waste (computer-Klondike; already recorded on `#8`).
+
+Rejected: layout B (thumb dock), layout C (side rails), and the Expo table ([#17](https://github.com/jusanherndon/Solitare/pull/17)). Primary source: `prototype/klondike-table-flutter` ([#22](https://github.com/jusanherndon/Solitare/pull/22)).
 

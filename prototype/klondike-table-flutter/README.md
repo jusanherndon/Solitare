@@ -12,9 +12,10 @@ Platforms: **Android** and **iOS** only.
 
 ```bash
 cd prototype/klondike-table-flutter
-flutter run            # connected Android device or iOS simulator
-flutter build apk      # Android APK
-flutter build ios      # iOS (macOS + Xcode)
+flutter run            # connected Android device (iOS Simulator needs a Mac)
+flutter build apk      # Android APK → build/app/outputs/flutter-apk/app-release.apk
+                       # needs Flutter SDK + Android SDK (`ANDROID_HOME`)
+flutter build ios      # iOS — macOS + Xcode only; not available until a Mac exists
 ```
 
 Rotate to compare portrait vs landscape.
