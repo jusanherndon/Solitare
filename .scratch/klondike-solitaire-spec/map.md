@@ -20,7 +20,7 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English Gam
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
 - `07` [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) (`task`, was #14) — waiting on a MacBook
-- `15` [How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md) (`prototype`)
+- `16` [Write the v1 spec from the closed decisions?](issues/16-write-spec.md) (`task`)
 
 ## Decisions so far
 
@@ -38,6 +38,7 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md) — Name, Justin Herndon, version, support `jherndon111@gmail.com`, source `github.com/jusanherndon/Solitare`, Privacy Policy URL (system browser), Flutter Licenses, Fomin/Atlas CC0 credit. No how-to-play or Kids copy. Reach it from the start screen (`11`).
 - [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) — Always the start screen (title Klondike Solitaire): New Game, Resume (hidden if nothing to resume), About. No Settings in v1. Table chrome: Undo, New Game, Start (Start keeps the Game). New Game confirms only when it would discard an unfinished Game.
 - [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md) — Cheap no-move check (no Tableau/Foundation play, Stock and Waste empty). Separate win and loss overlays; table visible behind; You won! / You lost. Win: Start + New Game. Loss: those plus Undo. Win and loss end the Game — no Resume.
+- [How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md) — Felt banner (variant A): felt + table chrome buttons; centered gold win card with sparkles; lower greyscale loss card with dust. Source: `prototype/klondike-table-flutter` on `prototype/chrome-screens-look`.
 
 ## Not yet specified
 

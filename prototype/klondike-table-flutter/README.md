@@ -1,35 +1,32 @@
-# PROTOTYPE — Klondike table look & play (Flutter twin of #6)
+# PROTOTYPE — Chrome screens look (start, About, win, loss)
 
-**Throwaway.** Same question as the Expo prototype on `prototype/klondike-table-layout`: *How should the Klondike table look and play on a phone in portrait and landscape?*
+**Throwaway.** Question: *How should the start, About, win, and loss screens look on a phone in portrait and landscape?*
 
-This copy uses the **Flutter SDK** plus one official **dev** package (`flutter_lints`) so the shipped APK stays free of extra runtime deps. Lint/format stack is ticket `13`.
+**Owner pick: A — Felt banner.** B and C stay on this branch as the comparison source.
 
-Layout and play match the current Expo table: classic top row, draw-one with Waste recycle, tap → tap, drag, double-click auto-move, Undo, New Game.
+Extends the Flutter table (`Layout A`). Yellow bars are prototype chrome — not part of the design. Contents and buttons are locked on tickets `09`, `11`, and `14`; this pass is look, overlay coverage, and animation.
 
-Platforms: **Android** and **iOS** only.
-
-## Run / build
+## Run
 
 ```bash
 cd prototype/klondike-table-flutter
-flutter run            # connected Android device (iOS Simulator needs a Mac)
-flutter build apk      # Android APK → build/app/outputs/flutter-apk/app-release.apk
-                       # needs Flutter SDK + Android SDK (`ANDROID_HOME`)
-flutter build ios      # iOS — macOS + Xcode only; not available until a Mac exists
+flutter run            # Linux desktop here; Android device for phone feel
+flutter run -d linux
+# rotate the window / device for landscape
 ```
 
-## Analyze / format / test
+Phone: `flutter run` on a connected Android device, or `flutter build apk`.
 
-```bash
-cd prototype/klondike-table-flutter
-flutter pub get
-flutter analyze
-dart format .
-flutter test
-```
+## Variants (bottom bar / ← →)
 
-Rotate to compare portrait vs landscape.
+- **A — Felt banner** — same felt and chrome-button language as the table. Centered win card; loss card sits lower, greyscale table, dust.
+- **B — Letterbox** — ink poster start; win/loss as cinematic bars with the table visible in the middle window. Card rain on win; greyscale on loss.
+- **C — Bottom sheet** — card-fan start; win/loss keep almost all of the table. Slim sheet; gold pulse + sparkles on win; dark sheet + Undo first on loss.
 
-## Play
+## Preview chips (top bar)
 
-Double-click to auto-move (Foundation first, then Tableau), or drag / tap → tap. Stock is draw-one; tap the empty Stock to recycle the Waste. Undo reverses moves/draws. New Game deals fresh.
+**Start · About · Table · Win · Loss** — jump without playing a Game through. Real buttons also navigate.
+
+Resume is hidden until an unfinished Game exists (New Game, or **Start** from the table). Win/Loss **Start** ends the Game, so Resume hides again.
+
+Support / Source / Privacy / Licenses are stubs (flash or a placeholder page).
