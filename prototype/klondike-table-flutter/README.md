@@ -1,35 +1,27 @@
-# PROTOTYPE — Klondike table look & play (Flutter twin of #6)
+# Klondike Solitaire — Flutter prototype (spec v1)
 
-**Throwaway.** Same question as the Expo prototype on `prototype/klondike-table-layout`: *How should the Klondike table look and play on a phone in portrait and landscape?*
+Throwaway phone app that follows [spec.md](../../.scratch/klondike-solitaire-spec/spec.md). Felt-banner chrome (start, About, win, loss) plus layout A table. Not the store product.
 
-This copy uses the **Flutter SDK** plus one official **dev** package (`flutter_lints`) so the shipped APK stays free of extra runtime deps. Lint/format stack is ticket `13`.
+**Playtest:** [What bugs or changes turn up when the owner runs the prototype on Android?](../../.scratch/klondike-solitaire-spec/issues/17-android-playtest.md)
 
-Layout and play match the current Expo table: classic top row, draw-one with Waste recycle, tap → tap, drag, double-click auto-move, Undo, New Game.
-
-Platforms: **Android** and **iOS** only.
-
-## Run / build
+## Run
 
 ```bash
 cd prototype/klondike-table-flutter
-flutter run            # connected Android device (iOS Simulator needs a Mac)
-flutter build apk      # Android APK → build/app/outputs/flutter-apk/app-release.apk
-                       # needs Flutter SDK + Android SDK (`ANDROID_HOME`)
-flutter build ios      # iOS — macOS + Xcode only; not available until a Mac exists
+flutter run                 # connected Android device
+flutter build apk           # sideload: build/app/outputs/flutter-apk/app-release.apk
+flutter run -d linux        # desktop, for layout checks
 ```
+
+First launch: **New Game** or **About**. **Resume** appears after you leave an unfinished Game via **Start**. Win/loss end the Game (no Resume). New Game confirms when it would discard an unfinished Game.
+
+Cards are still placeholder faces/backs; About already credits Fomin/Atlas. Portrait and landscape both use classic top-row layout.
 
 ## Analyze / format / test
 
 ```bash
-cd prototype/klondike-table-flutter
 flutter pub get
 flutter analyze
 dart format .
 flutter test
 ```
-
-Rotate to compare portrait vs landscape.
-
-## Play
-
-Double-click to auto-move (Foundation first, then Tableau), or drag / tap → tap. Stock is draw-one; tap the empty Stock to recycle the Waste. Undo reverses moves/draws. New Game deals fresh.

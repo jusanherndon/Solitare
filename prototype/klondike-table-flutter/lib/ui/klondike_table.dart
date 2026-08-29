@@ -9,29 +9,33 @@ import 'drag_overlay.dart';
 import 'interactive_pile.dart';
 
 class KlondikeTable extends StatefulWidget {
-  const KlondikeTable({super.key});
+  const KlondikeTable({
+    super.key,
+    required this.meta,
+    required this.onAction,
+    required this.onStart,
+    required this.onRequestNewGame,
+    this.playEnabled = true,
+  });
+
+  final GameMeta meta;
+  final void Function(MetaAction action) onAction;
+  final VoidCallback onStart;
+  final VoidCallback onRequestNewGame;
+  final bool playEnabled;
 
   @override
-  State<KlondikeTable> createState() => _KlondikeTableState();
+  State<KlondikeTable> createState() => KlondikeTableState();
 }
 
-class _KlondikeTableState extends State<KlondikeTable> {
-  GameMeta _meta = initMeta(42);
+class KlondikeTableState extends State<KlondikeTable> {
   final _hits = HitRegistry();
   final _drag = DragController();
 
-  GameState get _state => _meta.present;
+  GameState get _state => widget.meta.present;
 
   void _dispatch(GameAction action) {
-    setState(() {
-      _meta = reduceMeta(_meta, GameMetaAction(action));
-    });
-  }
-
-  void _undo() {
-    setState(() {
-      _meta = reduceMeta(_meta, const UndoMetaAction());
-    });
+    widget.onAction(GameMetaAction(action));
   }
 
   @override
@@ -52,116 +56,83 @@ class _KlondikeTableState extends State<KlondikeTable> {
     final selected = selectedCardIds(_state);
     final card = CardSize(metrics.cardW, metrics.cardH);
 
-    return ColoredBox(
-      color: const Color(0xFF1F6B45),
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              metrics.pad + metrics.insets.left,
-              metrics.insets.top + 8,
-              metrics.pad + metrics.insets.right,
-              metrics.insets.bottom + 12,
-            ),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: metrics.boardMax),
-                child: Column(
-                  children: [
-                    _TopBar(
-                      canUndo: _meta.past.isNotEmpty,
-                      uiScale: metrics.uiScale,
-                      onUndo: _undo,
-                      onNewGame: () => _dispatch(const NewGameAction()),
-                    ),
-                    SizedBox(height: 10 * metrics.uiScale.clamp(0.8, 1.4)),
-                    _TopRow(
-                      state: _state,
-                      metrics: metrics,
-                      card: card,
-                      selected: selected,
-                      hits: _hits,
-                      drag: _drag,
-                      onTap: (pile, i) => _dispatch(TapAction(pile, i)),
-                      onAutoMove: (pile, i) =>
-                          _dispatch(AutoMoveAction(pile, i)),
-                      onDrop: (onto, from, i) =>
-                          _dispatch(DropAction(onto, from: from, cardIndex: i)),
-                      onDraw: () => _dispatch(const DrawAction()),
-                    ),
-                    SizedBox(height: metrics.landscape ? 12 : 16),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (var i = 0; i < 7; i++) ...[
-                            if (i > 0) SizedBox(width: metrics.gap),
-                            InteractivePile(
-                              pile: PileRef.tableau(i),
-                              cards: _state.tableau[i],
-                              size: card,
-                              fanOffset: metrics.fan,
-                              emptyLabel: ' ',
-                              selectedIds: selected,
-                              hits: _hits,
-                              drag: _drag,
-                              onTap: (pile, idx) =>
-                                  _dispatch(TapAction(pile, idx)),
-                              onAutoMove: (pile, idx) =>
-                                  _dispatch(AutoMoveAction(pile, idx)),
-                              onDrop: (onto, from, idx) => _dispatch(
-                                DropAction(onto, from: from, cardIndex: idx),
-                              ),
-                            ),
-                          ],
-                        ],
+    return AbsorbPointer(
+      absorbing: !widget.playEnabled,
+      child: ColoredBox(
+        color: const Color(0xFF1F6B45),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                metrics.pad + metrics.insets.left,
+                metrics.insets.top + 8,
+                metrics.pad + metrics.insets.right,
+                metrics.insets.bottom + 12,
+              ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: metrics.boardMax),
+                  child: Column(
+                    children: [
+                      _TopBar(
+                        canUndo: widget.meta.past.isNotEmpty,
+                        uiScale: metrics.uiScale,
+                        onUndo: () => widget.onAction(const UndoMetaAction()),
+                        onNewGame: widget.onRequestNewGame,
+                        onStart: widget.onStart,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: metrics.insets.top + 4,
-            left: 0,
-            right: 0,
-            child: IgnorePointer(
-              child: Text(
-                'Double-click auto-move · drag · tap → tap',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color(0x59FFFFFF),
-                  fontSize: (10 * metrics.uiScale).roundToDouble(),
-                ),
-              ),
-            ),
-          ),
-          DragOverlay(controller: _drag),
-          if (_state.won)
-            Center(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0xBF000000),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28,
-                    vertical: 14,
+                      SizedBox(height: 10 * metrics.uiScale.clamp(0.8, 1.4)),
+                      _TopRow(
+                        state: _state,
+                        metrics: metrics,
+                        card: card,
+                        selected: selected,
+                        hits: _hits,
+                        drag: _drag,
+                        onTap: (pile, i) => _dispatch(TapAction(pile, i)),
+                        onAutoMove: (pile, i) =>
+                            _dispatch(AutoMoveAction(pile, i)),
+                        onDrop: (onto, from, i) => _dispatch(
+                          DropAction(onto, from: from, cardIndex: i),
+                        ),
+                        onDraw: () => _dispatch(const DrawAction()),
+                      ),
+                      SizedBox(height: metrics.landscape ? 12 : 16),
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var i = 0; i < 7; i++) ...[
+                              if (i > 0) SizedBox(width: metrics.gap),
+                              InteractivePile(
+                                pile: PileRef.tableau(i),
+                                cards: _state.tableau[i],
+                                size: card,
+                                fanOffset: metrics.fan,
+                                emptyLabel: ' ',
+                                selectedIds: selected,
+                                hits: _hits,
+                                drag: _drag,
+                                onTap: (pile, idx) =>
+                                    _dispatch(TapAction(pile, idx)),
+                                onAutoMove: (pile, idx) =>
+                                    _dispatch(AutoMoveAction(pile, idx)),
+                                onDrop: (onto, from, idx) => _dispatch(
+                                  DropAction(onto, from: from, cardIndex: idx),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    'Win',
-                    style: TextStyle(
-                      color: const Color(0xFFFFD54F),
-                      fontSize: (28 * metrics.uiScale).roundToDouble(),
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
                 ),
               ),
             ),
-        ],
+            DragOverlay(controller: _drag),
+          ],
+        ),
       ),
     );
   }
@@ -173,12 +144,14 @@ class _TopBar extends StatelessWidget {
     required this.uiScale,
     required this.onUndo,
     required this.onNewGame,
+    required this.onStart,
   });
 
   final bool canUndo;
   final double uiScale;
   final VoidCallback onUndo;
   final VoidCallback onNewGame;
+  final VoidCallback onStart;
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +166,8 @@ class _TopBar extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         _ChromeButton(label: 'New Game', uiScale: uiScale, onTap: onNewGame),
+        const SizedBox(width: 8),
+        _ChromeButton(label: 'Start', uiScale: uiScale, onTap: onStart),
       ],
     );
   }
