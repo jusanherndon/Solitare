@@ -8,6 +8,7 @@ Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `12` (iO
 
 Depends on [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5).
 Look-and-play is locked on [How should the Klondike table look and play on a phone in portrait and landscape?](../klondike-solitaire-spec/issues/01-klondike-table-look-and-play.md).
+The mark in the IPA / on the home screen is [What launcher icon should the Android APK and iOS IPA use?](../klondike-solitaire-spec/issues/18-launcher-icon.md) — this ticket keeps 6.9″ screenshots and store-listing use of that same 1024 art.
 
 Parked — owner is not ready to lock listing visuals yet.
 

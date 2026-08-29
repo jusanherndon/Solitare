@@ -21,6 +21,7 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 
 - `07` [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) (`task`, was #14) — waiting on a MacBook
 - `17` [What bugs or changes turn up when the owner runs the prototype on Android?](issues/17-android-playtest.md) (`task`) — playtest log
+- `18` [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md) (`prototype`)
 
 ## Decisions so far
 
