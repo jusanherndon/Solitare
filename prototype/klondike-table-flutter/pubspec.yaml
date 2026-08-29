@@ -1,5 +1,5 @@
 name: klondike_table
-description: Throwaway phone prototype for #6 — Flutter SDK only (Android APK + iOS).
+description: Phone prototype matching the v1 spec (felt-banner chrome + table).
 publish_to: none
 version: 0.0.0
 

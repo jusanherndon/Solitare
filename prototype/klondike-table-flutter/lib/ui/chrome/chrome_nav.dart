@@ -1,19 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-enum ChromeVariant { a, b, c }
-
-enum ChromePreview { start, about, table, win, loss }
-
-const variantNames = {
-  ChromeVariant.a: 'A — Felt banner',
-  ChromeVariant.b: 'B — Letterbox',
-  ChromeVariant.c: 'C — Bottom sheet',
-};
-
-/// Space reserved for the prototype switcher (not part of the design).
-const prototypeBarH = 56.0;
-const prototypePreviewH = 44.0;
-
 class ChromeNav {
   const ChromeNav({
     required this.showResume,
@@ -30,6 +16,8 @@ class ChromeNav {
     required this.onLossStart,
     required this.onLossNewGame,
     required this.onLossUndo,
+    required this.onConfirmDiscard,
+    required this.onCancelConfirm,
   });
 
   final bool showResume;
@@ -46,4 +34,6 @@ class ChromeNav {
   final VoidCallback onLossStart;
   final VoidCallback onLossNewGame;
   final VoidCallback onLossUndo;
+  final VoidCallback onConfirmDiscard;
+  final VoidCallback onCancelConfirm;
 }

@@ -11,6 +11,3 @@ const aboutLicenses = 'Licenses';
 const aboutCardArt =
     'Card art: Dmitry Fomin, English-pattern faces and '
     'Atlas back, CC0 1.0';
-const licensesStub =
-    'Flutter’s standard open-source license list would '
-    'open here.';

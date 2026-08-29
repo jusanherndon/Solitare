@@ -11,13 +11,17 @@ import 'interactive_pile.dart';
 class KlondikeTable extends StatefulWidget {
   const KlondikeTable({
     super.key,
-    this.onStart,
-    this.onWon,
+    required this.meta,
+    required this.onAction,
+    required this.onStart,
+    required this.onRequestNewGame,
     this.playEnabled = true,
   });
 
-  final VoidCallback? onStart;
-  final VoidCallback? onWon;
+  final GameMeta meta;
+  final void Function(MetaAction action) onAction;
+  final VoidCallback onStart;
+  final VoidCallback onRequestNewGame;
   final bool playEnabled;
 
   @override
@@ -25,28 +29,13 @@ class KlondikeTable extends StatefulWidget {
 }
 
 class KlondikeTableState extends State<KlondikeTable> {
-  GameMeta _meta = initMeta(42);
   final _hits = HitRegistry();
   final _drag = DragController();
 
-  GameState get _state => _meta.present;
-
-  void dealNewGame() => _dispatch(const NewGameAction());
-
-  void undoLast() => _undo();
+  GameState get _state => widget.meta.present;
 
   void _dispatch(GameAction action) {
-    final wasWon = _state.won;
-    setState(() {
-      _meta = reduceMeta(_meta, GameMetaAction(action));
-    });
-    if (!wasWon && _state.won) widget.onWon?.call();
-  }
-
-  void _undo() {
-    setState(() {
-      _meta = reduceMeta(_meta, const UndoMetaAction());
-    });
+    widget.onAction(GameMetaAction(action));
   }
 
   @override
@@ -86,10 +75,10 @@ class KlondikeTableState extends State<KlondikeTable> {
                   child: Column(
                     children: [
                       _TopBar(
-                        canUndo: _meta.past.isNotEmpty,
+                        canUndo: widget.meta.past.isNotEmpty,
                         uiScale: metrics.uiScale,
-                        onUndo: _undo,
-                        onNewGame: () => _dispatch(const NewGameAction()),
+                        onUndo: () => widget.onAction(const UndoMetaAction()),
+                        onNewGame: widget.onRequestNewGame,
                         onStart: widget.onStart,
                       ),
                       SizedBox(height: 10 * metrics.uiScale.clamp(0.8, 1.4)),
@@ -141,21 +130,6 @@ class KlondikeTableState extends State<KlondikeTable> {
                 ),
               ),
             ),
-            Positioned(
-              top: metrics.insets.top + 4,
-              left: 0,
-              right: 0,
-              child: IgnorePointer(
-                child: Text(
-                  'Double-click auto-move · drag · tap → tap',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: const Color(0x59FFFFFF),
-                    fontSize: (10 * metrics.uiScale).roundToDouble(),
-                  ),
-                ),
-              ),
-            ),
             DragOverlay(controller: _drag),
           ],
         ),
@@ -170,14 +144,14 @@ class _TopBar extends StatelessWidget {
     required this.uiScale,
     required this.onUndo,
     required this.onNewGame,
-    this.onStart,
+    required this.onStart,
   });
 
   final bool canUndo;
   final double uiScale;
   final VoidCallback onUndo;
   final VoidCallback onNewGame;
-  final VoidCallback? onStart;
+  final VoidCallback onStart;
 
   @override
   Widget build(BuildContext context) {
@@ -192,10 +166,8 @@ class _TopBar extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         _ChromeButton(label: 'New Game', uiScale: uiScale, onTap: onNewGame),
-        if (onStart != null) ...[
-          const SizedBox(width: 8),
-          _ChromeButton(label: 'Start', uiScale: uiScale, onTap: onStart!),
-        ],
+        const SizedBox(width: 8),
+        _ChromeButton(label: 'Start', uiScale: uiScale, onTap: onStart),
       ],
     );
   }

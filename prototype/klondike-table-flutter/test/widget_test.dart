@@ -1,47 +1,67 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:klondike_table/game/resume_store.dart';
 import 'package:klondike_table/main.dart';
-import 'package:klondike_table/ui/chrome/chrome_nav.dart';
+
+Future<void> _pumpApp(WidgetTester tester, {MemoryResumeStore? store}) async {
+  await tester.pumpWidget(
+    KlondikePrototypeApp(
+      store: store ?? MemoryResumeStore(),
+      openUrl: (_) async {},
+    ),
+  );
+  await tester.pump();
+}
 
 void main() {
-  testWidgets('Start screen shows New Game and About', (tester) async {
-    await tester.pumpWidget(const KlondikePrototypeApp());
-    expect(find.text('Klondike Solitaire'), findsWidgets);
-    expect(find.text('New Game'), findsOneWidget);
-    expect(find.text('About'), findsWidgets);
-    expect(find.text('Undo'), findsNothing);
-  });
-
-  testWidgets('preview chips and variants build without overflow', (
+  testWidgets('Start screen shows New Game and About, not Resume', (
     tester,
   ) async {
-    Future<void> walk() async {
-      const previews = [
-        ChromePreview.start,
-        ChromePreview.about,
-        ChromePreview.table,
-        ChromePreview.win,
-        ChromePreview.loss,
-      ];
-      for (var v = 0; v < 3; v++) {
-        for (final p in previews) {
-          await tester.tap(find.byKey(ValueKey('preview-$p')));
-          await tester.pump();
-        }
-        await tester.tap(find.text('→'));
-        await tester.pump();
-      }
-    }
+    await _pumpApp(tester);
+    expect(find.text('Klondike Solitaire'), findsOneWidget);
+    expect(find.text('New Game'), findsOneWidget);
+    expect(find.text('About'), findsOneWidget);
+    expect(find.text('Resume'), findsNothing);
+    expect(find.text('Undo'), findsNothing);
+    expect(find.text('A — Felt banner'), findsNothing);
+  });
 
-    await tester.pumpWidget(const KlondikePrototypeApp());
-    await walk();
-
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
+  testWidgets('New Game deals onto the table with chrome', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('New Game'));
     await tester.pump();
-    await walk();
+    expect(find.text('Undo'), findsOneWidget);
+    expect(find.text('Start'), findsOneWidget);
+  });
+
+  testWidgets('Start keeps the Game; Resume returns', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    expect(find.text('Resume'), findsOneWidget);
+    await tester.tap(find.text('Resume'));
+    await tester.pump();
+    expect(find.text('Undo'), findsOneWidget);
+  });
+
+  testWidgets('New Game from start with Resume asks to discard', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    expect(
+      find.text('This unfinished Game will be discarded.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Cancel'));
+    await tester.pump();
+    expect(find.text('Resume'), findsOneWidget);
   });
 }

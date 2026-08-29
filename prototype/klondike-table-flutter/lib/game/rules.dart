@@ -134,3 +134,60 @@ bool tableauRunIsLegal(List<PlayingCard> pile, int cardIndex) {
   }
   return true;
 }
+
+bool _canMoveOnto(List<PlayingCard> moving, PileRef onto, GameState state) {
+  if (moving.isEmpty) return false;
+  final head = moving.first;
+  switch (onto.area) {
+    case PileArea.foundation:
+      if (moving.length != 1) return false;
+      return canStackOnFoundation(head, state.foundations[onto.index]);
+    case PileArea.tableau:
+      final pile = state.tableau[onto.index];
+      final target = pile.isEmpty ? null : pile.last;
+      return canStackOnTableau(head, target);
+    case PileArea.stock:
+    case PileArea.waste:
+      return false;
+  }
+}
+
+bool hasTableauOrFoundationMove(GameState state) {
+  bool consider(List<PlayingCard> moving, PileRef from) {
+    for (var i = 0; i < 4; i++) {
+      final onto = PileRef.foundation(i);
+      if (from.sameAs(onto)) continue;
+      if (_canMoveOnto(moving, onto, state)) return true;
+    }
+    for (var i = 0; i < 7; i++) {
+      final onto = PileRef.tableau(i);
+      if (from.sameAs(onto)) continue;
+      if (_canMoveOnto(moving, onto, state)) return true;
+    }
+    return false;
+  }
+
+  if (state.waste.isNotEmpty) {
+    if (consider([state.waste.last], const PileRef.waste())) return true;
+  }
+  for (var i = 0; i < 4; i++) {
+    final pile = state.foundations[i];
+    if (pile.isEmpty) continue;
+    if (consider([pile.last], PileRef.foundation(i))) return true;
+  }
+  for (var i = 0; i < 7; i++) {
+    final pile = state.tableau[i];
+    for (var idx = 0; idx < pile.length; idx++) {
+      if (!tableauRunIsLegal(pile, idx)) continue;
+      if (consider(pile.sublist(idx), PileRef.tableau(i))) return true;
+    }
+  }
+  return false;
+}
+
+/// Spec: not a win, no Tableau/Foundation play, Stock empty, Waste empty.
+bool isLoss(GameState state) =>
+    !state.won &&
+    state.stock.isEmpty &&
+    state.waste.isEmpty &&
+    !hasTableauOrFoundationMove(state);

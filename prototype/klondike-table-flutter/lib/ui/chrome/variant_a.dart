@@ -1,6 +1,7 @@
-/// Variant A — Felt banner: same language as the table chrome.
+/// Felt banner chrome — spec look A.
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'about_copy.dart';
@@ -46,7 +47,7 @@ class VariantAStart extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.fromLTRB(
           28,
-          prototypePreviewH + MediaQuery.paddingOf(context).top + 24,
+          MediaQuery.paddingOf(context).top + 24,
           28,
           nav.bottomInset + 16,
         ),
@@ -91,7 +92,7 @@ class _VariantAAboutState extends State<VariantAAbout> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(
           24,
-          prototypePreviewH + MediaQuery.paddingOf(context).top + 12,
+          MediaQuery.paddingOf(context).top + 12,
           24,
           nav.bottomInset + 12,
         ),
@@ -115,13 +116,7 @@ class _VariantAAboutState extends State<VariantAAbout> {
             const SizedBox(height: 18),
             Expanded(
               child: _licenses
-                  ? const Center(
-                      child: Text(
-                        licensesStub,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: _cream, fontSize: 16),
-                      ),
-                    )
+                  ? const _LicenseBody()
                   : ListView(
                       children: [
                         _line(aboutAppName, big: true),
@@ -187,37 +182,34 @@ class VariantAWin extends StatelessWidget {
         Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 320),
-            child: Padding(
-              padding: EdgeInsets.only(bottom: nav.bottomInset),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0xE0121A14),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFFFD54F)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'You won!',
-                        style: TextStyle(
-                          color: Color(0xFFFFD54F),
-                          fontSize: 34,
-                          fontWeight: FontWeight.w800,
-                        ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: const Color(0xE0121A14),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFFFD54F)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'You won!',
+                      style: TextStyle(
+                        color: Color(0xFFFFD54F),
+                        fontSize: 34,
+                        fontWeight: FontWeight.w800,
                       ),
-                      const SizedBox(height: 18),
-                      _BannerBtn('Start', onTap: nav.onWinStart),
-                      const SizedBox(height: 8),
-                      _BannerBtn(
-                        'New Game',
-                        filled: true,
-                        onTap: nav.onWinNewGame,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 18),
+                    _BannerBtn('Start', onTap: nav.onWinStart),
+                    const SizedBox(height: 8),
+                    _BannerBtn(
+                      'New Game',
+                      filled: true,
+                      onTap: nav.onWinNewGame,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -315,6 +307,107 @@ class _BannerBtn extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class VariantAConfirm extends StatelessWidget {
+  const VariantAConfirm({super.key, required this.nav});
+  final ChromeNav nav;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        const DimScrim(amount: 0.45),
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 320),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: const Color(0xE0121A14),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0x40FFFFFF)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'This unfinished Game will be discarded.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFF7F3EA),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    _BannerBtn(
+                      'New Game',
+                      filled: true,
+                      onTap: nav.onConfirmDiscard,
+                    ),
+                    const SizedBox(height: 8),
+                    _BannerBtn('Cancel', onTap: nav.onCancelConfirm),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _LicenseBody extends StatelessWidget {
+  const _LicenseBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<LicenseEntry>>(
+      future: LicenseRegistry.licenses.toList(),
+      builder: (context, snap) {
+        if (!snap.hasData) {
+          return const Center(
+            child: Text(
+              'Loading…',
+              style: TextStyle(color: _cream, fontSize: 16),
+            ),
+          );
+        }
+        final entries = snap.data!;
+        return ListView(
+          children: [
+            for (final e in entries) ...[
+              Text(
+                e.packages.join(', '),
+                style: const TextStyle(
+                  color: _cream,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 6),
+              for (final p in e.paragraphs)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    p.text,
+                    style: const TextStyle(
+                      color: Color(0xCCF7F3EA),
+                      fontSize: 12,
+                      height: 1.3,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 16),
+            ],
+          ],
+        );
+      },
     );
   }
 }

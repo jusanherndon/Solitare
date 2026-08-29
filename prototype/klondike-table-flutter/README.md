@@ -1,32 +1,27 @@
-# PROTOTYPE — Chrome screens look (start, About, win, loss)
+# Klondike Solitaire — Flutter prototype (spec v1)
 
-**Throwaway.** Question: *How should the start, About, win, and loss screens look on a phone in portrait and landscape?*
+Throwaway phone app that follows [spec.md](../../.scratch/klondike-solitaire-spec/spec.md). Felt-banner chrome (start, About, win, loss) plus layout A table. Not the store product.
 
-**Owner pick: A — Felt banner.** B and C stay on this branch as the comparison source.
-
-Extends the Flutter table (`Layout A`). Yellow bars are prototype chrome — not part of the design. Contents and buttons are locked on tickets `09`, `11`, and `14`; this pass is look, overlay coverage, and animation.
+**Playtest:** [What bugs or changes turn up when the owner runs the prototype on Android?](../../.scratch/klondike-solitaire-spec/issues/17-android-playtest.md)
 
 ## Run
 
 ```bash
 cd prototype/klondike-table-flutter
-flutter run            # Linux desktop here; Android device for phone feel
-flutter run -d linux
-# rotate the window / device for landscape
+flutter run                 # connected Android device
+flutter build apk           # sideload: build/app/outputs/flutter-apk/app-release.apk
+flutter run -d linux        # desktop, for layout checks
 ```
 
-Phone: `flutter run` on a connected Android device, or `flutter build apk`.
+First launch: **New Game** or **About**. **Resume** appears after you leave an unfinished Game via **Start**. Win/loss end the Game (no Resume). New Game confirms when it would discard an unfinished Game.
 
-## Variants (bottom bar / ← →)
+Cards are still placeholder faces/backs; About already credits Fomin/Atlas. Portrait and landscape both use classic top-row layout.
 
-- **A — Felt banner** — same felt and chrome-button language as the table. Centered win card; loss card sits lower, greyscale table, dust.
-- **B — Letterbox** — ink poster start; win/loss as cinematic bars with the table visible in the middle window. Card rain on win; greyscale on loss.
-- **C — Bottom sheet** — card-fan start; win/loss keep almost all of the table. Slim sheet; gold pulse + sparkles on win; dark sheet + Undo first on loss.
+## Analyze / format / test
 
-## Preview chips (top bar)
-
-**Start · About · Table · Win · Loss** — jump without playing a Game through. Real buttons also navigate.
-
-Resume is hidden until an unfinished Game exists (New Game, or **Start** from the table). Win/Loss **Start** ends the Game, so Resume hides again.
-
-Support / Source / Privacy / Licenses are stubs (flash or a placeholder page).
+```bash
+flutter pub get
+flutter analyze
+dart format .
+flutter test
+```
