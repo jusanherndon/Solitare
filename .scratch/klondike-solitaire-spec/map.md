@@ -17,12 +17,13 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English gam
 
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
-- `04` [What icon, feature graphic, and screenshots does v1 use?](issues/04-listing-visuals.md) (`prototype`, was #11)
 - `05` [Does Play list Klondike Solitaire as including children?](issues/05-play-target-audience-children.md) (`grilling`, was #12)
 - `07` [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) (`task`, was #14) — waiting on a MacBook
 - `08` [Publish the Klondike Solitaire privacy policy on GitHub Pages](issues/08-publish-privacy-policy-pages.md) (`task`, was #15)
 - `09` [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md) (`grilling`, was #16)
 - `10` [Update jusanherndon.github.io for the Klondike privacy policy link](issues/10-update-personal-github-pages.md) (`task`) — blocked by 08
+- `11` [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) (`grilling`)
+- `12` [What icon, feature graphic, and screenshots does v1 use?](issues/12-listing-visuals.md) (`prototype`, was #11 / local `04`) — parked; prototype on `prototype/listing-visuals`
 
 ## Decisions so far
 
@@ -39,6 +40,7 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5) — Both stores: public privacy policy (listing + in-app), no-data nutrition/Data safety, honest age/content questionnaires (expect Apple 4+), phone listing assets (Apple 6.9″ screenshots + 1024 icon; Play 512 icon + 1024×500 feature graphic + ≥2 screenshots); Play personal accounts need 12 testers for 14 days.
 - [Which public-domain classic card assets can we ship on both stores?](https://github.com/jusanherndon/Solitare/issues/3) — Fomin English-pattern SVGs + Atlas card back (CC0 1.0); not Bicycle art or Bellot LGPL.
 - [What privacy policy does Klondike Solitaire publish, and where is it hosted?](https://github.com/jusanherndon/Solitare/issues/9) — GitHub Pages at `https://jusanherndon.github.io/Solitare/privacy/`; Klondike Solitaire by Justin Herndon; no off-device personal data; About-screen link; contact jherndon111@gmail.com.
+- [Which Flutter analyzer, lint, and format tools should this repo use?](issues/13-flutter-lint-and-style-tools.md) — Official `flutter_lints` (declare the missing dev_dependency) + `dart format` at 80 cols + `flutter analyze` / `flutter test`. Extra lints: `unawaited_futures`, `discarded_futures`. Skip VGA, DCM, `custom_lint`, `pedantic`. CI later: analyze, format `--set-exit-if-changed`, test.
 
 ## Not yet specified
 
