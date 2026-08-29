@@ -4,6 +4,9 @@ Type: grilling
 Status: resolved
 GitHub: #10 — https://github.com/jusanherndon/Solitare/issues/10
 
+Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `03`.
+Shared with [What copy goes on the App Store and Play listings?](../klondike-app-store/issues/03-store-listing-copy.md).
+
 Depends on [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5). Store name is already Klondike Solitaire.
 
 ## Question
@@ -14,7 +17,7 @@ Cover short description (Play ≤80), full description (both ≤4000), Apple key
 
 ## Answer
 
-Store name remains **Klondike Solitaire**. English only. No “kids,” “children,” or Family/Kids category on this ticket (`05` still decides Play’s child audience).
+Store name remains **Klondike Solitaire**. English only. No “kids,” “children,” or Family/Kids category on this ticket ([Does Play list Klondike Solitaire as including children?](issues/05-play-target-audience-children.md) still decides Play’s child audience).
 
 **Play short description** (67 characters):
 `Free Klondike Solitaire. Draw-one, undo, resume. No ads, no account.`
@@ -32,6 +35,6 @@ English. Portrait and landscape. Phones only.
 **Apple keywords** (61 bytes; name words omitted):
 `cards,patience,draw one,undo,classic,offline,no ads,card game`
 
-**Support:** contact `jherndon111@gmail.com`. Support URL `https://jusanherndon.github.io/Solitare/privacy/` (the public policy page, once `08` publishes it).
+**Support:** contact `jherndon111@gmail.com`. Support URL `https://jusanherndon.github.io/Solitare/privacy/` (the public policy page, once `01` publishes it).
 
 **Category:** Game / Card on both stores. Not Casino. Not Apple Family or Kids.

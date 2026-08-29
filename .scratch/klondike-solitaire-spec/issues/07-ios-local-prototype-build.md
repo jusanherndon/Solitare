@@ -14,7 +14,7 @@ The comparison prototype is `prototype/klondike-table-flutter` (see `01`). Start
 
 This ticket is done when repo docs name the command, the machine requirements, and where the `.ipa` or Simulator app lands, and a successful local build has been demonstrated.
 
-Not store submission, not CI, and not the product app — a local prototype artifact only. Do not use Expo / EAS.
+Not store submission, not CI, and not the product app — a local prototype artifact only. Do not use Expo / EAS. The App Store IPA path is [How do we produce a store-signed iOS build from this Flutter project?](../../klondike-app-store/issues/07-flutter-ios-store-build.md).
 
 ## Done when
 

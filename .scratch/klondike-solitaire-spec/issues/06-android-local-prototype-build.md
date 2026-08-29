@@ -12,7 +12,7 @@ Can we produce a phone-installable Android build of the Flutter Klondike table p
 
 The comparison prototype is `prototype/klondike-table-flutter` (see `01`). Starting point: `flutter build apk` (needs Flutter SDK + `ANDROID_HOME` / Android SDK). This ticket is done when a beginner can follow repo docs, run one documented command, get an APK, and sideload it onto a phone.
 
-Not store submission, not CI, and not the product app — a local prototype artifact only. Do not revive the Expo / EAS / `npm run prototype:table:apk:local` path; that table was dropped.
+Not store submission, not CI, and not the product app — a local prototype artifact only. Do not revive the Expo / EAS / `npm run prototype:table:apk:local` path; that table was dropped. The Play App Bundle path is [How do we produce a Play Android App Bundle from this Flutter project?](../../klondike-play-store/issues/09-flutter-play-aab.md).
 
 ## Done when
 

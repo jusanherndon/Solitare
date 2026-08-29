@@ -4,6 +4,8 @@ Type: grilling
 Status: open
 GitHub: #12 — https://github.com/jusanherndon/Solitare/issues/12
 
+Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `05`.
+
 Depends on [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5).
 
 ## Question
