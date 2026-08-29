@@ -5,7 +5,7 @@ A free, no-account, on-device Klondike Game for phones. This glossary is the lan
 ## Language
 
 **Game**:
-One deal of Klondike: Stock, Waste, four Foundations, and seven Tableau piles, from the opening layout until New Game or a win.
+One deal of Klondike: Stock, Waste, four Foundations, and seven Tableau piles, from the opening layout until New Game, a win, or a loss.
 _Avoid_: round, session, match
 
 **Stock**:
@@ -29,9 +29,21 @@ Reversal of the last successful move, draw, Stock recycle, or auto-move in the c
 _Avoid_: rewind, back
 
 **Resume**:
-Restoring an unfinished Game, including the Undo stack, when the app launches again. Selection and in-progress drag are not part of Resume.
+Restoring an unfinished Game, including the Undo stack, from the start screen. Selection and in-progress drag are not part of Resume. A win or a loss is not unfinished — Resume does not apply.
 _Avoid_: save, checkpoint, continue (as the feature name)
+
+**Start screen**:
+The dedicated screen the app opens to, not the Klondike table.
+_Avoid_: home screen, home, menu, title screen
 
 **Auto-move**:
 A double-tap or double-click that sends a card to a Foundation if legal, otherwise to a legal Tableau pile. Cards do not fly by themselves.
 _Avoid_: hint, autocomplete, auto-complete
+
+**Win**:
+A Game with all four Foundations complete, Ace through King of each suit.
+_Avoid_: victory, clear
+
+**Loss**:
+A Game with no legal play that is not a win: no Tableau move, no Foundation move, Stock empty, Waste empty.
+_Avoid_: stuck, fail, game over (as the outcome name)

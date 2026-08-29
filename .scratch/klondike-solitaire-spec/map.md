@@ -20,8 +20,7 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English Gam
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
 - `07` [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) (`task`, was #14) — waiting on a MacBook
-- `09` [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md) (`grilling`, was #16)
-- `11` [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) (`grilling`)
+- `15` [How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md) (`prototype`)
 
 ## Decisions so far
 
@@ -36,17 +35,18 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [Does v1 follow USPC Klondike strictly, or computer-Klondike conventions?](https://github.com/jusanherndon/Solitare/issues/8) — Computer-Klondike: unlimited Stock recycle + legal face-up subsequences (from `01` prototype feedback); #4 remains the printed citation.
 - [Which public-domain classic card assets can we ship on both stores?](https://github.com/jusanherndon/Solitare/issues/3) — Fomin English-pattern SVGs + Atlas card back (CC0 1.0); not Bicycle art or Bellot LGPL.
 - [Which Flutter analyzer, lint, and format tools should this repo use?](issues/13-flutter-lint-and-style-tools.md) — Official `flutter_lints` (declare the missing dev_dependency) + `dart format` at 80 cols + `flutter analyze` / `flutter test`. Extra lints: `unawaited_futures`, `discarded_futures`. Skip VGA, DCM, `custom_lint`, `pedantic`. CI later: analyze, format `--set-exit-if-changed`, test.
+- [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md) — Name, Justin Herndon, version, support `jherndon111@gmail.com`, source `github.com/jusanherndon/Solitare`, Privacy Policy URL (system browser), Flutter Licenses, Fomin/Atlas CC0 credit. No how-to-play or Kids copy. Reach it from the start screen (`11`).
+- [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) — Always the start screen (title Klondike Solitaire): New Game, Resume (hidden if nothing to resume), About. No Settings in v1. Table chrome: Undo, New Game, Start (Start keeps the Game). New Game confirms only when it would discard an unfinished Game.
+- [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md) — Cheap no-move check (no Tableau/Foundation play, Stock and Waste empty). Separate win and loss overlays; table visible behind; You won! / You lost. Win: Start + New Game. Loss: those plus Undo. Win and loss end the Game — no Resume.
 
 ## Not yet specified
-
-- Visual polish beyond Layout A once start/settings/About contents are locked
-- Whether the table chrome (Undo, New Game) changes after those screens exist (`11`)
 
 ## Out of scope
 
 - Other Solitaire variants (Spider, FreeCell, Pyramid, a multi-game suite)
 - Accounts, ads, in-app purchases, draw-three, house rules
 - Hints, score, timer, statistics, daily challenges, themes, sound
+- Settings screen — no v1 options; revisit in a later effort when a toggle exists
 - Tablet layouts and languages other than English
 - App Store and Play listing, privacy-policy hosting, developer-account enrollment, store uploads — [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md)
 - CI
