@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>B - Corner crop</title>
+  <rect width="1024" height="1024" fill="#1F6B45"/>
+  <g transform="translate(40 36) rotate(-6)">
+    <rect x="0" y="0" width="1180" height="1650" rx="72" fill="#F7F3EA" stroke="#CFC6B4" stroke-width="14"/>
+    <text x="72" y="280" font-family="Georgia, 'Times New Roman', serif" font-size="260" font-weight="700" fill="#1A1A1A">A</text>
+    <path transform="translate(210 430) scale(2.4)" fill="#1A1A1A" d="M0-70 C-52-28 -56 18 0 52 C56 18 52-28 0-70 Z M-12 46 L12 46 L7 96 L-7 96 Z"/>
+  </g>
+</svg>

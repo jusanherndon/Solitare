@@ -9,14 +9,23 @@ import 'drag_overlay.dart';
 import 'interactive_pile.dart';
 
 class KlondikeTable extends StatefulWidget {
-  const KlondikeTable({super.key});
+  const KlondikeTable({
+    super.key,
+    this.initialMeta,
+    this.showPrototypeHint = true,
+    this.forcePhoneMetrics = false,
+  });
+
+  final GameMeta? initialMeta;
+  final bool showPrototypeHint;
+  final bool forcePhoneMetrics;
 
   @override
   State<KlondikeTable> createState() => _KlondikeTableState();
 }
 
 class _KlondikeTableState extends State<KlondikeTable> {
-  GameMeta _meta = initMeta(42);
+  late GameMeta _meta = widget.initialMeta ?? initMeta(42);
   final _hits = HitRegistry();
   final _drag = DragController();
 
@@ -47,7 +56,7 @@ class _KlondikeTableState extends State<KlondikeTable> {
       size: media.size,
       padding: media.padding,
       fontScale: media.textScaler.scale(1),
-      touch: coarsePointer(),
+      touch: widget.forcePhoneMetrics || coarsePointer(),
     );
     final selected = selectedCardIds(_state);
     final card = CardSize(metrics.cardW, metrics.cardH);
@@ -123,21 +132,22 @@ class _KlondikeTableState extends State<KlondikeTable> {
               ),
             ),
           ),
-          Positioned(
-            top: metrics.insets.top + 4,
-            left: 0,
-            right: 0,
-            child: IgnorePointer(
-              child: Text(
-                'Double-click auto-move · drag · tap → tap',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color(0x59FFFFFF),
-                  fontSize: (10 * metrics.uiScale).roundToDouble(),
+          if (widget.showPrototypeHint)
+            Positioned(
+              top: metrics.insets.top + 4,
+              left: 0,
+              right: 0,
+              child: IgnorePointer(
+                child: Text(
+                  'Double-click auto-move · drag · tap → tap',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: const Color(0x59FFFFFF),
+                    fontSize: (10 * metrics.uiScale).roundToDouble(),
+                  ),
                 ),
               ),
             ),
-          ),
           DragOverlay(controller: _drag),
           if (_state.won)
             Center(

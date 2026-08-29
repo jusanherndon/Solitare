@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>C - Fan</title>
+  <rect width="1024" height="1024" fill="#1F6B45"/>
+  <g transform="translate(330 560) rotate(-26)">
+    <rect x="-150" y="-210" width="300" height="420" rx="28" fill="#1E3A5F" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="6"/>
+    <rect x="-118" y="-178" width="236" height="356" rx="12" fill="#2A5080" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="4"/>
+  </g>
+  <g transform="translate(512 500) rotate(-2)">
+    <rect x="-150" y="-210" width="300" height="420" rx="28" fill="#F7F3EA" stroke="#CFC6B4" stroke-width="6"/>
+    <text x="-108" y="-128" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="#C62828">Q</text>
+    <path transform="translate(-80 -70) scale(0.42)" fill="#C62828" d="M0-28 C-28-56 -70-28 -70 4 C-70 40 0 72 0 72 C0 72 70 40 70 4 C70-28 28-56 0-28 Z"/>
+  </g>
+  <g transform="translate(690 560) rotate(24)">
+    <rect x="-150" y="-210" width="300" height="420" rx="28" fill="#F7F3EA" stroke="#CFC6B4" stroke-width="6"/>
+    <text x="-108" y="-128" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="#1A1A1A">K</text>
+    <path transform="translate(-80 -88) scale(0.38)" fill="#1A1A1A" d="M0-70 C-52-28 -56 18 0 52 C56 18 52-28 0-70 Z M-12 46 L12 46 L7 96 L-7 96 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PROTOTYPE — listing visuals</title>
+  <link rel="stylesheet" href="listing.css" />
+</head>
+<body>
+  <!-- Three listing-visual families (icon + Play feature graphic + Flutter table shots), switchable via ?variant=. -->
+  <p class="question">
+    <strong>What icon, feature graphic, and screenshots does v1 use?</strong>
+    Throwaway. Steal bits across A/B/C. Icons are felt-green marks (no type, no “kids”).
+    Feature graphic is Play’s 1024×500. Screenshots are the Flutter table in use — same three shots on every family.
+  </p>
+
+  <section class="stage" data-variant="A">
+    <h2>Icon — Ace on felt</h2>
+    <div class="icon-row">
+      <div class="icon-wrap">
+        <img class="icon ios" src="icons/a-ace-on-felt.svg" alt="Ace of spades on felt, iOS mask" />
+        <span>iOS squircle</span>
+      </div>
+      <div class="icon-wrap">
+        <img class="icon play" src="icons/a-ace-on-felt.svg" alt="Ace of spades on felt, Play mask" />
+        <span>Play rounded</span>
+      </div>
+      <div class="store">
+        <div class="store-head">
+          <img src="icons/a-ace-on-felt.svg" alt="" />
+          <div>
+            <h3>Klondike Solitaire</h3>
+            <small>Justin Herndon · Game</small>
+          </div>
+        </div>
+        <p>Free Klondike Solitaire. Draw-one, undo, resume. No ads, no account.</p>
+      </div>
+    </div>
+    <h2>Feature graphic — table crop + name</h2>
+    <div class="graphic">
+      <img class="shot" src="shots/landscape-play.png" alt="Landscape table in play" />
+      <div class="shade"></div>
+      <div class="copy">
+        <h3>Klondike Solitaire</h3>
+        <p>Draw-one. Undo. Resume. No ads.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage" data-variant="B" hidden>
+    <h2>Icon — Corner crop</h2>
+    <div class="icon-row">
+      <div class="icon-wrap">
+        <img class="icon ios" src="icons/b-corner-crop.svg" alt="A and spade filling the icon, iOS mask" />
+        <span>iOS squircle</span>
+      </div>
+      <div class="icon-wrap">
+        <img class="icon play" src="icons/b-corner-crop.svg" alt="A and spade filling the icon, Play mask" />
+        <span>Play rounded</span>
+      </div>
+      <div class="store">
+        <div class="store-head">
+          <img src="icons/b-corner-crop.svg" alt="" />
+          <div>
+            <h3>Klondike Solitaire</h3>
+            <small>Justin Herndon · Game</small>
+          </div>
+        </div>
+        <p>Free Klondike Solitaire. Draw-one, undo, resume. No ads, no account.</p>
+      </div>
+    </div>
+    <h2>Feature graphic — mark + copy, no table photo</h2>
+    <div class="graphic graphic-b">
+      <img class="big-icon" src="icons/b-corner-crop.svg" alt="" />
+      <div class="copy">
+        <h3>Klondike Solitaire</h3>
+        <p>Free draw-one Klondike. Undo any move. Resume on this phone. No ads, no account.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage" data-variant="C" hidden>
+    <h2>Icon — Fan</h2>
+    <div class="icon-row">
+      <div class="icon-wrap">
+        <img class="icon ios" src="icons/c-fan.svg" alt="Three fanned cards on felt, iOS mask" />
+        <span>iOS squircle</span>
+      </div>
+      <div class="icon-wrap">
+        <img class="icon play" src="icons/c-fan.svg" alt="Three fanned cards on felt, Play mask" />
+        <span>Play rounded</span>
+      </div>
+      <div class="store">
+        <div class="store-head">
+          <img src="icons/c-fan.svg" alt="" />
+          <div>
+            <h3>Klondike Solitaire</h3>
+            <small>Justin Herndon · Game</small>
+          </div>
+        </div>
+        <p>Free Klondike Solitaire. Draw-one, undo, resume. No ads, no account.</p>
+      </div>
+    </div>
+    <h2>Feature graphic — cards only</h2>
+    <div class="graphic graphic-c">
+      <img class="fan" src="icons/c-fan.svg" alt="Fanned cards on felt" />
+      <span class="caption">Klondike Solitaire</span>
+    </div>
+  </section>
+
+  <section class="stage-shots" style="max-width:1100px;margin:0 auto;">
+    <h2>Screenshots — Flutter table (shared)</h2>
+    <div class="shots">
+      <figure class="shot-card">
+        <img src="shots/portrait-play.png" alt="Portrait, mid-Game: Waste, Foundations, Tableau" />
+        <figcaption>Portrait mid-Game — Waste + two Aces on Foundations + Tableau. Play/Apple in-use shot.</figcaption>
+      </figure>
+      <figure class="shot-card landscape">
+        <img src="shots/landscape-play.png" alt="Landscape, same mid-Game" />
+        <figcaption>Landscape mid-Game — same layout A, tighter fan. Second required Play shot; shows rotation.</figcaption>
+      </figure>
+      <figure class="shot-card">
+        <img src="shots/portrait-deal.png" alt="Portrait, opening deal" />
+        <figcaption>Portrait opening deal — Stock full, empty Waste/Foundations. Optional third; drop if it reads as splash.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="switcher" aria-label="Prototype variant switcher">
+    <button type="button" id="prev" aria-label="Previous variant">←</button>
+    <div class="label" id="variant-label">A — Ace on felt</div>
+    <button type="button" id="next" aria-label="Next variant">→</button>
+  </div>
+  <script src="listing.js"></script>
+</body>
+</html>

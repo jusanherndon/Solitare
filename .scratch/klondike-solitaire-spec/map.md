@@ -17,12 +17,13 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English gam
 
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
-- `04` [What icon, feature graphic, and screenshots does v1 use?](issues/04-listing-visuals.md) (`prototype`, was #11)
 - `05` [Does Play list Klondike Solitaire as including children?](issues/05-play-target-audience-children.md) (`grilling`, was #12)
 - `07` [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) (`task`, was #14) — waiting on a MacBook
 - `08` [Publish the Klondike Solitaire privacy policy on GitHub Pages](issues/08-publish-privacy-policy-pages.md) (`task`, was #15)
 - `09` [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md) (`grilling`, was #16)
 - `10` [Update jusanherndon.github.io for the Klondike privacy policy link](issues/10-update-personal-github-pages.md) (`task`) — blocked by 08
+- `11` [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) (`grilling`)
+- `12` [What icon, feature graphic, and screenshots does v1 use?](issues/12-listing-visuals.md) (`prototype`, was #11 / local `04`) — parked; prototype on `prototype/listing-visuals`
 
 ## Decisions so far
 

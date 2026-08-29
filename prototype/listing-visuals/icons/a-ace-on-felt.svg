@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>A - Ace on felt</title>
+  <rect width="1024" height="1024" fill="#1F6B45"/>
+  <g transform="translate(512 540) rotate(-9)">
+    <rect x="-230" y="-322" width="460" height="644" rx="38" fill="#1a1a1a" opacity="0.22"/>
+    <rect x="-220" y="-336" width="440" height="616" rx="36" fill="#F7F3EA" stroke="#CFC6B4" stroke-width="8"/>
+    <text x="-168" y="-248" font-family="Georgia, 'Times New Roman', serif" font-size="92" font-weight="700" fill="#1A1A1A">A</text>
+    <path transform="translate(-148 -198) scale(0.42)" fill="#1A1A1A" d="M0-70 C-52-28 -56 18 0 52 C56 18 52-28 0-70 Z M-10 44 L10 44 L6 88 L-6 88 Z"/>
+    <path transform="translate(0 28) scale(2.15)" fill="#1A1A1A" d="M0-70 C-52-28 -56 18 0 52 C56 18 52-28 0-70 Z M-12 46 L12 46 L7 96 L-7 96 Z"/>
+  </g>
+</svg>
