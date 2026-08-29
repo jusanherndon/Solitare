@@ -1,4 +1,5 @@
 /// PROTOTYPE — pure Klondike rules helpers. No Flutter.
+library;
 
 const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
 
@@ -18,12 +19,7 @@ const rankLabel = {
   13: 'K',
 };
 
-const suitGlyph = {
-  'spades': '♠',
-  'hearts': '♥',
-  'diamonds': '♦',
-  'clubs': '♣',
-};
+const suitGlyph = {'spades': '♠', 'hearts': '♥', 'diamonds': '♦', 'clubs': '♣'};
 
 class PlayingCard {
   const PlayingCard({
@@ -39,11 +35,11 @@ class PlayingCard {
   final bool faceUp;
 
   PlayingCard copyWith({bool? faceUp}) => PlayingCard(
-        id: id,
-        suit: suit,
-        rank: rank,
-        faceUp: faceUp ?? this.faceUp,
-      );
+    id: id,
+    suit: suit,
+    rank: rank,
+    faceUp: faceUp ?? this.faceUp,
+  );
 }
 
 enum PileArea { stock, waste, foundation, tableau }

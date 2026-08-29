@@ -86,7 +86,8 @@ BoardMetrics computeBoardMetrics({
 
   final pad = touch ? 8.0 : 20.0;
   final gap = touch ? 6.0 : 10.0;
-  final chromeH = insets.top +
+  final chromeH =
+      insets.top +
       insets.bottom +
       8 +
       12 +
@@ -100,8 +101,10 @@ BoardMetrics computeBoardMetrics({
 
   double fanFor(double w) {
     final inner = math.max(8.0, w - math.max(3.0, w * 0.05) * 2);
-    final label = math.min((inner * 0.7).roundToDouble(),
-        math.max(11.0, (w * 0.24).roundToDouble()));
+    final label = math.min(
+      (inner * 0.7).roundToDouble(),
+      math.max(11.0, (w * 0.24).roundToDouble()),
+    );
     final inset = math.max(3.0, (w * 0.05).roundToDouble());
     final readable = label * 2 + inset + 6;
     return math.max(readable, (w * cardRatio * fanRatio).roundToDouble());
@@ -126,8 +129,10 @@ BoardMetrics computeBoardMetrics({
     math.min(fanFor(cardW), maxFan > 0 ? maxFan : fanFor(cardW)),
   );
   final boardMax = 7 * cardW + 6 * gap + pad * 2;
-  final chromeScale =
-      math.max(0.9, math.min(touch ? 1.15 : 1.05, cardW / refCardW));
+  final chromeScale = math.max(
+    0.9,
+    math.min(touch ? 1.15 : 1.05, cardW / refCardW),
+  );
   final uiScale = chromeScale * fontScale;
 
   return BoardMetrics(

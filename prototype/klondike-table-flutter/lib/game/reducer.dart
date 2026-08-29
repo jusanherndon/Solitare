@@ -1,4 +1,5 @@
 /// PROTOTYPE — Klondike reducer. Pure; portable into the real app later.
+library;
 
 import 'deal.dart';
 import 'rules.dart';
@@ -41,12 +42,16 @@ class ClearSelectionAction extends GameAction {
 
 class _Board {
   _Board(GameState state)
-      : stock = [...state.stock],
-        waste = [...state.waste],
-        foundations = [for (final p in state.foundations) [...p]],
-        tableau = [for (final p in state.tableau) [...p]],
-        selection = state.selection,
-        won = state.won;
+    : stock = [...state.stock],
+      waste = [...state.waste],
+      foundations = [
+        for (final p in state.foundations) [...p],
+      ],
+      tableau = [
+        for (final p in state.tableau) [...p],
+      ],
+      selection = state.selection,
+      won = state.won;
 
   List<PlayingCard> stock;
   List<PlayingCard> waste;
@@ -56,13 +61,13 @@ class _Board {
   bool won;
 
   GameState freeze() => GameState(
-        stock: stock,
-        waste: waste,
-        foundations: foundations,
-        tableau: tableau,
-        selection: selection,
-        won: won,
-      );
+    stock: stock,
+    waste: waste,
+    foundations: foundations,
+    tableau: tableau,
+    selection: selection,
+    won: won,
+  );
 
   List<PlayingCard> pileOf(PileRef pile) {
     switch (pile.area) {

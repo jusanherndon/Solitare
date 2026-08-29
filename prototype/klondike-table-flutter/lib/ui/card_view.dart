@@ -35,7 +35,10 @@ class CardView extends StatelessWidget {
       math.max(22.0, (width * 0.48).roundToDouble()),
     );
     final cornerSuit = math.max(11.0, (cornerRank * 0.45).roundToDouble());
-    final empty = math.min(inner, math.max(11.0, (width * 0.17).roundToDouble()));
+    final empty = math.min(
+      inner,
+      math.max(11.0, (width * 0.17).roundToDouble()),
+    );
     final radius = math.max(6.0, (width * 0.1).roundToDouble());
 
     if (card == null) {
@@ -81,8 +84,9 @@ class CardView extends StatelessWidget {
       );
     }
 
-    final color =
-        isRed(card!.suit) ? const Color(0xFFC62828) : const Color(0xFF1A1A1A);
+    final color = isRed(card!.suit)
+        ? const Color(0xFFC62828)
+        : const Color(0xFF1A1A1A);
     final rank = rankLabel[card!.rank] ?? '?';
     final glyph = suitGlyph[card!.suit] ?? '';
     final remainH = height - pad * 2 - cornerRank - cornerSuit - 2;
@@ -153,10 +157,7 @@ class _DashedSlotPainter extends CustomPainter {
       Rect.fromLTWH(0.75, 0.75, size.width - 1.5, size.height - 1.5),
       Radius.circular(radius),
     );
-    canvas.drawRRect(
-      rrect,
-      Paint()..color = const Color(0x1F000000),
-    );
+    canvas.drawRRect(rrect, Paint()..color = const Color(0x1F000000));
     final path = Path()..addRRect(rrect);
     final dashed = _dash(path, 5, 4);
     canvas.drawPath(

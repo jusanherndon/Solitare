@@ -1,4 +1,5 @@
 /// Undo history around the pure Klondike reducer. Selection-only changes are skipped.
+library;
 
 import 'deal.dart';
 import 'reducer.dart';

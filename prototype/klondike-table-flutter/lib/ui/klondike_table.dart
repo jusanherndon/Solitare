@@ -85,9 +85,8 @@ class _KlondikeTableState extends State<KlondikeTable> {
                       onTap: (pile, i) => _dispatch(TapAction(pile, i)),
                       onAutoMove: (pile, i) =>
                           _dispatch(AutoMoveAction(pile, i)),
-                      onDrop: (onto, from, i) => _dispatch(
-                        DropAction(onto, from: from, cardIndex: i),
-                      ),
+                      onDrop: (onto, from, i) =>
+                          _dispatch(DropAction(onto, from: from, cardIndex: i)),
                       onDraw: () => _dispatch(const DrawAction()),
                     ),
                     SizedBox(height: metrics.landscape ? 12 : 16),
@@ -193,11 +192,7 @@ class _TopBar extends StatelessWidget {
           onTap: onUndo,
         ),
         const SizedBox(width: 8),
-        _ChromeButton(
-          label: 'New Game',
-          uiScale: uiScale,
-          onTap: onNewGame,
-        ),
+        _ChromeButton(label: 'New Game', uiScale: uiScale, onTap: onNewGame),
       ],
     );
   }

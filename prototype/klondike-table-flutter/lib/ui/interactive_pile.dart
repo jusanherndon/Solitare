@@ -131,15 +131,18 @@ class _InteractivePileState extends State<InteractivePile> {
           ? cards.sublist(g.cardIndex)
           : (cards.isEmpty ? const <PlayingCard>[] : [cards.last]);
       if (lifted.isEmpty) return;
-      final originY = g.pileOrigin.dy +
+      final originY =
+          g.pileOrigin.dy +
           (widget.fanOffset > 0 ? g.cardIndex * widget.fanOffset : 0);
-      widget.drag.setVisual(DragVisual(
-        cards: lifted,
-        origin: Offset(g.pileOrigin.dx, originY),
-        delta: delta,
-        size: widget.size,
-        fanOffset: widget.fanOffset,
-      ));
+      widget.drag.setVisual(
+        DragVisual(
+          cards: lifted,
+          origin: Offset(g.pileOrigin.dx, originY),
+          delta: delta,
+          size: widget.size,
+          fanOffset: widget.fanOffset,
+        ),
+      );
       setState(() {});
     }
     if (g.dragging) {
@@ -199,10 +202,7 @@ class _InteractivePileState extends State<InteractivePile> {
                 clipBehavior: Clip.none,
                 children: [
                   if (cards.isEmpty)
-                    CardView(
-                      size: widget.size,
-                      emptyLabel: widget.emptyLabel,
-                    )
+                    CardView(size: widget.size, emptyLabel: widget.emptyLabel)
                   else
                     for (var i = 0; i < cards.length; i++)
                       Positioned(
@@ -225,7 +225,8 @@ class _InteractivePileState extends State<InteractivePile> {
                   card: cards.isEmpty ? null : cards.last,
                   size: widget.size,
                   emptyLabel: widget.emptyLabel,
-                  selected: cards.isNotEmpty &&
+                  selected:
+                      cards.isNotEmpty &&
                       widget.selectedIds.contains(cards.last.id),
                 ),
               ),

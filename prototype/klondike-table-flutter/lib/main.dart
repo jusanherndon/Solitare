@@ -17,7 +17,7 @@ class KlondikePrototypeApp extends StatelessWidget {
       pageRouteBuilder: <T>(settings, builder) {
         return PageRouteBuilder<T>(
           settings: settings,
-          pageBuilder: (context, _, __) => builder(context),
+          pageBuilder: (context, _, _) => builder(context),
         );
       },
       home: const KlondikeTable(),

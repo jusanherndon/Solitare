@@ -19,12 +19,12 @@ class DragVisual {
   final double fanOffset;
 
   DragVisual copyWith({Offset? delta}) => DragVisual(
-        cards: cards,
-        origin: origin,
-        delta: delta ?? this.delta,
-        size: size,
-        fanOffset: fanOffset,
-      );
+    cards: cards,
+    origin: origin,
+    delta: delta ?? this.delta,
+    size: size,
+    fanOffset: fanOffset,
+  );
 }
 
 class DragController extends ChangeNotifier {
@@ -60,9 +60,8 @@ class DragOverlay extends StatelessWidget {
               for (var i = 0; i < visual.cards.length; i++)
                 Positioned(
                   left: visual.origin.dx + visual.delta.dx,
-                  top: visual.origin.dy +
-                      visual.delta.dy +
-                      i * visual.fanOffset,
+                  top:
+                      visual.origin.dy + visual.delta.dy + i * visual.fanOffset,
                   child: CardView(card: visual.cards[i], size: visual.size),
                 ),
             ],

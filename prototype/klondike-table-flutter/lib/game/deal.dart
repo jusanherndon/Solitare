@@ -1,4 +1,5 @@
 /// PROTOTYPE — deal a Klondike Game. No Flutter.
+library;
 
 import 'rules.dart';
 
@@ -20,12 +21,9 @@ List<PlayingCard> buildDeck() {
   final deck = <PlayingCard>[];
   for (final suit in suits) {
     for (var rank = 1; rank <= 13; rank++) {
-      deck.add(PlayingCard(
-        id: '$suit-$rank',
-        suit: suit,
-        rank: rank,
-        faceUp: false,
-      ));
+      deck.add(
+        PlayingCard(id: '$suit-$rank', suit: suit, rank: rank, faceUp: false),
+      );
     }
   }
   return deck;
@@ -45,8 +43,10 @@ List<PlayingCard> shuffle(List<PlayingCard> deck, int seed) {
 
 /// Standard Klondike deal: Tableau piles 1–7, tops face-up; rest face-down Stock.
 GameState dealGame([int? seed]) {
-  final deck =
-      shuffle(buildDeck(), seed ?? DateTime.now().millisecondsSinceEpoch);
+  final deck = shuffle(
+    buildDeck(),
+    seed ?? DateTime.now().millisecondsSinceEpoch,
+  );
   var i = 0;
   final tableau = <List<PlayingCard>>[];
   for (var col = 0; col < 7; col++) {
@@ -56,9 +56,7 @@ GameState dealGame([int? seed]) {
     }
     tableau.add(pile);
   }
-  final stock = [
-    for (final c in deck.skip(i)) c.copyWith(faceUp: false),
-  ];
+  final stock = [for (final c in deck.skip(i)) c.copyWith(faceUp: false)];
   return GameState(
     stock: stock,
     waste: const [],
