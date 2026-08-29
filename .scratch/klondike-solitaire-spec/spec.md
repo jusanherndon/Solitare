@@ -6,7 +6,7 @@ This file is the implementable spec. Decisions live in the tickets this map clos
 
 **Look sources.** Table: `prototype/klondike-table-flutter` ([How should the Klondike table look and play on a phone in portrait and landscape?](issues/01-klondike-table-look-and-play.md)). Chrome screens: same tree, **A — Felt banner**, on branch `prototype/chrome-screens-look` ([How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md)). The prototype is throwaway, not the product app.
 
-Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md).
+Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Playtest mechanic changes: [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
 ## Product
 
@@ -17,8 +17,8 @@ Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to t
 
 ## Out of scope
 
-- Other Solitaire variants; draw-three; house rules
-- Hints, score, timer, statistics, daily challenges, themes, sound
+- Other Solitaire variants; house rules
+- Score, timer, statistics, daily challenges, themes, sound
 - Settings
 - Tablets; languages other than English
 - Store listing, privacy-policy hosting, enrollment, store uploads

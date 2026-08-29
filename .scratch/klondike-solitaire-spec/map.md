@@ -2,25 +2,26 @@
 
 Migrated from: https://github.com/jusanherndon/Solitare/issues/1
 
-Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md).
+Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Playtest-driven mechanic changes continue on [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
 ## Destination
 
 A written spec for Klondike Solitaire — a free, no-account, no-ads English Game for phones — covering the features in the app and how it looks, complete enough that a later session can implement it. Phones only, portrait and landscape. This map does not ship the app or list it on a store.
 
+**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 is the other map. Leftover on this map: iOS local prototype (MacBook) and launcher icon.
+
 ## Notes
 
 - Domain: Klondike. Read `CONTEXT.md` before working a ticket. Use `/grilling`, `/domain-modeling`, `/research`, and `/prototype` as the ticket type requires.
 - Passion project; the owner is new to app development. One shared codebase for both stores. Store name: Klondike Solitaire. Toolkit is Flutter (owner override of the #2 Expo research after comparing prototypes).
-- Classic playing cards; prefer public-domain art. Tap and drag. Undo and resume. Draw-one, standard Klondike rules.
-- Plan, don't do: produce decisions for the spec, not the implementation. Store posting is the other two maps.
+- Classic playing cards; prefer public-domain art. Tap and drag. Undo and resume. Draw-one is the locked default on this map; draw-three lives on [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
+- Plan, don't do: produce decisions for the spec, not the implementation. Store posting is the other two maps. Mechanic playtest follow-up is [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
 ## Open tickets
 
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
 - `07` [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) (`task`, was #14) — waiting on a MacBook
-- `17` [What bugs or changes turn up when the owner runs the prototype on Android?](issues/17-android-playtest.md) (`task`) — playtest log
 - `18` [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md) (`prototype`)
 
 ## Decisions so far
@@ -41,14 +42,15 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md) — Cheap no-move check (no Tableau/Foundation play, Stock and Waste empty). Separate win and loss overlays; table visible behind; You won! / You lost. Win: Start + New Game. Loss: those plus Undo. Win and loss end the Game — no Resume.
 - [How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md) — Felt banner (variant A): felt + table chrome buttons; centered gold win card with sparkles; lower greyscale loss card with dust. Source: `prototype/klondike-table-flutter` on `prototype/chrome-screens-look`.
 - [Write the v1 spec from the closed decisions?](issues/16-write-spec.md) — Compiled [spec.md](spec.md) from the closed tickets; implement from there.
+- [What bugs or changes turn up when the owner runs the prototype on Android?](issues/17-android-playtest.md) — Playtest notes captured; mechanic follow-up is [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
 ## Not yet specified
 
 ## Out of scope
 
 - Other Solitaire variants (Spider, FreeCell, Pyramid, a multi-game suite)
-- Accounts, ads, in-app purchases, draw-three, house rules
-- Hints, score, timer, statistics, daily challenges, themes, sound
+- Accounts, ads, in-app purchases, house rules
+- Score, timer, statistics, daily challenges, themes, sound
 - Settings screen — no v1 options; revisit in a later effort when a toggle exists
 - Tablet layouts and languages other than English
 - App Store and Play listing, privacy-policy hosting, developer-account enrollment, store uploads — [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md)
