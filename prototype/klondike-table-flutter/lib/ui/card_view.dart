@@ -30,13 +30,20 @@ class CardView extends StatelessWidget {
     final height = size.height;
     final pad = math.max(3.0, width * 0.05);
     final inner = math.max(8.0, width - pad * 2);
-    final cornerRank = math.min(
+    final innerH = math.max(8.0, height - pad * 2);
+    var cornerRank = math.min(
       (inner * 0.7).roundToDouble(),
-      math.max(22.0, (width * 0.48).roundToDouble()),
+      math.max(22.0, (width * 0.42).roundToDouble()),
     );
-    final cornerSuit = math.max(11.0, (cornerRank * 0.45).roundToDouble());
+    var cornerSuit = math.max(11.0, (cornerRank * 0.45).roundToDouble());
+    final needed = cornerRank + cornerSuit + 2;
+    if (needed > innerH) {
+      final fit = innerH / needed;
+      cornerRank = (cornerRank * fit).floorToDouble();
+      cornerSuit = (cornerSuit * fit).floorToDouble();
+    }
     final empty = math.min(
-      inner,
+      innerH,
       math.max(11.0, (width * 0.17).roundToDouble()),
     );
     final radius = math.max(6.0, (width * 0.1).roundToDouble());
@@ -89,10 +96,9 @@ class CardView extends StatelessWidget {
         : const Color(0xFF1A1A1A);
     final rank = rankLabel[card!.rank] ?? '?';
     final glyph = suitGlyph[card!.suit] ?? '';
-    final remainH = height - pad * 2 - cornerRank - cornerSuit - 2;
-    final center = remainH >= 18 && inner >= 18
-        ? math.min((inner * 0.85).roundToDouble(), remainH)
-        : 0.0;
+    final center = math
+        .max(16.0, math.min(inner * 0.48, height * 0.28))
+        .roundToDouble();
 
     return Container(
       width: width,
@@ -104,43 +110,45 @@ class CardView extends StatelessWidget {
         border: Border.all(color: const Color(0xFFCFC6B4)),
       ),
       clipBehavior: Clip.hardEdge,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Text(
-            rank,
-            style: TextStyle(
-              color: color,
-              fontSize: cornerRank,
-              height: 1,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
-            ),
-          ),
-          Text(
-            glyph,
-            style: TextStyle(
-              color: color,
-              fontSize: cornerSuit,
-              height: 1,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
-            ),
-          ),
-          if (center >= 18)
-            Expanded(
-              child: Center(
-                child: Text(
-                  glyph,
-                  style: TextStyle(
-                    color: color,
-                    fontSize: center,
-                    height: 1,
-                    fontWeight: FontWeight.w600,
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                rank,
+                style: TextStyle(
+                  color: color,
+                  fontSize: cornerRank,
+                  height: 1,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
                 ),
               ),
+              Text(
+                glyph,
+                style: TextStyle(
+                  color: color,
+                  fontSize: cornerSuit,
+                  height: 1,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: const Alignment(0, 0.45),
+            child: Text(
+              glyph,
+              style: TextStyle(
+                color: color,
+                fontSize: center,
+                height: 1,
+                fontWeight: FontWeight.w600,
+              ),
             ),
+          ),
         ],
       ),
     );

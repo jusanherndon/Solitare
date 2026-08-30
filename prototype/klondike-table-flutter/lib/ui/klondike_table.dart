@@ -12,6 +12,9 @@ import 'card_view.dart';
 import 'drag_overlay.dart';
 import 'interactive_pile.dart';
 
+const _dockH = 88.0;
+const _dockReserve = 100.0;
+
 class KlondikeTable extends StatefulWidget {
   const KlondikeTable({
     super.key,
@@ -176,6 +179,8 @@ class KlondikeTableState extends State<KlondikeTable>
       padding: media.padding,
       fontScale: media.textScaler.scale(1),
       touch: coarsePointer(),
+      chromeTop: 0,
+      chromeBottom: _dockReserve,
     );
     final selected = selectedCardIds(_state);
     final card = CardSize(metrics.cardW, metrics.cardH);
@@ -196,32 +201,13 @@ class KlondikeTableState extends State<KlondikeTable>
                 metrics.pad + metrics.insets.left,
                 metrics.insets.top + 8,
                 metrics.pad + metrics.insets.right,
-                metrics.insets.bottom + 12,
+                metrics.insets.bottom + 12 + _dockReserve,
               ),
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: metrics.boardMax),
                   child: Column(
                     children: [
-                      _TopBar(
-                        canUndo: widget.meta.past.isNotEmpty,
-                        hintEnabled: !hintEmpty,
-                        uiScale: metrics.uiScale,
-                        onHint: _onHint,
-                        onUndo: () {
-                          _cancelGhost();
-                          widget.onAction(const UndoMetaAction());
-                        },
-                        onNewGame: () {
-                          _cancelGhost();
-                          widget.onRequestNewGame();
-                        },
-                        onStart: () {
-                          _cancelGhost();
-                          widget.onStart();
-                        },
-                      ),
-                      SizedBox(height: 10 * metrics.uiScale.clamp(0.8, 1.4)),
                       _TopRow(
                         state: _state,
                         metrics: metrics,
@@ -271,6 +257,24 @@ class KlondikeTableState extends State<KlondikeTable>
                   ),
                 ),
               ),
+            ),
+            _ThumbDock(
+              insets: media.padding,
+              canUndo: widget.meta.past.isNotEmpty,
+              hintEnabled: !hintEmpty,
+              onHint: _onHint,
+              onUndo: () {
+                _cancelGhost();
+                widget.onAction(const UndoMetaAction());
+              },
+              onNewGame: () {
+                _cancelGhost();
+                widget.onRequestNewGame();
+              },
+              onStart: () {
+                _cancelGhost();
+                widget.onStart();
+              },
             ),
             DragOverlay(controller: _drag),
             if (play != null)
@@ -339,20 +343,20 @@ class KlondikeTableState extends State<KlondikeTable>
   }
 }
 
-class _TopBar extends StatelessWidget {
-  const _TopBar({
+class _ThumbDock extends StatelessWidget {
+  const _ThumbDock({
+    required this.insets,
     required this.canUndo,
     required this.hintEnabled,
-    required this.uiScale,
     required this.onHint,
     required this.onUndo,
     required this.onNewGame,
     required this.onStart,
   });
 
+  final EdgeInsets insets;
   final bool canUndo;
   final bool hintEnabled;
-  final double uiScale;
   final VoidCallback onHint;
   final VoidCallback onUndo;
   final VoidCallback onNewGame;
@@ -360,67 +364,49 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        _ChromeButton(
-          label: 'Hint',
-          uiScale: uiScale,
-          enabled: hintEnabled,
-          onTap: onHint,
+    return Positioned(
+      left: insets.left + 8,
+      right: insets.right + 8,
+      bottom: insets.bottom + 4,
+      child: SizedBox(
+        height: _dockH,
+        child: Row(
+          children: [
+            _tile('Hint', onHint, enabled: hintEnabled),
+            const SizedBox(width: 8),
+            _tile('Undo', onUndo, enabled: canUndo),
+            const SizedBox(width: 8),
+            _tile('New Game', onNewGame),
+            const SizedBox(width: 8),
+            _tile('Start', onStart),
+          ],
         ),
-        const SizedBox(width: 8),
-        _ChromeButton(
-          label: 'Undo',
-          uiScale: uiScale,
-          enabled: canUndo,
-          onTap: onUndo,
-        ),
-        const SizedBox(width: 8),
-        _ChromeButton(label: 'New Game', uiScale: uiScale, onTap: onNewGame),
-        const SizedBox(width: 8),
-        _ChromeButton(label: 'Start', uiScale: uiScale, onTap: onStart),
-      ],
+      ),
     );
   }
-}
 
-class _ChromeButton extends StatelessWidget {
-  const _ChromeButton({
-    required this.label,
-    required this.uiScale,
-    required this.onTap,
-    this.enabled = true,
-  });
-
-  final String label;
-  final double uiScale;
-  final VoidCallback onTap;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: enabled ? onTap : null,
-      child: Opacity(
-        opacity: enabled ? 1 : 0.4,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: const Color(0x59000000),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0x40FFFFFF)),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: (14 * uiScale).roundToDouble(),
-              vertical: (8 * uiScale).roundToDouble(),
+  Widget _tile(String label, VoidCallback onTap, {bool enabled = true}) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: enabled ? onTap : null,
+        child: Opacity(
+          opacity: enabled ? 1 : 0.35,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: const Color(0xF2143D28),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: const Color(0xFFFFD54F), width: 2),
             ),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: const Color(0xFFFFFFFF),
-                fontSize: (13 * uiScale).roundToDouble(),
-                fontWeight: FontWeight.w700,
+            child: Center(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  height: 1.15,
+                ),
               ),
             ),
           ),

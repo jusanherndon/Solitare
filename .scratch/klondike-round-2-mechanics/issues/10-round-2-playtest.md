@@ -2,7 +2,7 @@
 
 Type: task
 Status: open
-Blocked by: 01, 06, 08, 09, 11, 12, 13, 14, 15
+Blocked by: 06
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md). Last ticket on [Round 2 of making the app mechanics](../map.md) — wait until the other open work is done and the round 2 decisions are playable in `prototype/klondike-table-flutter`.
 

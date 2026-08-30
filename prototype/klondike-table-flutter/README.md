@@ -1,6 +1,6 @@
 # Klondike Solitaire — Flutter prototype (spec v1)
 
-Throwaway phone app that follows [spec.md](../../.scratch/klondike-solitaire-spec/spec.md). Felt-banner chrome (start, About, win, loss) plus layout A table. Not the store product.
+Throwaway phone app that follows [spec.md](../../.scratch/klondike-solitaire-spec/spec.md). Felt-banner chrome (start, About, win, loss) plus layout A table and a bottom thumb dock (**Hint**, **Undo**, **New Game**, **Start**). Not the store product.
 
 **Playtest:** [What bugs or changes turn up when the owner runs the prototype on Android?](../../.scratch/klondike-solitaire-spec/issues/17-android-playtest.md)
 

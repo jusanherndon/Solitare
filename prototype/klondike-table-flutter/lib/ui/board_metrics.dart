@@ -66,6 +66,10 @@ BoardMetrics computeBoardMetrics({
   required EdgeInsets padding,
   required double fontScale,
   required bool touch,
+  double chromeTop = 0,
+  double chromeBottom = 0,
+  double chromeLeft = 0,
+  double chromeRight = 0,
 }) {
   final width = size.width;
   final height = size.height;
@@ -79,24 +83,28 @@ BoardMetrics computeBoardMetrics({
   final short = math.min(width, height);
 
   final fanRatio = landscape ? (touch ? 0.3 : 0.34) : (touch ? 0.45 : 0.36);
-  final minCard = touch ? 32.0 : 28.0;
+  final minCard = touch ? 36.0 : 32.0;
   final maxCard = touch
-      ? 100.0
-      : (math.min(84.0, math.max(68.0, short * 0.055))).roundToDouble();
+      ? 128.0
+      : math.min(120.0, math.max(92.0, short * 0.1)).roundToDouble();
 
-  final pad = touch ? 8.0 : 20.0;
-  final gap = touch ? 6.0 : 10.0;
+  final pad = touch ? 6.0 : 12.0;
+  final gap = touch ? 4.0 : 8.0;
   final chromeH =
       insets.top +
       insets.bottom +
+      chromeTop +
+      chromeBottom +
       8 +
       12 +
-      (48 * math.min(fontScale, 1.3)).round() +
       10 +
       (landscape ? 12 : 16) +
-      (touch ? 56 : 32);
+      (touch ? 16 : 12);
 
-  final availW = math.max(0.0, width - insets.left - insets.right - pad * 2);
+  final availW = math.max(
+    0.0,
+    width - insets.left - insets.right - pad * 2 - chromeLeft - chromeRight,
+  );
   final availH = math.max(0.0, height - chromeH);
 
   double fanFor(double w) {

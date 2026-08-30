@@ -18,11 +18,12 @@ The mechanic and table-chrome changes from that playtest locked in the spec and 
 
 Local files under `issues/`. First unblocked unclaimed ticket in number order is the frontier.
 
-- `01` [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) (`prototype`)
 - `06` [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) (`task`)
-- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`, blocked by `01`, `06`)
+- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`, blocked by `06`)
 
 ## Decisions so far
+
+- [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) — **B — Thumb dock**: **Hint**, **Undo**, **New Game**, **Start** as large gold-bordered tiles along the bottom; bigger rank/suit type.
 
 - [Implement the Winning deal button](issues/12-winning-deal-button.md) — **Winning deal** next to **New Game** on start / win / loss; random seed from the Settings pool; same confirm as **New Game**.
 

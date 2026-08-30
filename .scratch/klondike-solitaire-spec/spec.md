@@ -4,7 +4,7 @@ A free, no-account, no-ads English Game for phones. One shared Flutter codebase 
 
 This file is the implementable spec. Decisions live in the tickets this map closed; this document compiles them. Vocabulary is `CONTEXT.md`. Do not reopen those tickets while implementing.
 
-**Look sources.** Table: `prototype/klondike-table-flutter` ([How should the Klondike table look and play on a phone in portrait and landscape?](issues/01-klondike-table-look-and-play.md)). Chrome screens: same tree, **A — Felt banner**, on branch `prototype/chrome-screens-look` ([How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md)). The prototype is throwaway, not the product app.
+**Look sources.** Table: `prototype/klondike-table-flutter` ([How should the Klondike table look and play on a phone in portrait and landscape?](issues/01-klondike-table-look-and-play.md)). Table chrome: same tree, **B — Thumb dock** ([How should Undo, New Game, and Start look?](../klondike-round-2-mechanics/issues/01-table-chrome-look.md)). Chrome screens: same tree, **A — Felt banner**, on branch `prototype/chrome-screens-look` ([How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md)). The prototype is throwaway, not the product app.
 
 Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Playtest mechanic changes: [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
@@ -92,7 +92,7 @@ v1 always opens on a dedicated **start screen**. An unfinished Game does not ski
 
 Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, no “For Kids” / “For Children.”
 
-**Table chrome.** **Hint**, **Undo**, **New Game**, and **Start**, top-right, that order. **Start** goes to the start screen with no confirm; the unfinished Game and Undo stack stay. Resume is how they return. Hint is dimmed when it has nothing to show.
+**Table chrome.** **Hint**, **Undo**, **New Game**, and **Start**, that order, in a bottom thumb dock — four large gold-bordered tiles. Not top-right. **Start** goes to the start screen with no confirm; the unfinished Game and Undo stack stay. Resume is how they return. Hint is dimmed when it has nothing to show.
 
 **New Game.** Confirms only when an unfinished Game would be discarded — from the table, or from the start screen while Resume is showing. No confirm on first launch or after a win or a loss. A confirmed New Game deals a fresh random shuffle under the type in **Settings** and starts a new Undo stack.
 
@@ -106,18 +106,18 @@ Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, 
 
 From a win or a loss, **Start** goes to the start screen (Resume hidden). **New Game** and **Winning deal** deal with no confirm.
 
-Sources: [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md), [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md), [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md), [When is a Game a loss?](../klondike-round-2-mechanics/issues/03-loss-check.md), [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
+Sources: [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md), [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md), [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md), [How should Undo, New Game, and Start look?](../klondike-round-2-mechanics/issues/01-table-chrome-look.md), [When is a Game a loss?](../klondike-round-2-mechanics/issues/03-loss-check.md), [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
 
 ## Look
 
-Felt green (`#1F6B45`). Chrome buttons match the table: rounded, dark fill, light border; a filled / primary button uses a deeper green fill and gold border.
+Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep green fill, gold border. Screen chrome (start, About, overlays) uses rounded dark fill and a light border; a filled / primary button uses a deeper green fill and gold border.
 
 **Table — layout A, classic top row**, in both portrait and landscape (same arrangement when rotated, not a second layout).
 
 - Top row: Stock then Waste on the left, four Foundations on the right, with a gap between Waste and Foundations.
 - Tableau: seven columns below.
 - Empty Foundations are unlabeled dashed slots. Empty Waste is labeled. In draw-three the Waste fans up to three face-up cards; only the top is playable.
-- On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit. Portrait fans the Tableau more; landscape tightens the fan. Chrome stays top-right: **Hint**, **Undo**, **New Game**, **Start**.
+- On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit. Portrait fans the Tableau more; landscape tightens the fan. Rank and suit type is larger than the first table prototype. Chrome is a bottom thumb dock: **Hint**, **Undo**, **New Game**, **Start**.
 
 **Cards.** Ship Dmitry Fomin’s English-pattern SVG faces and Atlas card back, CC0 1.0 — not Bicycle art, not a Rider Back, not Bellot LGPL. Jokers are not used. Prefer the blue-and-brown Atlas back ([research](../../docs/research/public-domain-card-assets.md)).
 
@@ -135,7 +135,7 @@ Felt green (`#1F6B45`). Chrome buttons match the table: rounded, dark fill, ligh
 
 **New Game confirm.** Same felt-banner card and chrome buttons. Warn that the unfinished Game will be discarded. **Winning deal** uses this same confirm when **Resume** is showing.
 
-Rejected table layouts: thumb dock, side rails, Expo table. Rejected chrome: letterbox, bottom sheet.
+Rejected table layouts: pile thumb dock (Stock/Waste at the bottom), side rails, Expo table. Rejected chrome screens: letterbox, bottom sheet. Rejected table chrome: top-right felt pills, billboard strip, split play/leave, 2×2 island, Hint-first stack.
 
 ## Engineering
 
