@@ -10,7 +10,7 @@ The mechanic and table-chrome changes from that playtest locked in the spec and 
 
 - Domain: Klondike. Read `CONTEXT.md`. Use `/grilling`, `/domain-modeling`, `/prototype`, `/research` as the ticket type requires.
 - Playtest may still pull former out-of-scope items in. Do not treat the spec map’s old out-of-scope list as frozen.
-- Draw-one remains the default; draw-three is a second type ([How does draw-three difficulty work?](issues/04-draw-three.md)). **Auto-move** is still double-tap (Foundation then Tableau); **Hint** and finishing a win onto the Foundations are different.
+- Draw-one remains the default; draw-three is a second type ([How does draw-three difficulty work?](issues/04-draw-three.md)). **Auto-move** is still double-tap (Foundation then Tableau); **Hint** is table chrome ([How does Hint work, and where does it sit?](issues/05-hint.md)); **Finish** is a mid-Game overlay ([When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](issues/07-win-finish.md)).
 - Grilling or prototype first where the look or rules are unknown. Missed Auto-move and unresponsive chrome buttons are one **task** (reproduce and fix; may be timing). Other features wait for their decision tickets before a later implementation pass.
 - Toolkit: Flutter, `prototype/klondike-table-flutter`. Store posting stays on the other two maps.
 
@@ -19,21 +19,22 @@ The mechanic and table-chrome changes from that playtest locked in the spec and 
 Local files under `issues/`. First unblocked unclaimed ticket in number order is the frontier.
 
 - `01` [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) (`prototype`)
-- `03` [When is a Game a loss?](issues/03-loss-check.md) (`grilling`, blocked by `05`)
-- `05` [How does Hint work, and where does it sit?](issues/05-hint.md) (`grilling`)
 - `06` [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) (`task`)
-- `07` [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](issues/07-win-finish.md) (`grilling`)
 - `08` [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md) (`task`)
 - `09` [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md) (`task`, blocked by `08`)
+- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`, blocked by `01`, `06`, `08`, `09`)
 
 ## Decisions so far
 
 - [What is a winning deal, and how do you start one?](issues/02-winning-deal.md) — Proven per draw type; **Winning deal** button next to **New Game** on start / win / loss only; two shipped pools (~100–200 each); **New Game** stays random.
 - [How does draw-three difficulty work?](issues/04-draw-three.md) — Settings toggle **Draw three** (off = draw-one); fan of up to three, Waste top only; recycle shifts; same **loss** check as draw-one (no full-pass boolean).
+- [How does Hint work, and where does it sit?](issues/05-hint.md) — Table chrome **Hint** (with Undo / New Game / Start); ghost of face-up plays, new then repeats; dim when empty.
+- [When is a Game a loss?](issues/03-loss-check.md) — Last resort: no active Hint and no Stock/Waste card that can play on the current table; repeats do not block; no full-pass boolean.
+- [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](issues/07-win-finish.md) — **Finish** overlay when a Foundation-only win is ready; **Continue** hides it for the rest of the Game.
 
 ## Not yet specified
 
-- How the player picks Hint or finishing a win if those are options (table vs **Settings**, which now holds **Draw three**). **Winning deal** is already a dedicated button on start / win / loss.
+- (none toward this destination — remaining work is prototype, task, and later implementation)
 
 ## Out of scope
 

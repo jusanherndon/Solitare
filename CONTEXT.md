@@ -52,6 +52,14 @@ _Avoid_: draw 3, 3-card draw, hard mode (as the type name)
 A double-tap or double-click that sends a card to a Foundation if legal, otherwise to a legal Tableau pile. Cards do not fly by themselves.
 _Avoid_: hint, autocomplete, auto-complete
 
+**Hint**:
+A table-chrome control that previews a legal play from face-up cards without making it.
+_Avoid_: auto-move, autocomplete, tip, suggest
+
+**Finish**:
+A mid-Game overlay that offers to complete a win onto the Foundations when only Foundation plays remain.
+_Avoid_: autocomplete, auto-complete, auto-win
+
 **Win**:
 A Game with all four Foundations complete, Ace through King of each suit.
 _Avoid_: victory, clear
@@ -61,5 +69,5 @@ An opening layout from which at least one sequence of legal plays reaches a win 
 _Avoid_: guaranteed win (as in the player cannot lose), solvable seed, winning Game
 
 **Loss**:
-A Game with no legal play that is not a win: no Tableau move, no Foundation move, Stock empty, Waste empty.
+A Game that is not a win: no active Hint and no Stock or Waste card that could play onto the current Tableau or a Foundation. Repeats of a seen face-up table do not block a loss.
 _Avoid_: stuck, fail, game over (as the outcome name)

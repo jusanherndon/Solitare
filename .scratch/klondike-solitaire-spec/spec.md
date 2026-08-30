@@ -45,23 +45,31 @@ Tap an empty Stock to recycle the Waste onto the Stock face-down (unlimited, rev
 
 **Winning deal.** An opening that can be finished under the draw type of the Game being started. Draw-one and draw-three each have a shipped pool of about 100–200 openings (not much more), filled ahead of time by a bot (keep on **win**, skip otherwise). A draw-one proof is not a draw-three **winning deal**. **New Game** is still a random shuffle. **Winning deal** picks at random from the pool for the type in **Settings**.
 
-**Loss.** Not a win, and no legal play remains: no Tableau move, no Foundation move, Stock empty, Waste empty. Do not detect futile Stock cycles in v1.
+**Loss.** Not a win, and both of these hold: no **active Hint** (no legal face-up play to an unseen face-up table — repeats do not count), and no Stock or Waste card that could legally play onto the **current** Tableau or a Foundation, including face-down Stock and buried draw-three cards. Dimmed **Hint** is not itself a loss. Prefer a missed overlay over a premature **You lost.**
 
-After each successful move, draw, Stock recycle, or auto-move, check for no legal play. That shape is a win or a loss.
+After each successful Tableau or Foundation play, draw, Stock recycle, Auto-move, or Undo, check for a win first, then **Finish** if its gate holds and they have not **Continue**d this Game, then a loss. A Hint tap does not trigger these checks. Seen face-up tables persist with the unfinished Game and the Undo stack.
 
-Sources: [What standard Klondike draw-one rules should the spec cite?](https://github.com/jusanherndon/Solitare/issues/4), [Does v1 follow USPC Klondike strictly, or computer-Klondike conventions?](https://github.com/jusanherndon/Solitare/issues/8), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md).
+**Finish.** Not Auto-move, not Hint, not a Settings toggle. The overlay appears only when Stock is empty, every card is face-up, and a sequence of legal Foundation plays from the Waste top and Tableau tops reaches a **win**. If that gate is false, no overlay — **loss** still uses its own check. Empty Stock plus all face-up is not itself a loss.
+
+Sources: [What standard Klondike draw-one rules should the spec cite?](https://github.com/jusanherndon/Solitare/issues/4), [Does v1 follow USPC Klondike strictly, or computer-Klondike conventions?](https://github.com/jusanherndon/Solitare/issues/8), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md), [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md), [When is a Game a loss?](../klondike-round-2-mechanics/issues/03-loss-check.md), [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
 
 ## Interaction
 
 Both tap and drag are first-class. Tap a card, then tap a legal destination; or drag and drop. A tiny slip is a tap, not a drag. An illegal drop snaps back. Tapping an illegal destination, or tapping the same card again, clears the pick and does nothing else. A drag may start from a card already tapped. Drawing from the Stock is a tap on the Stock, not a drag. No selection highlight. Dragged cards follow the pointer in a root overlay so they stay above other piles.
 
-**Auto-move** only on double-tap / double-click: Foundation first if legal, otherwise a legal Tableau pile. Cards never fly to a Foundation on their own.
+**Auto-move** only on double-tap / double-click: Foundation first if legal, otherwise a legal Tableau pile. Cards never fly to a Foundation on their own except after **Finish**.
 
-**Undo** is unlimited in the current Game: every successful move, draw, Stock recycle, and auto-move, back to the opening Tableau. A Stock tap is one draw — in draw-three, Undo returns every card that tap moved, not one card of the fan. Selection-only taps do not stack. New Game cannot be undone; it starts a fresh Undo stack.
+**Hint** is a table-chrome button, not Auto-move. Each tap animates a ghost of one legal play from a face-up playable card (Waste top, a Foundation top, or a face-up Tableau sequence) onto a legal Tableau pile or Foundation, then fades. Real cards stay. The Game does not change; Undo is not stacked. Hint does not inspect face-down Tableau cards or the Stock. Draw and recycle are not Hints. In draw-three, only the Waste top is a source.
 
-**Resume** restores an unfinished Game (Stock, Waste, Foundations, Tableau, face-up state, draw type) and the Undo stack from the start screen. Do not restore a tap-selection or an in-progress drag. Persist on-device. A win or a loss ends the Game — Resume does not apply. The restored Game keeps the type it started with even if **Settings** now says the other.
+The Hint cycle is rebuilt after a Tableau or Foundation play, Auto-move, Undo, a Stock draw, or a recycle, then restarted at the first **new** Hint (a play that would leave an unseen face-up table). A Hint tap does not rebuild. New plays first, repeats last. Within each group: Foundation destinations before Tableau; sources Waste, then Foundations left to right, then Tableau left to right; shortest legal run first. Each source-and-destination pair is one step. Wrap after the last step.
 
-Source: [What are the v1 rules for Undo, resume, tap, and drag?](issues/02-undo-resume-tap-drag.md), superseded on launch by the start screen below.
+Tapping Hint during the ghost cancels it and does not start the next; the cycle still advances. Any table tap, drag, Stock, Auto-move, Undo, New Game, or Start also cancels. Empty list: dim Hint, ignore the tap, do not open **You lost.** A **loss** treats only new plays as **active Hints**.
+
+**Undo** is unlimited in the current Game: every successful move, draw, Stock recycle, and auto-move, back to the opening Tableau. A Stock tap is one draw — in draw-three, Undo returns every card that tap moved, not one card of the fan. Selection-only taps do not stack. New Game cannot be undone; it starts a fresh Undo stack. **Finish** (the action) cannot be undone.
+
+**Resume** restores an unfinished Game (Stock, Waste, Foundations, Tableau, face-up state, draw type, seen face-up tables, **Finish** overlay or the Continue opted-out flag) and the Undo stack from the start screen. Do not restore a tap-selection, an in-progress drag, or an in-progress Finish animation. Persist on-device. A win or a loss ends the Game — Resume does not apply. The restored Game keeps the type it started with even if **Settings** now says the other.
+
+Source: [What are the v1 rules for Undo, resume, tap, and drag?](issues/02-undo-resume-tap-drag.md), superseded on launch by the start screen below; [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md); [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
 
 ## Screens and chrome
 
@@ -84,7 +92,7 @@ v1 always opens on a dedicated **start screen**. An unfinished Game does not ski
 
 Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, no “For Kids” / “For Children.”
 
-**Table chrome.** **Undo**, **New Game**, and **Start**, top-right. **Start** goes to the start screen with no confirm; the unfinished Game and Undo stack stay. Resume is how they return.
+**Table chrome.** **Hint**, **Undo**, **New Game**, and **Start**, top-right, that order. **Start** goes to the start screen with no confirm; the unfinished Game and Undo stack stay. Resume is how they return. Hint is dimmed when it has nothing to show.
 
 **New Game.** Confirms only when an unfinished Game would be discarded — from the table, or from the start screen while Resume is showing. No confirm on first launch or after a win or a loss. A confirmed New Game deals a fresh random shuffle under the type in **Settings** and starts a new Undo stack.
 
@@ -92,11 +100,13 @@ Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, 
 
 **Win overlay.** Headline **You won!** Actions: **Start**, **New Game**, and **Winning deal**. No Undo.
 
+**Finish overlay.** Headline **You can finish.** (wording may change in a look pass). Actions: filled **Finish**, then **Continue**. No Start, New Game, Winning deal, or Undo. Table stays visible behind, dimmed like the win overlay, still in color. **Finish** moves remaining cards onto the Foundations (Waste top, then Tableau left to right; Foundations left to right), then the win overlay; cannot stop or Undo. **Continue** returns to the table and hides this overlay for the rest of the Game.
+
 **Loss overlay.** Headline **You lost.** Actions: **Start**, **New Game**, **Winning deal**, and **Undo** (back to the table, last move reversed). Undo is the only way back into that Game.
 
 From a win or a loss, **Start** goes to the start screen (Resume hidden). **New Game** and **Winning deal** deal with no confirm.
 
-Sources: [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md), [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md).
+Sources: [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md), [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md), [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md), [When is a Game a loss?](../klondike-round-2-mechanics/issues/03-loss-check.md), [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
 
 ## Look
 
@@ -107,7 +117,7 @@ Felt green (`#1F6B45`). Chrome buttons match the table: rounded, dark fill, ligh
 - Top row: Stock then Waste on the left, four Foundations on the right, with a gap between Waste and Foundations.
 - Tableau: seven columns below.
 - Empty Foundations are unlabeled dashed slots. Empty Waste is labeled. In draw-three the Waste fans up to three face-up cards; only the top is playable.
-- On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit. Portrait fans the Tableau more; landscape tightens the fan. Chrome stays top-right.
+- On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit. Portrait fans the Tableau more; landscape tightens the fan. Chrome stays top-right: **Hint**, **Undo**, **New Game**, **Start**.
 
 **Cards.** Ship Dmitry Fomin’s English-pattern SVG faces and Atlas card back, CC0 1.0 — not Bicycle art, not a Rider Back, not Bellot LGPL. Jokers are not used. Prefer the blue-and-brown Atlas back ([research](../../docs/research/public-domain-card-assets.md)).
 
@@ -118,6 +128,8 @@ Felt green (`#1F6B45`). Chrome buttons match the table: rounded, dark fill, ligh
 **Settings (felt banner).** Same as About: cream body, **Start** chrome button top-left, no table behind. One **Draw three** toggle.
 
 **Win overlay.** Table visible around a centered dark rounded card with a gold border. **You won!** in gold. **Start**, then filled **New Game**, then **Winning deal** next to **New Game**. Dim the table (~40%). Gold sparkles rise through the open felt.
+
+**Finish overlay.** Same family as the win overlay: table visible, dim (~40%), still in color, not greyscale. Centered dark rounded card with a gold border. **You can finish.** (wording may change in a look pass). Filled **Finish**, then **Continue**.
 
 **Loss overlay.** Table visible but greyscale and dimmer (~50%). A darker card slightly below center, red-tinted border, **You lost.** in muted grey. Grey dust falls. Filled **Undo** first, then **Start**, then **New Game**, then **Winning deal** next to **New Game**.
 
