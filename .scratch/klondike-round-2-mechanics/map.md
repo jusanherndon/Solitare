@@ -11,7 +11,7 @@ The mechanic and table-chrome changes from that playtest locked in the spec and 
 - Domain: Klondike. Read `CONTEXT.md`. Use `/grilling`, `/domain-modeling`, `/prototype`, `/research` as the ticket type requires.
 - Playtest may still pull former out-of-scope items in. Do not treat the spec map’s old out-of-scope list as frozen.
 - Draw-one stays the default until [How does draw-three difficulty work?](issues/04-draw-three.md) says otherwise. **Auto-move** is still double-tap (Foundation then Tableau); **Hint** and finishing a win onto the Foundations are different.
-- Grilling or prototype first where the look or rules are unknown. The Auto-move miss is a **task** (reproduce and fix). Other features wait for their decision tickets before a later implementation pass.
+- Grilling or prototype first where the look or rules are unknown. Missed Auto-move and unresponsive chrome buttons are one **task** (reproduce and fix; may be timing). Other features wait for their decision tickets before a later implementation pass.
 - Toolkit: Flutter, `prototype/klondike-table-flutter`. Store posting stays on the other two maps.
 
 ## Open tickets
@@ -23,7 +23,7 @@ Local files under `issues/`. First unblocked unclaimed ticket in number order is
 - `03` [When is a Game a loss?](issues/03-loss-check.md) (`grilling`)
 - `04` [How does draw-three difficulty work?](issues/04-draw-three.md) (`grilling`)
 - `05` [How does Hint work, and where does it sit?](issues/05-hint.md) (`grilling`)
-- `06` [Why does Auto-move miss a legal play, and what should it do?](issues/06-auto-move-miss.md) (`task`)
+- `06` [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) (`task`)
 - `07` [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](issues/07-win-finish.md) (`grilling`)
 
 ## Decisions so far

@@ -4,6 +4,7 @@ Type: grilling
 Status: open
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
+Related: [When is a Game a loss?](issues/03-loss-check.md) may treat “no active Hints” as part of a loss.
 
 ## Question
 
