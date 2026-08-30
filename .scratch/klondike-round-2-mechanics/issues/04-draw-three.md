@@ -4,7 +4,7 @@ Type: grilling
 Status: resolved
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
-Related: [What is a winning deal, and how do you start one?](issues/02-winning-deal.md) locked two **winning deal** pools (draw-one and draw-three); draw-one remains. Filling the draw-three pool is [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md).
+Related: [What is a winning deal, and how do you start one?](issues/02-winning-deal.md) locked two **winning deal** pools (draw-one and draw-three); draw-one remains. Filling the draw-three pool is [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md). Implementation: [Implement draw-three in the Flutter prototype](issues/11-draw-three.md).
 
 Draw-three is in scope for this effort. Draw-one stays (not replaced).
 

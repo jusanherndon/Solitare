@@ -4,7 +4,7 @@ Type: grilling
 Status: resolved
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
-Related: blocks [When is a Game a loss?](issues/03-loss-check.md) — a **loss** uses **Hint** (no active Hints) so that check stays easy.
+Related: blocks [When is a Game a loss?](issues/03-loss-check.md) — a **loss** uses **Hint** (no active Hints) so that check stays easy. Implementation: [Implement Hint on the table](issues/13-hint.md).
 
 ## Question
 

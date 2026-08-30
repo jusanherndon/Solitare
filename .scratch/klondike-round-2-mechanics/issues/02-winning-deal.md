@@ -4,7 +4,7 @@ Type: grilling
 Status: resolved
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
-Related: [How does draw-three difficulty work?](issues/04-draw-three.md), [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md), [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md).
+Related: [How does draw-three difficulty work?](issues/04-draw-three.md), [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md), [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md), [Implement the Winning deal button](issues/12-winning-deal-button.md).
 
 ## Question
 

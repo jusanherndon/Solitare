@@ -2,7 +2,7 @@
 
 Type: task
 Status: open
-Blocked by: 01, 06, 08, 09
+Blocked by: 01, 06, 08, 09, 11, 12, 13, 14, 15
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md). Last ticket on [Round 2 of making the app mechanics](../map.md) — wait until the other open work is done and the round 2 decisions are playable in `prototype/klondike-table-flutter`.
 
@@ -18,8 +18,11 @@ Do not start until:
 - [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md)
 - [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md)
 - [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md)
-
-and the grilled mechanics from this map are in the prototype (not spec-only).
+- [Implement draw-three in the Flutter prototype](issues/11-draw-three.md)
+- [Implement the Winning deal button](issues/12-winning-deal-button.md)
+- [Implement Hint on the table](issues/13-hint.md)
+- [Implement the last-resort loss check](issues/14-loss-check.md)
+- [Implement the Finish overlay](issues/15-finish.md)
 
 Run `prototype/klondike-table-flutter` (`flutter run` on a connected device, or `flutter build apk` and sideload). Do not treat this as store QA. iOS stays on [Can we build and install the Klondike table prototype on iOS locally?](../../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md).
 

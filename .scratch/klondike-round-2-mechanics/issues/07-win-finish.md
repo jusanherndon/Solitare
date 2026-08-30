@@ -4,6 +4,7 @@ Type: grilling
 Status: resolved
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
+Implementation: [Implement the Finish overlay](issues/15-finish.md).
 
 ## Question
 

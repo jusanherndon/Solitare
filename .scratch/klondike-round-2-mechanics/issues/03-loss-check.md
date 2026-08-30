@@ -5,7 +5,7 @@ Status: resolved
 Blocked by: 05
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
-Related: [How does draw-three difficulty work?](issues/04-draw-three.md). **Loss** uses **Hint**; [How does Hint work, and where does it sit?](issues/05-hint.md) is resolved (active Hint = **new** play only).
+Related: [How does draw-three difficulty work?](issues/04-draw-three.md). **Loss** uses **Hint**; [How does Hint work, and where does it sit?](issues/05-hint.md) is resolved (active Hint = **new** play only). Implementation: [Implement the last-resort loss check](issues/14-loss-check.md).
 
 Reopens the cheap check on [When no legal move remains, what ending screen does v1 show?](../../klondike-solitaire-spec/issues/14-no-moves-ending-screen.md) (Stock empty, Waste empty, no Tableau/Foundation play).
 
