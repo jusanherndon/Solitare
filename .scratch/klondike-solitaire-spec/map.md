@@ -38,7 +38,7 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [Which public-domain classic card assets can we ship on both stores?](https://github.com/jusanherndon/Solitare/issues/3) — Fomin English-pattern SVGs + Atlas card back (CC0 1.0); not Bicycle art or Bellot LGPL.
 - [Which Flutter analyzer, lint, and format tools should this repo use?](issues/13-flutter-lint-and-style-tools.md) — Official `flutter_lints` (declare the missing dev_dependency) + `dart format` at 80 cols + `flutter analyze` / `flutter test`. Extra lints: `unawaited_futures`, `discarded_futures`. Skip VGA, DCM, `custom_lint`, `pedantic`. CI later: analyze, format `--set-exit-if-changed`, test.
 - [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md) — Name, Justin Herndon, version, support `jherndon111@gmail.com`, source `github.com/jusanherndon/Solitare`, Privacy Policy URL (system browser), Flutter Licenses, Fomin/Atlas CC0 credit. No how-to-play or Kids copy. Reach it from the start screen (`11`).
-- [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) — Always the start screen (title Klondike Solitaire): New Game, Resume (hidden if nothing to resume), About. No Settings in v1. Table chrome: Undo, New Game, Start (Start keeps the Game). New Game confirms only when it would discard an unfinished Game.
+- [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md) — Always the start screen (title Klondike Solitaire): New Game, Resume (hidden if nothing to resume), About. No Settings in that ticket; **Settings** and **Draw three** were added on [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md).
 - [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md) — Cheap no-move check (no Tableau/Foundation play, Stock and Waste empty). Separate win and loss overlays; table visible behind; You won! / You lost. Win: Start + New Game. Loss: those plus Undo. Win and loss end the Game — no Resume.
 - [How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md) — Felt banner (variant A): felt + table chrome buttons; centered gold win card with sparkles; lower greyscale loss card with dust. Source: `prototype/klondike-table-flutter` on `prototype/chrome-screens-look`.
 - [Write the v1 spec from the closed decisions?](issues/16-write-spec.md) — Compiled [spec.md](spec.md) from the closed tickets; implement from there.
@@ -51,7 +51,6 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - Other Solitaire variants (Spider, FreeCell, Pyramid, a multi-game suite)
 - Accounts, ads, in-app purchases, house rules
 - Score, timer, statistics, daily challenges, themes, sound
-- Settings screen — no v1 options; revisit in a later effort when a toggle exists
 - Tablet layouts and languages other than English
 - App Store and Play listing, privacy-policy hosting, developer-account enrollment, store uploads — [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md)
 - CI

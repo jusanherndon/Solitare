@@ -36,6 +36,18 @@ _Avoid_: save, checkpoint, continue (as the feature name)
 The dedicated screen the app opens to, not the Klondike table.
 _Avoid_: home screen, home, menu, title screen
 
+**Settings**:
+The screen reached from the start screen that holds options for the next deal. Not on the table.
+_Avoid_: options, preferences, settings menu
+
+**Draw-one**:
+A Game type whose Stock tap turns one card onto the Waste.
+_Avoid_: draw 1, single draw
+
+**Draw-three**:
+A Game type whose Stock tap turns up to three cards onto the Waste, fanned face-up. Only the Waste top is playable.
+_Avoid_: draw 3, 3-card draw, hard mode (as the type name)
+
 **Auto-move**:
 A double-tap or double-click that sends a card to a Foundation if legal, otherwise to a legal Tableau pile. Cards do not fly by themselves.
 _Avoid_: hint, autocomplete, auto-complete
@@ -43,6 +55,10 @@ _Avoid_: hint, autocomplete, auto-complete
 **Win**:
 A Game with all four Foundations complete, Ace through King of each suit.
 _Avoid_: victory, clear
+
+**Winning deal**:
+An opening layout from which at least one sequence of legal plays reaches a win under a given draw type (draw-one or draw-three). A layout that can be finished draw-one is not thereby a winning deal for draw-three. The player can still lose.
+_Avoid_: guaranteed win (as in the player cannot lose), solvable seed, winning Game
 
 **Loss**:
 A Game with no legal play that is not a win: no Tableau move, no Foundation move, Stock empty, Waste empty.

@@ -2,9 +2,10 @@
 
 Type: grilling
 Status: open
+Blocked by: 05
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
-Related: [How does draw-three difficulty work?](issues/04-draw-three.md), [How does Hint work, and where does it sit?](issues/05-hint.md).
+Related: [How does draw-three difficulty work?](issues/04-draw-three.md). **Loss** uses **Hint**; this ticket waits on [How does Hint work, and where does it sit?](issues/05-hint.md).
 
 Reopens the cheap check on [When no legal move remains, what ending screen does v1 show?](../../klondike-solitaire-spec/issues/14-no-moves-ending-screen.md) (Stock empty, Waste empty, no Tableau/Foundation play).
 
@@ -27,3 +28,38 @@ Grill the exact “full pass” rule, what “active Hint” and “repeat” me
 ### jusanherndon — 2026-08-30
 
 A potential way to make the loss check is a combination of: no active hints, no legal moves in the drawable deck after you have cycled through the deck, and no move repeats.
+
+### agent — 2026-08-30
+
+Working rule (owner: keep for now; prefer a missed overlay over a premature **You lost.**):
+
+A **loss** is last resort. The cheap Stock-empty and Waste-empty check is not the only path, but the comprehensive check must not fire early.
+
+Four parts, all required:
+
+1. One full Stock pass has happened (boolean on the Game; check off while false). This boolean is free — test it before any search.
+2. **No active Hints** — first real check, so we skip the rest when Hint still has something to show ([How does Hint work, and where does it sit?](issues/05-hint.md)).
+3. No card in Stock or Waste that could legally play onto the **current** Tableau or a Foundation.
+4. No non-repeating play.
+
+Draw-three’s “full pass” stays on [How does draw-three difficulty work?](issues/04-draw-three.md).
+
+**Repeat (locked):** a table you have already had in this Game, comparing **only face-up cards** (Waste, Foundations, face-up Tableau). Do not look at Stock or face-down Tableau cards. Recycle after the full pass is a repeat unless clause 3 says a buried Stock/Waste card can play on the current table. For Hint-first, an “active Hint” is only a play that would leave an unseen *face-up* table. **Undo** should drop tables that only existed after the undone play. How Hint animates repeats stays on [How does Hint work, and where does it sit?](issues/05-hint.md).
+
+**Full pass (locked, draw-one):** the boolean becomes true the first time every card that started in the Stock (24 after the deal) has been drawn onto the Waste at least once — the draw that first empties the Stock, even if some Waste cards already went to the table. Recycle does not turn it off. The boolean lives on the Game and the Undo stack: Undo of the draw that flipped it turns it false; Redo turns it true. Undo from a **loss** overlay restores it with that table. Draw-three’s pass stays on [How does draw-three difficulty work?](issues/04-draw-three.md).
+
+**When to check (locked):** after each successful move, draw, Stock recycle, or Auto-move — same as today. The draw that flips the boolean is eligible immediately. While the boolean is false, skip the comprehensive check (the deal is never a **loss** this way). A **win** still wins first. Persist the boolean with the unfinished Game so Resume restores it with the Undo stack. Overlay actions stay **Undo**, **Start**, **New Game**, **Winning deal**.
+
+### agent — 2026-08-30
+
+Owner confirmed that comment as the shared understanding of everything this ticket can lock without Hint. Status returns to open; still blocked by [How does Hint work, and where does it sit?](issues/05-hint.md). Do not close, do not patch `CONTEXT.md` **Loss**, until Hint locks which plays count as an **active Hint**. Draw-three’s pass is owned by [How does draw-three difficulty work?](issues/04-draw-three.md).
+
+### agent — 2026-08-30
+
+Amended on [How does draw-three difficulty work?](issues/04-draw-three.md): **drop the full-pass boolean** for both draw types. “Stock emptied once” is the wrong gate for draw-three and redundant for draw-one (clause 3 already peeks Stock/Waste). Same last-resort check for both:
+
+1. **No active Hints** — first real check.
+2. No card in Stock or Waste that could legally play onto the **current** Tableau or a Foundation (including a buried draw-three card that is not the Waste top).
+3. No play to an unseen **face-up** table.
+
+**When to check** is unchanged except there is no boolean to persist or skip on: after each successful move, draw, Stock recycle, or Auto-move. **Win** first. Overlay actions unchanged. Repeat / Undo-of-seen-tables unchanged. Recycle is a repeat unless clause 2 says a buried Stock/Waste card can play now.
