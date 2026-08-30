@@ -1,7 +1,7 @@
 # Fill and ship the draw-three winning-deal pool
 
 Type: task
-Status: open
+Status: resolved
 Blocked by: 08
 
 From [What is a winning deal, and how do you start one?](issues/02-winning-deal.md).
@@ -15,3 +15,7 @@ After draw-three play is locked, run the same bot under **draw-three** rules: ra
 
 - About 100–200 draw-three **winning deals** are in the repo, loadable by the app, distinct from the draw-one list.
 - The answer points at the list and how it was produced.
+
+## Answer
+
+**150** draw-three seeds in `prototype/klondike-table-flutter/lib/game/winning_deal_pool.dart` (`drawThreeWinningDealSeeds`), distinct list from draw-one. Same hint-follow bot under **draw-three** rules; a draw-one **win** was not copied in. Filled by `dart run tool/fill_winning_deals.dart` (1361 deals tried).

@@ -33,11 +33,17 @@ class VariantAStart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _BannerBtn('New Game', filled: true, onTap: nav.onNewGame),
+        _dealButtons(
+          onNewGame: nav.onNewGame,
+          onWinningDeal: nav.onWinningDeal,
+          newFilled: true,
+        ),
         if (nav.showResume) ...[
           const SizedBox(height: 10),
           _BannerBtn('Resume', onTap: nav.onResume),
         ],
+        const SizedBox(height: 10),
+        _BannerBtn('Settings', onTap: nav.onSettings),
         const SizedBox(height: 10),
         _BannerBtn('About', onTap: nav.onAbout),
       ],
@@ -56,7 +62,7 @@ class VariantAStart extends StatelessWidget {
                 children: [
                   Expanded(child: title),
                   const SizedBox(width: 24),
-                  SizedBox(width: 220, child: actions),
+                  SizedBox(width: 280, child: actions),
                 ],
               )
             : Column(
@@ -169,6 +175,118 @@ class _VariantAAboutState extends State<VariantAAbout> {
   );
 }
 
+class VariantASettings extends StatelessWidget {
+  const VariantASettings({super.key, required this.nav});
+  final ChromeNav nav;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: _felt,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          24,
+          MediaQuery.paddingOf(context).top + 12,
+          24,
+          nav.bottomInset + 12,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(children: [_BannerBtn('Start', onTap: nav.onBackToStart)]),
+            const SizedBox(height: 28),
+            GestureDetector(
+              onTap: nav.onToggleDrawThree,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0x59000000),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0x40FFFFFF)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Draw three',
+                          style: TextStyle(
+                            color: _cream,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        nav.drawThree ? 'On' : 'Off',
+                        style: const TextStyle(
+                          color: Color(0xFFFFE082),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class VariantAFinish extends StatelessWidget {
+  const VariantAFinish({super.key, required this.nav});
+  final ChromeNav nav;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        const DimScrim(amount: 0.4),
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 320),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: const Color(0xE0121A14),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFFFD54F)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 22, 24, 18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'You can finish.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFFFD54F),
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    _BannerBtn('Finish', filled: true, onTap: nav.onFinish),
+                    const SizedBox(height: 8),
+                    _BannerBtn('Continue', onTap: nav.onContinueFinish),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class VariantAWin extends StatelessWidget {
   const VariantAWin({super.key, required this.nav});
   final ChromeNav nav;
@@ -204,10 +322,10 @@ class VariantAWin extends StatelessWidget {
                     const SizedBox(height: 18),
                     _BannerBtn('Start', onTap: nav.onWinStart),
                     const SizedBox(height: 8),
-                    _BannerBtn(
-                      'New Game',
-                      filled: true,
-                      onTap: nav.onWinNewGame,
+                    _dealButtons(
+                      onNewGame: nav.onWinNewGame,
+                      onWinningDeal: nav.onWinWinningDeal,
+                      newFilled: true,
                     ),
                   ],
                 ),
@@ -263,7 +381,10 @@ class VariantALoss extends StatelessWidget {
                       const SizedBox(height: 8),
                       _BannerBtn('Start', onTap: nav.onLossStart),
                       const SizedBox(height: 8),
-                      _BannerBtn('New Game', onTap: nav.onLossNewGame),
+                      _dealButtons(
+                        onNewGame: nav.onLossNewGame,
+                        onWinningDeal: nav.onLossWinningDeal,
+                      ),
                     ],
                   ),
                 ),
@@ -274,6 +395,22 @@ class VariantALoss extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget _dealButtons({
+  required VoidCallback onNewGame,
+  required VoidCallback onWinningDeal,
+  bool newFilled = false,
+}) {
+  return Row(
+    children: [
+      Expanded(
+        child: _BannerBtn('New Game', filled: newFilled, onTap: onNewGame),
+      ),
+      const SizedBox(width: 8),
+      Expanded(child: _BannerBtn('Winning deal', onTap: onWinningDeal)),
+    ],
+  );
 }
 
 class _BannerBtn extends StatelessWidget {
@@ -345,7 +482,7 @@ class VariantAConfirm extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     _BannerBtn(
-                      'New Game',
+                      nav.confirmActionLabel,
                       filled: true,
                       onTap: nav.onConfirmDiscard,
                     ),

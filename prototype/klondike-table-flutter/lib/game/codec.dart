@@ -30,6 +30,8 @@ Map<String, Object?> _stateJson(GameState s) => {
     for (final p in s.tableau) [for (final c in p) _cardJson(c)],
   ],
   'won': s.won,
+  'drawType': s.drawType.name,
+  'seenFaceUp': s.seenFaceUp.toList(),
 };
 
 GameState _state(Map<String, dynamic> j) => GameState(
@@ -50,11 +52,19 @@ GameState _state(Map<String, dynamic> j) => GameState(
       [for (final c in p as List<dynamic>) _card(c as Map<String, dynamic>)],
   ],
   won: j['won'] as bool? ?? false,
+  drawType: j['drawType'] == 'drawThree'
+      ? DrawType.drawThree
+      : DrawType.drawOne,
+  seenFaceUp: {
+    for (final k in (j['seenFaceUp'] as List<dynamic>? ?? const []))
+      k as String,
+  },
 );
 
 String encodeMeta(GameMeta meta) => jsonEncode({
   'present': _stateJson(meta.present),
   'past': [for (final s in meta.past) _stateJson(s)],
+  'finishContinued': meta.finishContinued,
 });
 
 GameMeta decodeMeta(String raw) {
@@ -65,5 +75,6 @@ GameMeta decodeMeta(String raw) {
       for (final s in j['past'] as List<dynamic>)
         _state(s as Map<String, dynamic>),
     ],
+    finishContinued: j['finishContinued'] as bool? ?? false,
   );
 }

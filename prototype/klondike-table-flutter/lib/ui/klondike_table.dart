@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
+import '../game/finish.dart';
+import '../game/hint.dart';
 import '../game/history.dart';
 import '../game/reducer.dart';
 import '../game/rules.dart';
@@ -16,6 +20,7 @@ class KlondikeTable extends StatefulWidget {
     required this.onStart,
     required this.onRequestNewGame,
     this.playEnabled = true,
+    this.finishing = false,
   });
 
   final GameMeta meta;
@@ -23,25 +28,144 @@ class KlondikeTable extends StatefulWidget {
   final VoidCallback onStart;
   final VoidCallback onRequestNewGame;
   final bool playEnabled;
+  final bool finishing;
 
   @override
   State<KlondikeTable> createState() => KlondikeTableState();
 }
 
-class KlondikeTableState extends State<KlondikeTable> {
+class KlondikeTableState extends State<KlondikeTable>
+    with TickerProviderStateMixin {
   final _hits = HitRegistry();
   final _drag = DragController();
+  late final AnimationController _ghost;
+  late final AnimationController _flight;
+  HintCursor? _cursor;
+  HintPlay? _ghostPlay;
+  FinishPlay? _flightPlay;
 
   GameState get _state => widget.meta.present;
 
+  static const _finishFlight = Duration(milliseconds: 650);
+
+  @override
+  void initState() {
+    super.initState();
+    _ghost = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 480),
+    );
+    _ghost.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _cursor?.advance();
+        setState(() => _ghostPlay = null);
+      }
+    });
+    _flight = AnimationController(vsync: this, duration: _finishFlight);
+    _rebuildCycle();
+    if (widget.finishing) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_runFinish());
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(KlondikeTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (boardKey(oldWidget.meta.present) != boardKey(_state)) {
+      _cancelGhost();
+      _rebuildCycle();
+    }
+    if (widget.finishing && !oldWidget.finishing) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_runFinish());
+      });
+    }
+  }
+
+  var _runningFinish = false;
+
+  Future<void> _runFinish() async {
+    if (_runningFinish) return;
+    _runningFinish = true;
+    try {
+      while (mounted && widget.finishing && !_state.won) {
+        final play = nextFinishPlay(_state);
+        if (play == null) break;
+        setState(() => _flightPlay = play);
+        await _flight.forward(from: 0);
+        if (!mounted) return;
+        setState(() => _flightPlay = null);
+        final stepped = applyFinishStep(_state);
+        widget.onAction(const FinishStepMetaAction());
+        if (isWin(stepped.foundations)) break;
+        await Future<void>.delayed(Duration.zero);
+      }
+    } finally {
+      _runningFinish = false;
+    }
+  }
+
+  void _rebuildCycle() {
+    _cursor = HintCursor(hintCycle(_state));
+  }
+
+  void _cancelGhost({bool advance = false}) {
+    _ghost.stop();
+    _ghost.reset();
+    if (advance) _cursor?.advance();
+    _ghostPlay = null;
+  }
+
   void _dispatch(GameAction action) {
+    _cancelGhost();
     widget.onAction(GameMetaAction(action));
+  }
+
+  void _onHint() {
+    final cursor = _cursor ?? HintCursor(hintCycle(_state));
+    _cursor = cursor;
+    if (cursor.isEmpty) return;
+    if (_ghostPlay != null) {
+      setState(() => _cancelGhost(advance: true));
+      return;
+    }
+    setState(() {
+      _ghostPlay = cursor.current;
+      _ghost.forward(from: 0);
+    });
   }
 
   @override
   void dispose() {
+    _ghost.dispose();
+    _flight.dispose();
     _drag.dispose();
     super.dispose();
+  }
+
+  Offset _pileOrigin(PileRef pile, int cardIndex, BoardMetrics metrics) {
+    final base = _hits.origin(pile) ?? Offset.zero;
+    if (pile.area == PileArea.tableau) {
+      return base + Offset(0, cardIndex * metrics.fan);
+    }
+    if (pile.area == PileArea.waste && _state.drawType == DrawType.drawThree) {
+      final n = _state.waste.length < 3 ? _state.waste.length : 3;
+      if (n > 1) {
+        return base + Offset(metrics.cardW * 0.32 * (n - 1), 0);
+      }
+    }
+    return base;
+  }
+
+  List<PlayingCard> _ghostCards(HintPlay play) {
+    final pile = getPile(_state, play.from);
+    if (play.from.area == PileArea.tableau) {
+      return pile.sublist(play.cardIndex);
+    }
+    if (pile.isEmpty) return const [];
+    return [pile.last];
   }
 
   @override
@@ -55,9 +179,14 @@ class KlondikeTableState extends State<KlondikeTable> {
     );
     final selected = selectedCardIds(_state);
     final card = CardSize(metrics.cardW, metrics.cardH);
+    final hintEmpty = _cursor?.isEmpty ?? true;
+    final play = _ghostPlay;
+    final hidden = <String>{
+      if (_flightPlay != null) ...[getPile(_state, _flightPlay!.from).last.id],
+    };
 
     return AbsorbPointer(
-      absorbing: !widget.playEnabled,
+      absorbing: !widget.playEnabled || widget.finishing,
       child: ColoredBox(
         color: const Color(0xFF1F6B45),
         child: Stack(
@@ -76,10 +205,21 @@ class KlondikeTableState extends State<KlondikeTable> {
                     children: [
                       _TopBar(
                         canUndo: widget.meta.past.isNotEmpty,
+                        hintEnabled: !hintEmpty,
                         uiScale: metrics.uiScale,
-                        onUndo: () => widget.onAction(const UndoMetaAction()),
-                        onNewGame: widget.onRequestNewGame,
-                        onStart: widget.onStart,
+                        onHint: _onHint,
+                        onUndo: () {
+                          _cancelGhost();
+                          widget.onAction(const UndoMetaAction());
+                        },
+                        onNewGame: () {
+                          _cancelGhost();
+                          widget.onRequestNewGame();
+                        },
+                        onStart: () {
+                          _cancelGhost();
+                          widget.onStart();
+                        },
                       ),
                       SizedBox(height: 10 * metrics.uiScale.clamp(0.8, 1.4)),
                       _TopRow(
@@ -87,6 +227,7 @@ class KlondikeTableState extends State<KlondikeTable> {
                         metrics: metrics,
                         card: card,
                         selected: selected,
+                        hiddenIds: hidden,
                         hits: _hits,
                         drag: _drag,
                         onTap: (pile, i) => _dispatch(TapAction(pile, i)),
@@ -111,6 +252,7 @@ class KlondikeTableState extends State<KlondikeTable> {
                                 fanOffset: metrics.fan,
                                 emptyLabel: ' ',
                                 selectedIds: selected,
+                                hiddenIds: hidden,
                                 hits: _hits,
                                 drag: _drag,
                                 onTap: (pile, idx) =>
@@ -131,6 +273,65 @@ class KlondikeTableState extends State<KlondikeTable> {
               ),
             ),
             DragOverlay(controller: _drag),
+            if (play != null)
+              AnimatedBuilder(
+                animation: _ghost,
+                builder: (context, _) {
+                  final t = Curves.easeInOut.transform(_ghost.value);
+                  final from = _pileOrigin(play.from, play.cardIndex, metrics);
+                  final destIdx = play.onto.area == PileArea.tableau
+                      ? getPile(_state, play.onto).length
+                      : 0;
+                  final to = _pileOrigin(play.onto, destIdx, metrics);
+                  final pos = Offset.lerp(from, to, t)!;
+                  final cards = _ghostCards(play);
+                  return IgnorePointer(
+                    child: Opacity(
+                      opacity: (1 - (t - 0.75).clamp(0.0, 1.0) * 4).clamp(
+                        0.0,
+                        0.85,
+                      ),
+                      child: Stack(
+                        children: [
+                          for (var i = 0; i < cards.length; i++)
+                            Positioned(
+                              left: pos.dx,
+                              top: pos.dy + i * metrics.fan,
+                              child: CardView(card: cards[i], size: card),
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            if (_flightPlay != null)
+              AnimatedBuilder(
+                animation: _flight,
+                builder: (context, _) {
+                  final flight = _flightPlay!;
+                  final t = Curves.easeInOut.transform(_flight.value);
+                  final fromPile = getPile(_state, flight.from);
+                  final from = _pileOrigin(
+                    flight.from,
+                    fromPile.length - 1,
+                    metrics,
+                  );
+                  final to = _pileOrigin(flight.onto, 0, metrics);
+                  final pos = Offset.lerp(from, to, t)!;
+                  return IgnorePointer(
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: pos.dx,
+                          top: pos.dy,
+                          child: CardView(card: fromPile.last, size: card),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
           ],
         ),
       ),
@@ -141,14 +342,18 @@ class KlondikeTableState extends State<KlondikeTable> {
 class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.canUndo,
+    required this.hintEnabled,
     required this.uiScale,
+    required this.onHint,
     required this.onUndo,
     required this.onNewGame,
     required this.onStart,
   });
 
   final bool canUndo;
+  final bool hintEnabled;
   final double uiScale;
+  final VoidCallback onHint;
   final VoidCallback onUndo;
   final VoidCallback onNewGame;
   final VoidCallback onStart;
@@ -158,6 +363,13 @@ class _TopBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        _ChromeButton(
+          label: 'Hint',
+          uiScale: uiScale,
+          enabled: hintEnabled,
+          onTap: onHint,
+        ),
+        const SizedBox(width: 8),
         _ChromeButton(
           label: 'Undo',
           uiScale: uiScale,
@@ -224,6 +436,7 @@ class _TopRow extends StatelessWidget {
     required this.metrics,
     required this.card,
     required this.selected,
+    required this.hiddenIds,
     required this.hits,
     required this.drag,
     required this.onTap,
@@ -236,6 +449,7 @@ class _TopRow extends StatelessWidget {
   final BoardMetrics metrics;
   final CardSize card;
   final Set<String> selected;
+  final Set<String> hiddenIds;
   final HitRegistry hits;
   final DragController drag;
   final void Function(PileRef pile, int? cardIndex) onTap;
@@ -250,18 +464,26 @@ class _TopRow extends StatelessWidget {
         StockPile(count: state.stock.length, size: card, onDraw: onDraw),
         SizedBox(width: metrics.gap),
         InteractivePile(
+          key: ValueKey(state.drawType),
           pile: const PileRef.waste(),
           cards: state.waste,
           size: card,
           emptyLabel: 'Waste',
           selectedIds: selected,
+          hiddenIds: hiddenIds,
           hits: hits,
           drag: drag,
           onTap: onTap,
           onAutoMove: onAutoMove,
           onDrop: onDrop,
+          wasteFan: state.drawType == DrawType.drawThree,
         ),
-        SizedBox(width: (metrics.cardW * 0.35).clamp(12, 40)),
+        SizedBox(
+          width:
+              (metrics.cardW *
+                      (state.drawType == DrawType.drawThree ? 0.7 : 0.35))
+                  .clamp(12, 48),
+        ),
         for (var i = 0; i < 4; i++) ...[
           if (i > 0) SizedBox(width: metrics.gap),
           InteractivePile(
@@ -270,6 +492,7 @@ class _TopRow extends StatelessWidget {
             size: card,
             emptyLabel: '',
             selectedIds: selected,
+            hiddenIds: hiddenIds,
             hits: hits,
             drag: drag,
             onTap: onTap,

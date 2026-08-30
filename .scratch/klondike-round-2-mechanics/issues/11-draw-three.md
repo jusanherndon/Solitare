@@ -1,7 +1,7 @@
 # Implement draw-three in the Flutter prototype
 
 Type: task
-Status: open
+Status: resolved
 
 From [How does draw-three difficulty work?](issues/04-draw-three.md). Spec: [spec.md](../../klondike-solitaire-spec/spec.md).
 
@@ -14,3 +14,10 @@ Put **draw-three** in `prototype/klondike-table-flutter` as locked: **Settings**
 - The owner can start **draw-one** or **draw-three** from **Settings** and play either type on a phone-sized layout.
 - Waste fan, recycle, **Undo**, and **Resume** match the spec.
 - Tests cover the draw-three rules that the prototype now owns.
+
+## Answer
+
+**Draw-three** is in `prototype/klondike-table-flutter`. **Settings** (start screen) has **Draw three**, off by default, persisted apart from **Resume**. A deal locks the type; **Resume** restores it. Waste fans up to three in draw-three (top only playable). A Stock tap is one **Undo**. Tests: `test/draw_three_test.dart`, Settings/Resume widget tests.
+
+## Comments
+

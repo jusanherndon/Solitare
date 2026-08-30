@@ -22,6 +22,8 @@ class InteractivePile extends StatefulWidget {
     required this.hits,
     required this.drag,
     this.selectedIds = const {},
+    this.hiddenIds = const {},
+    this.wasteFan = false,
   });
 
   final PileRef pile;
@@ -35,6 +37,8 @@ class InteractivePile extends StatefulWidget {
   final HitRegistry hits;
   final DragController drag;
   final Set<String> selectedIds;
+  final Set<String> hiddenIds;
+  final bool wasteFan;
 
   @override
   State<InteractivePile> createState() => _InteractivePileState();
@@ -62,6 +66,7 @@ class _InteractivePileState extends State<InteractivePile> {
   int _pickIndex(double localY) {
     final cards = widget.cards;
     if (cards.isEmpty) return 0;
+    if (widget.wasteFan) return cards.length - 1;
     final fan = widget.fanOffset;
     if (fan <= 0) return cards.length - 1;
     var idx = (localY / fan).floor().clamp(0, cards.length - 1);
@@ -70,6 +75,19 @@ class _InteractivePileState extends State<InteractivePile> {
     }
     if (!cards[idx].faceUp) idx = cards.length - 1;
     return idx;
+  }
+
+  double _wasteFanX() => widget.size.width * 0.32;
+
+  int _wasteFanCount() {
+    if (!widget.wasteFan || widget.cards.isEmpty) return 0;
+    return widget.cards.length < 3 ? widget.cards.length : 3;
+  }
+
+  Offset _topOrigin(Offset pileOrigin) {
+    final n = _wasteFanCount();
+    if (n <= 1) return pileOrigin;
+    return pileOrigin + Offset(_wasteFanX() * (n - 1), 0);
   }
 
   void _fireTapOrDouble(int cardIndex) {
@@ -116,7 +134,7 @@ class _InteractivePileState extends State<InteractivePile> {
     _gesture = _Gesture(
       start: global,
       cardIndex: _pickIndex(local.dy),
-      pileOrigin: origin,
+      pileOrigin: _topOrigin(origin),
     );
   }
 
@@ -188,6 +206,15 @@ class _InteractivePileState extends State<InteractivePile> {
       height = widget.size.height;
     }
 
+    final fanCount = _wasteFanCount();
+    final fanX = _wasteFanX();
+    final width = fanCount > 1
+        ? widget.size.width + fanX * (fanCount - 1)
+        : widget.size.width;
+    final fanCards = fanCount > 1
+        ? widget.cards.sublist(widget.cards.length - fanCount)
+        : const <PlayingCard>[];
+
     return Listener(
       key: _key,
       onPointerDown: (e) {
@@ -195,7 +222,7 @@ class _InteractivePileState extends State<InteractivePile> {
         _onDown(e.position, e.localPosition);
       },
       child: SizedBox(
-        width: widget.size.width,
+        width: width,
         height: height,
         child: fan > 0
             ? Stack(
@@ -209,7 +236,11 @@ class _InteractivePileState extends State<InteractivePile> {
                         top: i * fan,
                         left: 0,
                         child: Opacity(
-                          opacity: dragging && i >= _gesture!.cardIndex ? 0 : 1,
+                          opacity:
+                              (dragging && i >= _gesture!.cardIndex) ||
+                                  widget.hiddenIds.contains(cards[i].id)
+                              ? 0
+                              : 1,
                           child: CardView(
                             card: cards[i],
                             size: widget.size,
@@ -219,14 +250,45 @@ class _InteractivePileState extends State<InteractivePile> {
                       ),
                 ],
               )
+            : fanCount > 1
+            ? Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  for (var i = 0; i < fanCards.length; i++)
+                    Positioned(
+                      left: i * fanX,
+                      top: 0,
+                      child: Opacity(
+                        opacity:
+                            (dragging && i == fanCards.length - 1) ||
+                                widget.hiddenIds.contains(fanCards[i].id)
+                            ? 0
+                            : 1,
+                        child: CardView(
+                          card: fanCards[i],
+                          size: widget.size,
+                          selected: widget.selectedIds.contains(fanCards[i].id),
+                        ),
+                      ),
+                    ),
+                ],
+              )
             : Opacity(
                 opacity: dragging ? 0 : 1,
                 child: CardView(
-                  card: cards.isEmpty ? null : cards.last,
+                  card: () {
+                    for (var i = cards.length - 1; i >= 0; i--) {
+                      if (!widget.hiddenIds.contains(cards[i].id)) {
+                        return cards[i];
+                      }
+                    }
+                    return null;
+                  }(),
                   size: widget.size,
                   emptyLabel: widget.emptyLabel,
                   selected:
                       cards.isNotEmpty &&
+                      !widget.hiddenIds.contains(cards.last.id) &&
                       widget.selectedIds.contains(cards.last.id),
                 ),
               ),

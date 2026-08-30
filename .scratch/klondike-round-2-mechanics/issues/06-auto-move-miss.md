@@ -27,3 +27,7 @@ Reproduce in `prototype/klondike-table-flutter`. If Auto-move’s choice of pile
 ### jusanherndon — 2026-08-30
 
 May be more than a missed Auto-move destination. Sometimes the buttons do not respond at all. Possible timing issue. Scope of this ticket widened to both symptoms.
+
+### agent — 2026-08-30
+
+Owner asked to sharpen Auto-move (destination, not just a missed tap). Double-tap now takes the first play **Hint** would show for that card: Foundation first if legal; no Foundation-to-Foundation; no Foundation Ace onto Tableau; a Foundation card onto Tableau only when a waiting Waste or Tableau card can play onto it; no built Tableau-run shift unless it frees a Foundation play. Shared list is `legalHintPlays` in `lib/game/plays.dart`. Chrome-button miss still open.

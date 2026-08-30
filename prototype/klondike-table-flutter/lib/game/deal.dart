@@ -42,7 +42,7 @@ List<PlayingCard> shuffle(List<PlayingCard> deck, int seed) {
 }
 
 /// Standard Klondike deal: Tableau piles 1–7, tops face-up; rest face-down Stock.
-GameState dealGame([int? seed]) {
+GameState dealGame({int? seed, DrawType drawType = DrawType.drawOne}) {
   final deck = shuffle(
     buildDeck(),
     seed ?? DateTime.now().millisecondsSinceEpoch,
@@ -57,10 +57,12 @@ GameState dealGame([int? seed]) {
     tableau.add(pile);
   }
   final stock = [for (final c in deck.skip(i)) c.copyWith(faceUp: false)];
-  return GameState(
+  final dealt = GameState(
     stock: stock,
     waste: const [],
     foundations: const [[], [], [], []],
     tableau: tableau,
+    drawType: drawType,
   );
+  return dealt.copyWith(seenFaceUp: {faceUpTableKey(dealt)});
 }

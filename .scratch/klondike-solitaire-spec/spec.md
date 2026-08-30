@@ -57,7 +57,7 @@ Sources: [What standard Klondike draw-one rules should the spec cite?](https://g
 
 Both tap and drag are first-class. Tap a card, then tap a legal destination; or drag and drop. A tiny slip is a tap, not a drag. An illegal drop snaps back. Tapping an illegal destination, or tapping the same card again, clears the pick and does nothing else. A drag may start from a card already tapped. Drawing from the Stock is a tap on the Stock, not a drag. No selection highlight. Dragged cards follow the pointer in a root overlay so they stay above other piles.
 
-**Auto-move** only on double-tap / double-click: Foundation first if legal, otherwise a legal Tableau pile. Cards never fly to a Foundation on their own except after **Finish**.
+**Auto-move** only on double-tap / double-click: Foundation first if legal, otherwise a Tableau pile that **Hint** would show for that card. Not Foundation onto Foundation. Not a Foundation Ace onto Tableau. Not a built Tableau run onto another pile unless that frees a Foundation play. Cards never fly to a Foundation on their own except after **Finish**.
 
 **Hint** is a table-chrome button, not Auto-move. Each tap animates a ghost of one legal play from a face-up playable card (Waste top, a Foundation top, or a face-up Tableau sequence) onto a legal Tableau pile or Foundation, then fades. Real cards stay. The Game does not change; Undo is not stacked. Hint does not inspect face-down Tableau cards or the Stock. Draw and recycle are not Hints. In draw-three, only the Waste top is a source.
 

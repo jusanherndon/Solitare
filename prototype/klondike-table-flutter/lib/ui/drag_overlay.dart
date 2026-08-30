@@ -101,4 +101,10 @@ class HitRegistry {
     }
     return best;
   }
+
+  Offset? origin(PileRef pile) {
+    final box = _boxes[pile];
+    if (box == null || !box.hasSize || !box.attached) return null;
+    return box.localToGlobal(Offset.zero);
+  }
 }

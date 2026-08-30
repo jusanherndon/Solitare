@@ -2,12 +2,17 @@
 library;
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
+import 'game/finish.dart';
 import 'game/history.dart';
+import 'game/loss.dart';
 import 'game/resume_store.dart';
 import 'game/rules.dart';
+import 'game/settings_store.dart';
+import 'game/winning_deal.dart';
 import 'host.dart' as host;
 import 'ui/chrome/chrome_nav.dart';
 import 'ui/chrome/variant_a.dart';
@@ -17,15 +22,24 @@ void main() {
   runApp(KlondikePrototypeApp());
 }
 
-enum _Screen { start, about, table, win, loss }
+enum _Screen { start, about, settings, table, finish, finishing, win, loss }
 
 class KlondikePrototypeApp extends StatelessWidget {
-  KlondikePrototypeApp({super.key, ResumeStore? store, host.OpenUrl? openUrl})
-    : store = store ?? FileResumeStore(),
-      openUrl = openUrl ?? host.openUrl;
+  KlondikePrototypeApp({
+    super.key,
+    ResumeStore? store,
+    SettingsStore? settings,
+    host.OpenUrl? openUrl,
+    Random? winningDealRandom,
+  }) : store = store ?? FileResumeStore(),
+       settings = settings ?? FileSettingsStore(),
+       openUrl = openUrl ?? host.openUrl,
+       winningDealRandom = winningDealRandom ?? Random();
 
   final ResumeStore store;
+  final SettingsStore settings;
   final host.OpenUrl openUrl;
+  final Random winningDealRandom;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +52,12 @@ class KlondikePrototypeApp extends StatelessWidget {
           pageBuilder: (context, _, _) => builder(context),
         );
       },
-      home: KlondikeSession(store: store, openUrl: openUrl),
+      home: KlondikeSession(
+        store: store,
+        settings: settings,
+        openUrl: openUrl,
+        winningDealRandom: winningDealRandom,
+      ),
     );
   }
 }
@@ -47,11 +66,15 @@ class KlondikeSession extends StatefulWidget {
   const KlondikeSession({
     super.key,
     required this.store,
+    required this.settings,
     required this.openUrl,
+    required this.winningDealRandom,
   });
 
   final ResumeStore store;
+  final SettingsStore settings;
   final host.OpenUrl openUrl;
+  final Random winningDealRandom;
 
   @override
   State<KlondikeSession> createState() => _KlondikeSessionState();
@@ -62,7 +85,9 @@ class _KlondikeSessionState extends State<KlondikeSession> {
   GameMeta? _saved;
   GameMeta? _table;
   bool _confirm = false;
+  bool _confirmWinning = false;
   bool _booted = false;
+  bool _drawThree = false;
 
   @override
   void initState() {
@@ -72,9 +97,11 @@ class _KlondikeSessionState extends State<KlondikeSession> {
 
   Future<void> _boot() async {
     final saved = await widget.store.load();
+    final drawThree = await widget.settings.loadDrawThree();
     if (!mounted) return;
     setState(() {
       _saved = saved;
+      _drawThree = drawThree;
       _booted = true;
     });
   }
@@ -89,52 +116,88 @@ class _KlondikeSessionState extends State<KlondikeSession> {
     await widget.store.clear();
   }
 
-  void _dealToTable() {
-    final meta = initMeta(DateTime.now().millisecondsSinceEpoch);
+  void _dealToTable({bool fromPool = false}) {
+    final drawType = _drawThree ? DrawType.drawThree : DrawType.drawOne;
+    final seed = fromPool
+        ? pickWinningDealSeed(drawType, widget.winningDealRandom)
+        : DateTime.now().millisecondsSinceEpoch;
+    final meta = initMeta(seed: seed, drawType: drawType);
     setState(() {
       _table = meta;
       _screen = _Screen.table;
       _confirm = false;
+      _confirmWinning = false;
     });
     unawaited(_persistUnfinished(meta));
+  }
+
+  bool _offersFinish(GameMeta meta) =>
+      canFinish(meta.present) && !meta.finishContinued && !meta.present.won;
+
+  _Screen _playScreen(GameMeta meta) {
+    if (meta.present.won) return _Screen.win;
+    if (_offersFinish(meta)) return _Screen.finish;
+    if (isLoss(meta.present)) return _Screen.loss;
+    return _Screen.table;
   }
 
   void _onAction(MetaAction action) {
     final current = _table;
     if (current == null) return;
     final next = reduceMeta(current, action);
-    setState(() => _table = next);
-    if (next.present.won) {
-      unawaited(_clearSaved());
-      setState(() => _screen = _Screen.win);
+    if (_screen == _Screen.finishing) {
+      setState(() => _table = next);
+      if (next.present.won) {
+        setState(() => _screen = _Screen.win);
+        unawaited(_clearSaved());
+      }
       return;
     }
-    if (isLoss(next.present)) {
+    final screen = _playScreen(next);
+    setState(() {
+      _table = next;
+      _screen = screen;
+    });
+    if (screen == _Screen.win || screen == _Screen.loss) {
       unawaited(_clearSaved());
-      setState(() => _screen = _Screen.loss);
       return;
     }
     unawaited(_persistUnfinished(next));
   }
 
-  void _requestNewGame({required bool wouldDiscard}) {
+  void _requestDeal({required bool fromPool, required bool wouldDiscard}) {
     if (wouldDiscard) {
-      setState(() => _confirm = true);
+      setState(() {
+        _confirm = true;
+        _confirmWinning = fromPool;
+      });
       return;
     }
-    _dealToTable();
+    _dealToTable(fromPool: fromPool);
   }
 
   ChromeNav _nav(BuildContext context) {
     return ChromeNav(
       showResume: _saved != null,
       bottomInset: MediaQuery.paddingOf(context).bottom,
-      onNewGame: () => _requestNewGame(wouldDiscard: _saved != null),
+      onNewGame: () =>
+          _requestDeal(fromPool: false, wouldDiscard: _saved != null),
+      onWinningDeal: () =>
+          _requestDeal(fromPool: true, wouldDiscard: _saved != null),
       onResume: () => setState(() {
-        _table = _saved;
-        _screen = _Screen.table;
+        final saved = _saved;
+        if (saved == null) return;
+        _table = saved;
+        _screen = _playScreen(saved);
       }),
       onAbout: () => setState(() => _screen = _Screen.about),
+      onSettings: () => setState(() => _screen = _Screen.settings),
+      drawThree: _drawThree,
+      onToggleDrawThree: () {
+        final next = !_drawThree;
+        setState(() => _drawThree = next);
+        unawaited(widget.settings.saveDrawThree(next));
+      },
       onBackToStart: () => setState(() => _screen = _Screen.start),
       onSupport: () {
         unawaited(widget.openUrl(host.supportMailto));
@@ -153,6 +216,7 @@ class _KlondikeSessionState extends State<KlondikeSession> {
         });
       },
       onWinNewGame: _dealToTable,
+      onWinWinningDeal: () => _dealToTable(fromPool: true),
       onLossStart: () {
         unawaited(_clearSaved());
         setState(() {
@@ -161,20 +225,18 @@ class _KlondikeSessionState extends State<KlondikeSession> {
         });
       },
       onLossNewGame: _dealToTable,
+      onLossWinningDeal: () => _dealToTable(fromPool: true),
       onLossUndo: () {
-        final current = _table;
-        if (current == null) return;
-        final next = reduceMeta(current, const UndoMetaAction());
-        setState(() {
-          _table = next;
-          _screen = isLoss(next.present) ? _Screen.loss : _Screen.table;
-        });
-        if (!isLoss(next.present)) {
-          unawaited(_persistUnfinished(next));
-        }
+        _onAction(const UndoMetaAction());
       },
-      onConfirmDiscard: _dealToTable,
-      onCancelConfirm: () => setState(() => _confirm = false),
+      confirmActionLabel: _confirmWinning ? 'Winning deal' : 'New Game',
+      onConfirmDiscard: () => _dealToTable(fromPool: _confirmWinning),
+      onCancelConfirm: () => setState(() {
+        _confirm = false;
+        _confirmWinning = false;
+      }),
+      onFinish: () => setState(() => _screen = _Screen.finishing),
+      onContinueFinish: () => _onAction(const ContinueFinishMetaAction()),
     );
   }
 
@@ -191,12 +253,14 @@ class _KlondikeSessionState extends State<KlondikeSession> {
         children: [
           if (table != null &&
               _screen != _Screen.start &&
-              _screen != _Screen.about)
+              _screen != _Screen.about &&
+              _screen != _Screen.settings)
             Stack(
               children: [
                 KlondikeTable(
                   meta: table,
                   playEnabled: _screen == _Screen.table,
+                  finishing: _screen == _Screen.finishing,
                   onAction: _onAction,
                   onStart: () {
                     final m = _table;
@@ -207,14 +271,17 @@ class _KlondikeSessionState extends State<KlondikeSession> {
                       _screen = _Screen.start;
                     });
                   },
-                  onRequestNewGame: () => _requestNewGame(wouldDiscard: true),
+                  onRequestNewGame: () =>
+                      _requestDeal(fromPool: false, wouldDiscard: true),
                 ),
+                if (_screen == _Screen.finish) VariantAFinish(nav: nav),
                 if (_screen == _Screen.win) VariantAWin(nav: nav),
                 if (_screen == _Screen.loss) VariantALoss(nav: nav),
               ],
             ),
           if (_screen == _Screen.start) VariantAStart(nav: nav),
           if (_screen == _Screen.about) VariantAAbout(nav: nav),
+          if (_screen == _Screen.settings) VariantASettings(nav: nav),
           if (_confirm) VariantAConfirm(nav: nav),
         ],
       ),

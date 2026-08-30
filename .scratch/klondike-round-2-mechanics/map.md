@@ -20,16 +20,19 @@ Local files under `issues/`. First unblocked unclaimed ticket in number order is
 
 - `01` [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) (`prototype`)
 - `06` [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) (`task`)
-- `08` [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md) (`task`)
-- `09` [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md) (`task`, blocked by `08`)
-- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`, blocked by `01`, `06`, `08`, `09`, `11`–`15`)
-- `11` [Implement draw-three in the Flutter prototype](issues/11-draw-three.md) (`task`)
-- `12` [Implement the Winning deal button](issues/12-winning-deal-button.md) (`task`, blocked by `08`, `09`, `11`)
-- `13` [Implement Hint on the table](issues/13-hint.md) (`task`, blocked by `11`)
-- `14` [Implement the last-resort loss check](issues/14-loss-check.md) (`task`, blocked by `13`)
-- `15` [Implement the Finish overlay](issues/15-finish.md) (`task`, blocked by `11`)
+- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`, blocked by `01`, `06`)
 
 ## Decisions so far
+
+- [Implement the Winning deal button](issues/12-winning-deal-button.md) — **Winning deal** next to **New Game** on start / win / loss; random seed from the Settings pool; same confirm as **New Game**.
+
+- [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md) — 150 draw-three seeds in `winning_deal_pool.dart`; same hint-follow bot, not copied from draw-one.
+- [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md) — 150 draw-one seeds in `winning_deal_pool.dart`; bot follows new Hint then Stock.
+
+- [Implement the Finish overlay](issues/15-finish.md) — Overlay when Foundation-only win is ready; **Finish** completes; **Continue** hides it for the rest of the Game.
+- [Implement the last-resort loss check](issues/14-loss-check.md) — No active Hint and no Stock/Waste play on the current table; repeats do not block; seen tables follow Undo and Resume.
+- [Implement Hint on the table](issues/13-hint.md) — Table chrome **Hint**; ghost cycle new-then-repeats; dim when empty.
+- [Implement draw-three in the Flutter prototype](issues/11-draw-three.md) — Settings **Draw three**; Waste fan; type locked at deal; **Resume** restores it.
 
 - [What is a winning deal, and how do you start one?](issues/02-winning-deal.md) — Proven per draw type; **Winning deal** button next to **New Game** on start / win / loss only; two shipped pools (~100–200 each); **New Game** stays random.
 - [How does draw-three difficulty work?](issues/04-draw-three.md) — Settings toggle **Draw three** (off = draw-one); fan of up to three, Waste top only; recycle shifts; same **loss** check as draw-one (no full-pass boolean).

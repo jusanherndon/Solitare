@@ -1,7 +1,7 @@
 # Implement the Finish overlay
 
 Type: task
-Status: open
+Status: resolved
 Blocked by: 11
 
 From [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](issues/07-win-finish.md). Spec: [spec.md](../../klondike-solitaire-spec/spec.md). Waits on [Implement draw-three in the Flutter prototype](issues/11-draw-three.md) so the gate uses the Waste top in both types.
@@ -15,3 +15,10 @@ Put **Finish** in `prototype/klondike-table-flutter` as locked: overlay **You ca
 - The overlay appears only when the gate is true, runs **Finish** through to the win overlay with no **Undo**, and **Continue** lets a manual win.
 - **Resume** restores the overlay or the opted-out flag.
 - Tests cover the gate (including a face-up table that still needs Tableau play — no overlay).
+
+## Answer
+
+**Finish** overlay **You can finish.** when Stock is empty, every card is face-up, and Foundation-only plays from the Waste top and Tableau tops reach a win. Filled **Finish** applies those plays (no Undo) then **You won!** **Continue** sets a Game flag that survives Undo. Resume restores the overlay or that flag. Tests: `test/finish_test.dart` and widget Resume/Continue/Finish.
+
+## Comments
+

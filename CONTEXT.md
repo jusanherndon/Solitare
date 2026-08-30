@@ -49,7 +49,7 @@ A Game type whose Stock tap turns up to three cards onto the Waste, fanned face-
 _Avoid_: draw 3, 3-card draw, hard mode (as the type name)
 
 **Auto-move**:
-A double-tap or double-click that sends a card to a Foundation if legal, otherwise to a legal Tableau pile. Cards do not fly by themselves.
+A double-tap or double-click that sends a card to a Foundation if legal, otherwise onto Tableau when that play is one Hint would show. Cards do not fly by themselves.
 _Avoid_: hint, autocomplete, auto-complete
 
 **Hint**:

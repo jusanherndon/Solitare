@@ -2,6 +2,7 @@
 library;
 
 import 'deal.dart';
+import 'plays.dart';
 import 'rules.dart';
 
 sealed class GameAction {
@@ -9,8 +10,9 @@ sealed class GameAction {
 }
 
 class NewGameAction extends GameAction {
-  const NewGameAction([this.seed]);
+  const NewGameAction([this.seed, this.drawType = DrawType.drawOne]);
   final int? seed;
+  final DrawType drawType;
 }
 
 class DrawAction extends GameAction {
@@ -51,7 +53,9 @@ class _Board {
         for (final p in state.tableau) [...p],
       ],
       selection = state.selection,
-      won = state.won;
+      won = state.won,
+      drawType = state.drawType,
+      seenFaceUp = state.seenFaceUp;
 
   List<PlayingCard> stock;
   List<PlayingCard> waste;
@@ -59,6 +63,8 @@ class _Board {
   List<List<PlayingCard>> tableau;
   Selection? selection;
   bool won;
+  DrawType drawType;
+  Set<String> seenFaceUp;
 
   GameState freeze() => GameState(
     stock: stock,
@@ -67,6 +73,8 @@ class _Board {
     tableau: tableau,
     selection: selection,
     won: won,
+    drawType: drawType,
+    seenFaceUp: seenFaceUp,
   );
 
   List<PlayingCard> pileOf(PileRef pile) {
@@ -167,34 +175,18 @@ GameState applySelect(GameState state, PileRef pile, int? cardIndex) {
   if (pile.area == PileArea.stock) return state;
   final cards = getPile(state, pile);
   if (cards.isEmpty) {
-    return GameState(
-      stock: state.stock,
-      waste: state.waste,
-      foundations: state.foundations,
-      tableau: state.tableau,
-      won: state.won,
-    );
+    return state.copyWith(selection: null);
   }
   if (pile.area == PileArea.waste || pile.area == PileArea.foundation) {
-    return GameState(
-      stock: state.stock,
-      waste: state.waste,
-      foundations: state.foundations,
-      tableau: state.tableau,
+    return state.copyWith(
       selection: Selection(from: pile, cardIndex: cards.length - 1),
-      won: state.won,
     );
   }
   final idx = cardIndex ?? cards.length - 1;
   if (idx < 0 || idx >= cards.length || !cards[idx].faceUp) return state;
   if (!tableauRunIsLegal(cards, idx)) return state;
-  return GameState(
-    stock: state.stock,
-    waste: state.waste,
-    foundations: state.foundations,
-    tableau: state.tableau,
+  return state.copyWith(
     selection: Selection(from: pile, cardIndex: idx),
-    won: state.won,
   );
 }
 
@@ -202,13 +194,7 @@ GameState applyAutoMove(GameState state, PileRef from, int? cardIndex) {
   if (from.area == PileArea.stock) return state;
   final cards = getPile(state, from);
   if (cards.isEmpty) {
-    return GameState(
-      stock: state.stock,
-      waste: state.waste,
-      foundations: state.foundations,
-      tableau: state.tableau,
-      won: state.won,
-    );
+    return state.copyWith(selection: null);
   }
 
   late final int idx;
@@ -217,60 +203,18 @@ GameState applyAutoMove(GameState state, PileRef from, int? cardIndex) {
   } else {
     idx = cardIndex ?? cards.length - 1;
     if (idx < 0 || idx >= cards.length || !cards[idx].faceUp) {
-      return GameState(
-        stock: state.stock,
-        waste: state.waste,
-        foundations: state.foundations,
-        tableau: state.tableau,
-        won: state.won,
-      );
+      return state.copyWith(selection: null);
     }
     if (!tableauRunIsLegal(cards, idx)) {
-      return GameState(
-        stock: state.stock,
-        waste: state.waste,
-        foundations: state.foundations,
-        tableau: state.tableau,
-        won: state.won,
-      );
+      return state.copyWith(selection: null);
     }
   }
 
-  final moving = _takeSelection(
-    _Board(state),
-    Selection(from: from, cardIndex: idx),
-  );
-  if (moving == null) {
-    return GameState(
-      stock: state.stock,
-      waste: state.waste,
-      foundations: state.foundations,
-      tableau: state.tableau,
-      won: state.won,
-    );
+  final play = autoMovePlay(state, from, idx);
+  if (play == null) {
+    return state.copyWith(selection: null);
   }
-
-  final builder = _Board(state);
-  for (var i = 0; i < 4; i++) {
-    final onto = PileRef.foundation(i);
-    if (_canDrop(moving, onto, builder)) {
-      return applyDrop(state, onto, from, idx);
-    }
-  }
-  for (var i = 0; i < 7; i++) {
-    final onto = PileRef.tableau(i);
-    if (from.area == PileArea.tableau && from.index == i) continue;
-    if (_canDrop(moving, onto, builder)) {
-      return applyDrop(state, onto, from, idx);
-    }
-  }
-  return GameState(
-    stock: state.stock,
-    waste: state.waste,
-    foundations: state.foundations,
-    tableau: state.tableau,
-    won: state.won,
-  );
+  return applyDrop(state, play.onto, from, idx);
 }
 
 GameState applyTap(GameState state, PileRef pile, int? cardIndex) {
@@ -281,13 +225,7 @@ GameState applyTap(GameState state, PileRef pile, int? cardIndex) {
         ? cards.length - 1
         : cardIndex ?? cards.length - 1;
     if (idx == state.selection!.cardIndex) {
-      return GameState(
-        stock: state.stock,
-        waste: state.waste,
-        foundations: state.foundations,
-        tableau: state.tableau,
-        won: state.won,
-      );
+      return state.copyWith(selection: null);
     }
     return applySelect(state, pile, cardIndex);
   }
@@ -306,15 +244,23 @@ GameState draw(GameState state) {
     next.waste = [];
     return next.freeze();
   }
-  final card = next.stock.removeLast();
-  next.waste = [...next.waste, card.copyWith(faceUp: true)];
+  final n = state.drawType == DrawType.drawThree ? 3 : 1;
+  final take = n < next.stock.length ? n : next.stock.length;
+  final drawn = <PlayingCard>[];
+  for (var i = 0; i < take; i++) {
+    drawn.add(next.stock.removeLast().copyWith(faceUp: true));
+  }
+  next.waste = [...next.waste, ...drawn];
   return next.freeze();
 }
 
 GameState reduce(GameState state, GameAction action) {
   switch (action) {
-    case NewGameAction(:final seed):
-      return dealGame(seed ?? DateTime.now().millisecondsSinceEpoch);
+    case NewGameAction(:final seed, :final drawType):
+      return dealGame(
+        seed: seed ?? DateTime.now().millisecondsSinceEpoch,
+        drawType: drawType,
+      );
     case DrawAction():
       return draw(state);
     case TapAction(:final pile, :final cardIndex):
@@ -324,13 +270,7 @@ GameState reduce(GameState state, GameAction action) {
     case AutoMoveAction(:final pile, :final cardIndex):
       return applyAutoMove(state, pile, cardIndex);
     case ClearSelectionAction():
-      return GameState(
-        stock: state.stock,
-        waste: state.waste,
-        foundations: state.foundations,
-        tableau: state.tableau,
-        won: state.won,
-      );
+      return state.copyWith(selection: null);
   }
 }
 

@@ -44,6 +44,10 @@ class PlayingCard {
 
 enum PileArea { stock, waste, foundation, tableau }
 
+enum DrawType { drawOne, drawThree }
+
+const _absent = Object();
+
 class PileRef {
   const PileRef._(this.area, this.index);
   const PileRef.stock() : this._(PileArea.stock, 0);
@@ -83,6 +87,8 @@ class GameState {
     required this.tableau,
     this.selection,
     this.won = false,
+    this.drawType = DrawType.drawOne,
+    this.seenFaceUp = const {},
   });
 
   final List<PlayingCard> stock;
@@ -91,6 +97,32 @@ class GameState {
   final List<List<PlayingCard>> tableau;
   final Selection? selection;
   final bool won;
+  final DrawType drawType;
+  final Set<String> seenFaceUp;
+
+  GameState copyWith({
+    List<PlayingCard>? stock,
+    List<PlayingCard>? waste,
+    List<List<PlayingCard>>? foundations,
+    List<List<PlayingCard>>? tableau,
+    Object? selection = _absent,
+    bool? won,
+    DrawType? drawType,
+    Set<String>? seenFaceUp,
+  }) {
+    return GameState(
+      stock: stock ?? this.stock,
+      waste: waste ?? this.waste,
+      foundations: foundations ?? this.foundations,
+      tableau: tableau ?? this.tableau,
+      selection: identical(selection, _absent)
+          ? this.selection
+          : selection as Selection?,
+      won: won ?? this.won,
+      drawType: drawType ?? this.drawType,
+      seenFaceUp: seenFaceUp ?? this.seenFaceUp,
+    );
+  }
 }
 
 bool isRed(String suit) => suit == 'hearts' || suit == 'diamonds';
@@ -135,7 +167,7 @@ bool tableauRunIsLegal(List<PlayingCard> pile, int cardIndex) {
   return true;
 }
 
-bool _canMoveOnto(List<PlayingCard> moving, PileRef onto, GameState state) {
+bool canMoveOnto(List<PlayingCard> moving, PileRef onto, GameState state) {
   if (moving.isEmpty) return false;
   final head = moving.first;
   switch (onto.area) {
@@ -157,12 +189,12 @@ bool hasTableauOrFoundationMove(GameState state) {
     for (var i = 0; i < 4; i++) {
       final onto = PileRef.foundation(i);
       if (from.sameAs(onto)) continue;
-      if (_canMoveOnto(moving, onto, state)) return true;
+      if (canMoveOnto(moving, onto, state)) return true;
     }
     for (var i = 0; i < 7; i++) {
       final onto = PileRef.tableau(i);
       if (from.sameAs(onto)) continue;
-      if (_canMoveOnto(moving, onto, state)) return true;
+      if (canMoveOnto(moving, onto, state)) return true;
     }
     return false;
   }
@@ -185,9 +217,16 @@ bool hasTableauOrFoundationMove(GameState state) {
   return false;
 }
 
-/// Spec: not a win, no Tableau/Foundation play, Stock empty, Waste empty.
-bool isLoss(GameState state) =>
-    !state.won &&
-    state.stock.isEmpty &&
-    state.waste.isEmpty &&
-    !hasTableauOrFoundationMove(state);
+String _cardKey(PlayingCard c) => '${c.suit}-${c.rank}';
+
+/// Face-up table for Hint new/repeat and loss: Waste, Foundations, face-up Tableau.
+String faceUpTableKey(GameState state) => [
+  [for (final c in state.waste) _cardKey(c)],
+  [
+    for (final p in state.foundations) [for (final c in p) _cardKey(c)],
+  ],
+  [
+    for (final p in state.tableau)
+      [for (final c in p.where((c) => c.faceUp)) _cardKey(c)],
+  ],
+].toString();
