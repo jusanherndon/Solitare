@@ -1,7 +1,7 @@
 # Can we build and install the Klondike table prototype on iOS locally?
 
 Type: task
-Status: open
+Status: resolved
 GitHub: #14 — https://github.com/jusanherndon/Solitare/issues/14
 
 Supports [How should the Klondike table look and play on a phone in portrait and landscape?](issues/01-klondike-table-look-and-play.md).
@@ -31,3 +31,13 @@ Owner chose Flutter over Expo after comparing prototypes ([#22](https://github.c
 ### jusanherndon — 2026-08-23T20:56:00Z
 
 iOS local builds wait until the owner buys a MacBook. Android is done on `06`. Do not treat EAS/cloud iOS as a substitute. Ticket stays open.
+
+### agent — 2026-09-03
+
+Demonstrated on this MacBook: Xcode 26.6, Flutter 3.47.2, iPhone 17 Simulator (iOS 26.5). `flutter build ios --simulator` wrote `build/ios/iphonesimulator/Runner.app`; `flutter run -d ios` installed and ran the table. Added the iOS `klondike/host` channel (`filesDir`, `open`) so boot matches Android. No physical iPhone was connected.
+
+## Answer
+
+Yes. On this MacBook, `cd prototype/klondike-table-flutter && flutter build ios --simulator` produces `build/ios/iphonesimulator/Runner.app`. `flutter run -d ios` installs it on the Simulator. macOS + Xcode are required; CocoaPods is not, for this plugin-free prototype. Command and paths are in that prototype README.
+
+A physical iPhone you own does **not** need the paid Apple Developer Program. It does need a one-time Apple ID Team in Xcode (Automatically manage signing), Developer Mode, Trust This Computer, and trusting the developer certificate on the phone, then `flutter run`. Paid enrollment / TestFlight / store IPA stay on [Post Klondike Solitaire to the App Store](../../klondike-app-store/map.md).

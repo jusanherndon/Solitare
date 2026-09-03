@@ -3,7 +3,7 @@
 Type: research
 Status: resolved
 
-Related: local Simulator/device prototype is [Can we build and install the Klondike table prototype on iOS locally?](../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md) (spec map — waits on a MacBook). This ticket is the **App Store** path, not that prototype APK/Simulator check.
+Related: local Simulator/device prototype is [Can we build and install the Klondike table prototype on iOS locally?](../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md) (spec map — Simulator path demonstrated). This ticket is the **App Store** path, not that prototype APK/Simulator check.
 
 ## Question
 
