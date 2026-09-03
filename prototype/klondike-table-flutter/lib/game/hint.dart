@@ -13,13 +13,15 @@ bool _isNew(GameState state, HintPlay play) {
 }
 
 /// New plays first, repeats last. Empty when nothing legal is face-up.
+/// Repeat Foundation pulls are omitted so Hint does not undo a card that
+/// already went up.
 List<HintPlay> hintCycle(GameState state) {
   final news = <HintPlay>[];
   final repeats = <HintPlay>[];
   for (final play in legalHintPlays(state)) {
     if (_isNew(state, play)) {
       news.add(play);
-    } else {
+    } else if (play.from.area != PileArea.foundation) {
       repeats.add(play);
     }
   }

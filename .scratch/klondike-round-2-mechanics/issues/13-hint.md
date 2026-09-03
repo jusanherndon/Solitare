@@ -31,3 +31,7 @@ Owner tweak: do not Hint a Foundation Ace back onto Tableau. Do Hint a Foundatio
 
 Owner tweak: do not Hint a King that already sits on an empty Tableau pile onto another empty pile. Still Hint a King that uncovers a face-down card.
 
+### agent — 2026-09-03
+
+Owner tweak: do not Hint a Foundation card back onto Tableau when that pull only repeats a seen face-up table. After 4♣ goes up, pulling it back because 3♥ still looks waiting was a loop.
+

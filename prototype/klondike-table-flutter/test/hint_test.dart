@@ -417,6 +417,56 @@ void main() {
     },
   );
 
+  test(
+    'Hint does not pull a Foundation card back down after it just went up',
+    () {
+      final opening = board(
+        foundations: [
+          [c('spades', 1), c('spades', 2), c('spades', 3), c('spades', 4)],
+          [c('clubs', 1), c('clubs', 2), c('clubs', 3)],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('hearts', 5)],
+          [c('diamonds', 5), c('clubs', 4), c('hearts', 3)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      var meta = GameMeta(
+        present: opening.copyWith(seenFaceUp: {faceUpTableKey(opening)}),
+        past: const [],
+      );
+      final keys = <String>{boardKey(meta.present)};
+      for (var i = 0; i < 8; i++) {
+        final cycle = hintCycle(meta.present);
+        if (cycle.isEmpty) break;
+        final play = cycle.first;
+        meta = reduceMeta(
+          meta,
+          GameMetaAction(
+            DropAction(play.onto, from: play.from, cardIndex: play.cardIndex),
+          ),
+        );
+        expect(
+          keys.add(boardKey(meta.present)),
+          isTrue,
+          reason: 'Hint followed a loop at step $i',
+        );
+      }
+      expect(meta.present.foundations[1].last.suit, 'clubs');
+      expect(meta.present.foundations[1].last.rank, 4);
+      expect(
+        hintCycle(meta.present).any((p) => p.from.area == PileArea.foundation),
+        isFalse,
+      );
+    },
+  );
+
   test('Hint does not pull a Foundation 3 onto Tableau with no waiting 2', () {
     final state = board(
       foundations: [
