@@ -126,7 +126,11 @@ bool _foundationPullHelps(GameState state, PlayingCard pulled, PileRef onto) {
     if (!waiting(top)) continue;
     if (pile.length >= 2) {
       final parent = pile[pile.length - 2];
-      if (parent.faceUp && canStackOnTableau(top, parent)) continue;
+      if (parent.faceUp &&
+          canStackOnTableau(top, parent) &&
+          !_canPlayOnFoundation(parent, state)) {
+        continue;
+      }
     }
     return true;
   }

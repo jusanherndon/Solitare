@@ -386,6 +386,37 @@ void main() {
     );
   });
 
+  test(
+    'Hint pulls a Foundation card when it frees a stacked waiting card',
+    () {
+      final state = board(
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3), c('hearts', 4), c('hearts', 5), c('hearts', 6)],
+          [],
+          [c('diamonds', 1), c('diamonds', 2), c('diamonds', 3), c('diamonds', 4), c('diamonds', 5)],
+          [],
+        ],
+        tableau: [
+          [c('spades', 7)],
+          [c('diamonds', 6), c('clubs', 5)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(
+        hintCycle(state).any(
+          (p) =>
+              p.from == const PileRef.foundation(0) &&
+              p.onto == const PileRef.tableau(0),
+        ),
+        isTrue,
+      );
+    },
+  );
+
   test('Hint does not pull a Foundation 3 onto Tableau with no waiting 2', () {
     final state = board(
       foundations: [
