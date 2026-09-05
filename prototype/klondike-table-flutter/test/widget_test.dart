@@ -92,7 +92,8 @@ void main() {
     await tester.tap(find.text('Settings'));
     await tester.pump();
     expect(find.text('Draw three'), findsOneWidget);
-    expect(find.text('Off'), findsOneWidget);
+    expect(find.text('Fast Finish'), findsOneWidget);
+    expect(find.text('Off'), findsNWidgets(2));
     await tester.tap(find.text('Draw three'));
     await tester.pump();
     expect(find.text('On'), findsOneWidget);
@@ -181,10 +182,56 @@ void main() {
     await tester.pump();
     expect(find.text('Finish!'), findsNothing);
     for (var i = 0; i < 12; i++) {
-      await tester.pump(const Duration(milliseconds: 650));
+      await tester.pump(KlondikeTable.finishFlight);
     }
     expect(find.text('You won!'), findsOneWidget);
     expect(find.text('Winning deal'), findsOneWidget);
+  });
+
+  testWidgets('Settings Fast Finish is off by default and can turn on', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    expect(find.text('Fast Finish'), findsOneWidget);
+    expect(find.text('Off'), findsNWidgets(2));
+    await tester.tap(find.text('Fast Finish'));
+    await tester.pump();
+    expect(find.text('On'), findsOneWidget);
+    expect(find.text('Off'), findsOneWidget);
+  });
+
+  testWidgets('Fast Finish persists independent of Draw three', (tester) async {
+    final settings = MemorySettingsStore();
+    await _pumpApp(tester, settings: settings);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Fast Finish'));
+    await tester.pump();
+    expect(await settings.loadFastFinish(), isTrue);
+    expect(await settings.loadDrawThree(), isFalse);
+  });
+
+  testWidgets('Fast Finish runs the Finish animation at double speed', (
+    tester,
+  ) async {
+    final store = MemoryResumeStore();
+    await store.save(finishable());
+    await _pumpApp(
+      tester,
+      store: store,
+      settings: MemorySettingsStore(fastFinish: true),
+    );
+    await tester.tap(find.text('Resume'));
+    await tester.pump();
+    await tester.tap(find.text('Finish'));
+    await tester.pump();
+    expect(find.text('Finish!'), findsNothing);
+    for (var i = 0; i < 12; i++) {
+      await tester.pump(KlondikeTable.fastFinishFlight);
+    }
+    expect(find.text('You won!'), findsOneWidget);
   });
 
   testWidgets('Winning deal deals a random seed from the Settings pool', (

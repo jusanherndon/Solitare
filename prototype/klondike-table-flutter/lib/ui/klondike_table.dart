@@ -24,6 +24,7 @@ class KlondikeTable extends StatefulWidget {
     required this.onRequestNewGame,
     this.playEnabled = true,
     this.finishing = false,
+    this.fastFinish = false,
   });
 
   final GameMeta meta;
@@ -32,6 +33,10 @@ class KlondikeTable extends StatefulWidget {
   final VoidCallback onRequestNewGame;
   final bool playEnabled;
   final bool finishing;
+  final bool fastFinish;
+
+  static const finishFlight = Duration(milliseconds: 650);
+  static const fastFinishFlight = Duration(milliseconds: 325);
 
   @override
   State<KlondikeTable> createState() => KlondikeTableState();
@@ -49,7 +54,9 @@ class KlondikeTableState extends State<KlondikeTable>
 
   GameState get _state => widget.meta.present;
 
-  static const _finishFlight = Duration(milliseconds: 650);
+  Duration get _finishFlight => widget.fastFinish
+      ? KlondikeTable.fastFinishFlight
+      : KlondikeTable.finishFlight;
 
   @override
   void initState() {
@@ -79,6 +86,9 @@ class KlondikeTableState extends State<KlondikeTable>
     if (boardKey(oldWidget.meta.present) != boardKey(_state)) {
       _cancelGhost();
       _rebuildCycle();
+    }
+    if (widget.fastFinish != oldWidget.fastFinish) {
+      _flight.duration = _finishFlight;
     }
     if (widget.finishing && !oldWidget.finishing) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

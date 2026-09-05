@@ -88,6 +88,7 @@ class _KlondikeSessionState extends State<KlondikeSession> {
   bool _confirmWinning = false;
   bool _booted = false;
   bool _drawThree = false;
+  bool _fastFinish = false;
 
   @override
   void initState() {
@@ -98,10 +99,12 @@ class _KlondikeSessionState extends State<KlondikeSession> {
   Future<void> _boot() async {
     final saved = await widget.store.load();
     final drawThree = await widget.settings.loadDrawThree();
+    final fastFinish = await widget.settings.loadFastFinish();
     if (!mounted) return;
     setState(() {
       _saved = saved;
       _drawThree = drawThree;
+      _fastFinish = fastFinish;
       _booted = true;
     });
   }
@@ -198,6 +201,12 @@ class _KlondikeSessionState extends State<KlondikeSession> {
         setState(() => _drawThree = next);
         unawaited(widget.settings.saveDrawThree(next));
       },
+      fastFinish: _fastFinish,
+      onToggleFastFinish: () {
+        final next = !_fastFinish;
+        setState(() => _fastFinish = next);
+        unawaited(widget.settings.saveFastFinish(next));
+      },
       onBackToStart: () => setState(() => _screen = _Screen.start),
       onSupport: () {
         unawaited(widget.openUrl(host.supportMailto));
@@ -261,6 +270,7 @@ class _KlondikeSessionState extends State<KlondikeSession> {
                   meta: table,
                   playEnabled: _screen == _Screen.table,
                   finishing: _screen == _Screen.finishing,
+                  fastFinish: _fastFinish,
                   onAction: _onAction,
                   onStart: () {
                     final m = _table;

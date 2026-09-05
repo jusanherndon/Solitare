@@ -11,6 +11,8 @@ class ChromeNav {
     required this.onSettings,
     required this.drawThree,
     required this.onToggleDrawThree,
+    required this.fastFinish,
+    required this.onToggleFastFinish,
     required this.onBackToStart,
     required this.onSupport,
     required this.onSource,
@@ -38,6 +40,8 @@ class ChromeNav {
   final VoidCallback onSettings;
   final bool drawThree;
   final VoidCallback onToggleDrawThree;
+  final bool fastFinish;
+  final VoidCallback onToggleFastFinish;
   final VoidCallback onBackToStart;
   final VoidCallback onSupport;
   final VoidCallback onSource;

@@ -195,45 +195,69 @@ class VariantASettings extends StatelessWidget {
           children: [
             Row(children: [_BannerBtn('Start', onTap: nav.onBackToStart)]),
             const SizedBox(height: 28),
-            GestureDetector(
+            _SettingsToggle(
+              label: 'Draw three',
+              on: nav.drawThree,
               onTap: nav.onToggleDrawThree,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0x59000000),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0x40FFFFFF)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: Text(
-                          'Draw three',
-                          style: TextStyle(
-                            color: _cream,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        nav.drawThree ? 'On' : 'Off',
-                        style: const TextStyle(
-                          color: Color(0xFFFFE082),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+            ),
+            const SizedBox(height: 12),
+            _SettingsToggle(
+              label: 'Fast Finish',
+              on: nav.fastFinish,
+              onTap: nav.onToggleFastFinish,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsToggle extends StatelessWidget {
+  const _SettingsToggle({
+    required this.label,
+    required this.on,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool on;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: const Color(0x59000000),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0x40FFFFFF)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    color: _cream,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-            ),
-          ],
+              Text(
+                on ? 'On' : 'Off',
+                style: const TextStyle(
+                  color: Color(0xFFFFE082),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
