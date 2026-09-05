@@ -35,3 +35,7 @@ Owner tweak: do not Hint a King that already sits on an empty Tableau pile onto 
 
 Owner tweak: do not Hint a Foundation card back onto Tableau when that pull only repeats a seen face-up table. After 4♣ goes up, pulling it back because 3♥ still looks waiting was a loop.
 
+### agent — 2026-09-05
+
+Owner tweak: while a new play exists, do not Hint repeats (the undo of a Foundation pull wrapping with the waiting card moving onto it). Recreated from a table where 3♣ comes down onto 4♦: Hint was alternating 2♥ onto 3♣ and 3♣ going back up.
+

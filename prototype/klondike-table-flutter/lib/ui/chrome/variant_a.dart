@@ -264,7 +264,7 @@ class VariantAFinish extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'You can finish.',
+                      'Finish!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFFFD54F),

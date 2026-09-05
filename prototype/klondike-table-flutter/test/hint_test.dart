@@ -102,9 +102,11 @@ void main() {
     expect(cycle, isNotEmpty);
     expect(cycle.first.from.area, PileArea.waste);
     expect(cycle.first.onto.area, PileArea.foundation);
-    final last = cycle.last;
-    expect(last.from, const PileRef.tableau(0));
-    expect(last.onto, const PileRef.tableau(1));
+    expect(
+      cycle.any((p) => p.from.area == PileArea.tableau),
+      isFalse,
+      reason: 'repeat Tableau shift is hidden while a new play exists',
+    );
     final cursor = HintCursor(cycle);
     for (var i = 0; i < cycle.length; i++) {
       cursor.advance();
@@ -464,6 +466,90 @@ void main() {
         hintCycle(meta.present).any((p) => p.from.area == PileArea.foundation),
         isFalse,
       );
+    },
+  );
+
+  test(
+    'Hint does not wrap a Foundation pull with sending that card back up',
+    () {
+      final opening = board(
+        foundations: [
+          [c('clubs', 1), c('clubs', 2), c('clubs', 3)],
+          [c('spades', 1), c('spades', 2)],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('diamonds', 4)],
+          [c('hearts', 4), c('spades', 3), c('hearts', 2)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      var meta = GameMeta(
+        present: opening.copyWith(seenFaceUp: {faceUpTableKey(opening)}),
+        past: const [],
+      );
+      expect(
+        hintCycle(meta.present).single,
+        HintPlay(
+          from: const PileRef.foundation(0),
+          cardIndex: 2,
+          onto: const PileRef.tableau(0),
+        ),
+      );
+      meta = reduceMeta(
+        meta,
+        const GameMetaAction(
+          DropAction(
+            PileRef.tableau(0),
+            from: PileRef.foundation(0),
+            cardIndex: 2,
+          ),
+        ),
+      );
+      final afterPull = hintCycle(meta.present);
+      expect(
+        afterPull.any(
+          (p) =>
+              p.from == const PileRef.tableau(0) &&
+              p.onto == const PileRef.foundation(0),
+        ),
+        isFalse,
+        reason: '3♣ going back up would wrap with 2♥ moving onto it',
+      );
+      expect(
+        afterPull.single,
+        HintPlay(
+          from: const PileRef.tableau(1),
+          cardIndex: 2,
+          onto: const PileRef.tableau(0),
+        ),
+      );
+
+      final keys = <String>{boardKey(meta.present)};
+      for (var i = 0; i < 6; i++) {
+        final cycle = hintCycle(meta.present);
+        if (cycle.isEmpty) break;
+        final play = cycle.first;
+        meta = reduceMeta(
+          meta,
+          GameMetaAction(
+            DropAction(play.onto, from: play.from, cardIndex: play.cardIndex),
+          ),
+        );
+        expect(
+          keys.add(boardKey(meta.present)),
+          isTrue,
+          reason: 'Hint followed a loop at step $i',
+        );
+      }
+      expect(meta.present.foundations[1].last.suit, 'spades');
+      expect(meta.present.foundations[1].last.rank, 3);
+      expect(hintCycle(meta.present), isEmpty);
     },
   );
 

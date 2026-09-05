@@ -1,4 +1,4 @@
-/// Hint cycle: legal face-up plays, new then repeats. Not Auto-move.
+/// Hint cycle: legal face-up plays. New plays only while any exist. Not Auto-move.
 library;
 
 import 'plays.dart';
@@ -12,9 +12,9 @@ bool _isNew(GameState state, HintPlay play) {
   return !state.seenFaceUp.contains(faceUpTableKey(next));
 }
 
-/// New plays first, repeats last. Empty when nothing legal is face-up.
-/// Repeat Foundation pulls are omitted so Hint does not undo a card that
-/// already went up.
+/// New plays first. Repeats are omitted while any new play exists, so Hint
+/// does not wrap between a useful play and undoing a Foundation pull.
+/// Repeat Foundation pulls stay omitted even when they are the only plays.
 List<HintPlay> hintCycle(GameState state) {
   final news = <HintPlay>[];
   final repeats = <HintPlay>[];
@@ -25,7 +25,8 @@ List<HintPlay> hintCycle(GameState state) {
       repeats.add(play);
     }
   }
-  return [...news, ...repeats];
+  if (news.isNotEmpty) return news;
+  return repeats;
 }
 
 /// Active Hint for loss: a play that would leave an unseen face-up table.

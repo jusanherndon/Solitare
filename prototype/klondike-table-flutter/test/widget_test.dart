@@ -147,15 +147,13 @@ void main() {
     );
   }
 
-  testWidgets('Resume of a finishable Game shows You can finish', (
-    tester,
-  ) async {
+  testWidgets('Resume of a finishable Game shows Finish!', (tester) async {
     final store = MemoryResumeStore();
     await store.save(finishable());
     await _pumpApp(tester, store: store);
     await tester.tap(find.text('Resume'));
     await tester.pump();
-    expect(find.text('You can finish.'), findsOneWidget);
+    expect(find.text('Finish!'), findsOneWidget);
     expect(find.text('Finish'), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
     expect(find.text('Winning deal'), findsNothing);
@@ -169,7 +167,7 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('Continue'));
     await tester.pump();
-    expect(find.text('You can finish.'), findsNothing);
+    expect(find.text('Finish!'), findsNothing);
     expect(find.text('Hint'), findsOneWidget);
   });
 
@@ -181,7 +179,7 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('Finish'));
     await tester.pump();
-    expect(find.text('You can finish.'), findsNothing);
+    expect(find.text('Finish!'), findsNothing);
     for (var i = 0; i < 12; i++) {
       await tester.pump(const Duration(milliseconds: 650));
     }
