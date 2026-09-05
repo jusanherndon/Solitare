@@ -19,3 +19,9 @@ After draw-three play is locked, run the same bot under **draw-three** rules: ra
 ## Answer
 
 **150** draw-three seeds in `prototype/klondike-table-flutter/lib/game/winning_deal_pool.dart` (`drawThreeWinningDealSeeds`), distinct list from draw-one. Same hint-follow bot under **draw-three** rules; a draw-one **win** was not copied in. Filled by `dart run tool/fill_winning_deals.dart` (1361 deals tried).
+
+## Comments
+
+### agent — 2026-09-05
+
+Regenerated after Hint cycle changes (same pass as draw-one). Dropped seeds 372, 447, 963, 1330; added 1403, 1412, 1419, 1429. Pool still 150. `dart run tool/fill_winning_deals.dart --three`.

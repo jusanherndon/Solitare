@@ -21,3 +21,9 @@ A bot loss is a skip, not a proof the deal is unwinnable. Do not fill the draw-t
 ## Answer
 
 **150** draw-one seeds in `prototype/klondike-table-flutter/lib/game/winning_deal_pool.dart` (`drawOneWinningDealSeeds`). The bot in `lib/game/hint_bot.dart` deals seed 1, 2, 3…, plays the first **new** Hint (else taps Stock), keeps on a **win**, skips a **loss** or a repeated table. Filled by `dart run tool/fill_winning_deals.dart` (422 deals tried). The **Winning deal** button stays on [Implement the Winning deal button](issues/12-winning-deal-button.md).
+
+## Comments
+
+### agent — 2026-09-05
+
+Regenerated after Hint cycle changes. Dropped seeds 63 and 394 (bot skip); added 423 and 424. Pool still 150. `dart run tool/fill_winning_deals.dart --one`.
