@@ -8,7 +8,7 @@ Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire 
 
 A written spec for Klondike Solitaire — a free, no-account, no-ads English Game for phones — covering the features in the app and how it looks, complete enough that a later session can implement it. Phones only, portrait and landscape. This map does not ship the app or list it on a store.
 
-**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 is the other map. Leftover on this map: launcher icon.
+**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 is the other map. Leftover on this map: launcher icon, and disconnected iOS device install.
 
 ## Notes
 
@@ -22,6 +22,7 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English Gam
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
 - `18` [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md) (`prototype`)
+- `19` [How do we install the Klondike table prototype on a physical iPhone without a connected `flutter run`?](issues/19-ios-disconnected-device-install.md) (`task`)
 
 ## Decisions so far
 

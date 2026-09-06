@@ -8,15 +8,27 @@ abstract class SettingsStore {
   Future<void> saveDrawThree(bool drawThree);
   Future<bool> loadFastFinish();
   Future<void> saveFastFinish(bool fastFinish);
+  Future<bool> loadLeftHanded();
+  Future<void> saveLeftHanded(bool leftHanded);
+  Future<bool> loadWasteOnLeft();
+  Future<void> saveWasteOnLeft(bool wasteOnLeft);
 }
 
 class MemorySettingsStore implements SettingsStore {
-  MemorySettingsStore({bool drawThree = false, bool fastFinish = false})
-    : _drawThree = drawThree,
-      _fastFinish = fastFinish;
+  MemorySettingsStore({
+    bool drawThree = false,
+    bool fastFinish = false,
+    bool leftHanded = false,
+    bool wasteOnLeft = false,
+  }) : _drawThree = drawThree,
+       _fastFinish = fastFinish,
+       _leftHanded = leftHanded,
+       _wasteOnLeft = wasteOnLeft;
 
   bool _drawThree;
   bool _fastFinish;
+  bool _leftHanded;
+  bool _wasteOnLeft;
 
   @override
   Future<bool> loadDrawThree() async => _drawThree;
@@ -28,7 +40,22 @@ class MemorySettingsStore implements SettingsStore {
   Future<bool> loadFastFinish() async => _fastFinish;
 
   @override
-  Future<void> saveFastFinish(bool fastFinish) async => _fastFinish = fastFinish;
+  Future<void> saveFastFinish(bool fastFinish) async =>
+      _fastFinish = fastFinish;
+
+  @override
+  Future<bool> loadLeftHanded() async => _leftHanded;
+
+  @override
+  Future<void> saveLeftHanded(bool leftHanded) async =>
+      _leftHanded = leftHanded;
+
+  @override
+  Future<bool> loadWasteOnLeft() async => _wasteOnLeft;
+
+  @override
+  Future<void> saveWasteOnLeft(bool wasteOnLeft) async =>
+      _wasteOnLeft = wasteOnLeft;
 }
 
 class FileSettingsStore implements SettingsStore {
@@ -47,21 +74,20 @@ class FileSettingsStore implements SettingsStore {
   }
 
   Future<Map<String, bool>> _load() async {
+    const defaults = {
+      'drawThree': false,
+      'fastFinish': false,
+      'leftHanded': false,
+      'wasteOnLeft': false,
+    };
     final file = await _file();
-    if (!file.existsSync()) {
-      return {'drawThree': false, 'fastFinish': false};
-    }
+    if (!file.existsSync()) return Map<String, bool>.from(defaults);
     try {
       final decoded = jsonDecode(file.readAsStringSync());
-      if (decoded is! Map) {
-        return {'drawThree': false, 'fastFinish': false};
-      }
-      return {
-        'drawThree': decoded['drawThree'] == true,
-        'fastFinish': decoded['fastFinish'] == true,
-      };
+      if (decoded is! Map) return Map<String, bool>.from(defaults);
+      return {for (final e in defaults.entries) e.key: decoded[e.key] == true};
     } on Object {
-      return {'drawThree': false, 'fastFinish': false};
+      return Map<String, bool>.from(defaults);
     }
   }
 
@@ -71,6 +97,8 @@ class FileSettingsStore implements SettingsStore {
       jsonEncode({
         'drawThree': values['drawThree'] ?? false,
         'fastFinish': values['fastFinish'] ?? false,
+        'leftHanded': values['leftHanded'] ?? false,
+        'wasteOnLeft': values['wasteOnLeft'] ?? false,
       }),
     );
   }
@@ -92,6 +120,26 @@ class FileSettingsStore implements SettingsStore {
   Future<void> saveFastFinish(bool fastFinish) async {
     final values = await _load();
     values['fastFinish'] = fastFinish;
+    await _save(values);
+  }
+
+  @override
+  Future<bool> loadLeftHanded() async => (await _load())['leftHanded']!;
+
+  @override
+  Future<void> saveLeftHanded(bool leftHanded) async {
+    final values = await _load();
+    values['leftHanded'] = leftHanded;
+    await _save(values);
+  }
+
+  @override
+  Future<bool> loadWasteOnLeft() async => (await _load())['wasteOnLeft']!;
+
+  @override
+  Future<void> saveWasteOnLeft(bool wasteOnLeft) async {
+    final values = await _load();
+    values['wasteOnLeft'] = wasteOnLeft;
     await _save(values);
   }
 }

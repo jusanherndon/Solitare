@@ -10,6 +10,7 @@ import 'package:klondike_table/game/rules.dart';
 import 'package:klondike_table/game/settings_store.dart';
 import 'package:klondike_table/game/winning_deal.dart';
 import 'package:klondike_table/main.dart';
+import 'package:klondike_table/ui/interactive_pile.dart';
 import 'package:klondike_table/ui/klondike_table.dart';
 
 import 'board.dart';
@@ -93,7 +94,9 @@ void main() {
     await tester.pump();
     expect(find.text('Draw three'), findsOneWidget);
     expect(find.text('Fast Finish'), findsOneWidget);
-    expect(find.text('Off'), findsNWidgets(2));
+    expect(find.text('Left-handed'), findsOneWidget);
+    expect(find.text('Waste on left'), findsOneWidget);
+    expect(find.text('Off'), findsNWidgets(4));
     await tester.tap(find.text('Draw three'));
     await tester.pump();
     expect(find.text('On'), findsOneWidget);
@@ -195,11 +198,11 @@ void main() {
     await tester.tap(find.text('Settings'));
     await tester.pump();
     expect(find.text('Fast Finish'), findsOneWidget);
-    expect(find.text('Off'), findsNWidgets(2));
+    expect(find.text('Off'), findsNWidgets(4));
     await tester.tap(find.text('Fast Finish'));
     await tester.pump();
     expect(find.text('On'), findsOneWidget);
-    expect(find.text('Off'), findsOneWidget);
+    expect(find.text('Off'), findsNWidgets(3));
   });
 
   testWidgets('Fast Finish persists independent of Draw three', (tester) async {
@@ -211,6 +214,8 @@ void main() {
     await tester.pump();
     expect(await settings.loadFastFinish(), isTrue);
     expect(await settings.loadDrawThree(), isFalse);
+    expect(await settings.loadLeftHanded(), isFalse);
+    expect(await settings.loadWasteOnLeft(), isFalse);
   });
 
   testWidgets('Fast Finish runs the Finish animation at double speed', (
@@ -312,5 +317,106 @@ void main() {
     await tester.pump();
     expect(find.text('You lost.'), findsOneWidget);
     expect(find.text('Winning deal'), findsOneWidget);
+  });
+
+  Finder foundation0() => find.byWidgetPredicate(
+    (w) => w is InteractivePile && w.pile == const PileRef.foundation(0),
+  );
+
+  Finder wastePile() => find.byWidgetPredicate(
+    (w) => w is InteractivePile && w.pile == const PileRef.waste(),
+  );
+
+  testWidgets('Stock then Waste sit on the right by default', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    final stock = tester.getTopLeft(find.byType(StockPile));
+    final waste = tester.getTopLeft(wastePile());
+    final foundation = tester.getTopLeft(foundation0());
+    expect(stock.dx, greaterThan(foundation.dx));
+    expect(waste.dx, greaterThan(stock.dx));
+  });
+
+  testWidgets('Left-handed Settings keeps Stock then Waste on the left', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Left-handed'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    final stock = tester.getTopLeft(find.byType(StockPile));
+    final waste = tester.getTopLeft(wastePile());
+    final foundation = tester.getTopLeft(foundation0());
+    expect(stock.dx, lessThan(foundation.dx));
+    expect(waste.dx, greaterThan(stock.dx));
+  });
+
+  testWidgets('Left-handed persists independent of Draw three', (tester) async {
+    final settings = MemorySettingsStore();
+    await _pumpApp(tester, settings: settings);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Left-handed'));
+    await tester.pump();
+    expect(await settings.loadLeftHanded(), isTrue);
+    expect(await settings.loadDrawThree(), isFalse);
+  });
+
+  testWidgets('Waste on left Settings puts Waste to the left of Stock', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Waste on left'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    final stock = tester.getTopLeft(find.byType(StockPile));
+    final waste = tester.getTopLeft(wastePile());
+    expect(waste.dx, lessThan(stock.dx));
+  });
+
+  testWidgets(
+    'Waste on left still puts Waste left of Stock in Left-handed layout',
+    (tester) async {
+      await _pumpApp(tester);
+      await tester.tap(find.text('Settings'));
+      await tester.pump();
+      await tester.tap(find.text('Left-handed'));
+      await tester.pump();
+      await tester.tap(find.text('Waste on left'));
+      await tester.pump();
+      await tester.tap(find.text('Start'));
+      await tester.pump();
+      await tester.tap(find.text('New Game'));
+      await tester.pump();
+      final stock = tester.getTopLeft(find.byType(StockPile));
+      final waste = tester.getTopLeft(wastePile());
+      final foundation = tester.getTopLeft(foundation0());
+      expect(stock.dx, lessThan(foundation.dx));
+      expect(waste.dx, lessThan(stock.dx));
+    },
+  );
+
+  testWidgets('Waste on left persists independent of Left-handed', (
+    tester,
+  ) async {
+    final settings = MemorySettingsStore();
+    await _pumpApp(tester, settings: settings);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Waste on left'));
+    await tester.pump();
+    expect(await settings.loadWasteOnLeft(), isTrue);
+    expect(await settings.loadLeftHanded(), isFalse);
   });
 }

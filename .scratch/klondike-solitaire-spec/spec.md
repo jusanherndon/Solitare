@@ -77,7 +77,7 @@ v1 always opens on a dedicated **start screen**. An unfinished Game does not ski
 
 **Start screen.** Title **Klondike Solitaire**. Actions: **New Game**, **Winning deal**, **Resume**, **Settings**, **About**. Resume is hidden unless an unfinished Game exists (first launch, and after a win or a loss). No table behind this screen. Back from About or Settings returns here.
 
-**Settings.** Felt banner like About (no table behind). A **Start** chrome button top-left. One control: **Draw three**, off by default (**draw-one**). Persist on the phone, independent of Resume. No confirm on the toggle. Applies only to the next **New Game** or **Winning deal**; the type is fixed when the deal starts. Nothing else on this screen yet.
+**Settings.** Felt banner like About (no table behind). A **Start** chrome button top-left. Controls: **Draw three**, off by default (**draw-one**); **Left-handed**, off by default (Stock and Waste on the right); **Waste on left**, off by default (Waste to the right of Stock). Persist on the phone, independent of Resume. No confirm on a toggle. **Draw three** applies only to the next **New Game** or **Winning deal**; the type is fixed when the deal starts. **Left-handed** and **Waste on left** apply as soon as they return to the table.
 
 **About** (this inventory, in this order):
 
@@ -112,9 +112,11 @@ Sources: [What start screen does the app open to, and what does Settings contain
 
 Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep green fill, gold border. Screen chrome (start, About, overlays) uses rounded dark fill and a light border; a filled / primary button uses a deeper green fill and gold border.
 
-**Table — layout A, classic top row**, in both portrait and landscape (same arrangement when rotated, not a second layout).
+**Table — layout A**, in both portrait and landscape (same arrangement when rotated, not a second layout).
 
-- Top row: Stock then Waste on the left, four Foundations on the right, with a gap between Waste and Foundations.
+- Top row, default: four Foundations on the left, Stock then Waste on the right, with a gap between Foundations and Stock.
+- **Left-handed** Settings: the Stock/Waste pair on the left, four Foundations on the right (the pre-flip positions).
+- **Waste on left** Settings: Waste sits to the left of Stock in both the default and **Left-handed** layouts. Off keeps Waste to the right of Stock. Independent of which side of the board the pair sits on.
 - Tableau: seven columns below.
 - Empty Foundations are unlabeled dashed slots. Empty Waste is labeled. In draw-three the Waste fans up to three face-up cards; only the top is playable.
 - On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit. Portrait fans the Tableau more; landscape tightens the fan. Rank and suit type is larger than the first table prototype. Chrome is a bottom thumb dock: **Hint**, **Undo**, **New Game**, **Start**.
@@ -125,7 +127,7 @@ Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep g
 
 **About (felt banner).** Cream body type, gold underlined tappable rows. A **Start** chrome button top-left. No table behind.
 
-**Settings (felt banner).** Same as About: cream body, **Start** chrome button top-left, no table behind. One **Draw three** toggle.
+**Settings (felt banner).** Same as About: cream body, **Start** chrome button top-left, no table behind. **Draw three**, **Left-handed**, and **Waste on left** toggles.
 
 **Win overlay.** Table visible around a centered dark rounded card with a gold border. **You won!** in gold. **Start**, then filled **New Game**, then **Winning deal** next to **New Game**. Dim the table (~40%). Gold sparkles rise through the open felt.
 

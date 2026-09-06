@@ -31,3 +31,21 @@ Run `prototype/klondike-table-flutter` (`flutter run` on a connected device, or 
 - The owner has played on Android (portrait and landscape).
 - Bugs and wanted changes are written in Comments on this ticket.
 - A follow-up session has either patched the spec, filed follow-on work, or recorded that nothing needs to change.
+
+## Comments
+
+### jusanherndon — 2026-09-06T15:40:00Z
+
+Want Stock and Waste flipped to the right of the top row, Tableau still on top. Default should be that right-hand layout. Add a **Settings** option for left-handed play that puts Stock and Waste back on the left, Foundations on the right — the positions they had before the flip.
+
+### jusanherndon — 2026-09-06T15:44:00Z
+
+After the flip, Waste sat on the left of the draw pile. Want Waste on the right of Stock in the default layout. Do not change **Left-handed**: that pair stays Stock then Waste on the left.
+
+### jusanherndon — 2026-09-06T15:59:00Z
+
+Want a **Settings** option so Waste can sit on either side of the draw pile. Default remains Waste to the right of Stock. **Waste on left** puts Waste to the left of Stock. Independent of **Left-handed**.
+
+### jusanherndon — 2026-09-06T16:00:00Z
+
+**Waste on left** must also apply in **Left-handed** layout, not only the right-hand default. Turning it on puts Waste to the left of Stock whether the pair is on the left or the right.

@@ -51,5 +51,5 @@ Local files under `issues/`. First unblocked unclaimed ticket in number order is
 - Score, timer, statistics, daily challenges, themes, sound
 - Store listing, privacy hosting, enrollment — [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md), [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md)
 - Launcher icon — [What launcher icon should the Android APK and iOS IPA use?](../klondike-solitaire-spec/issues/18-launcher-icon.md)
-- iOS local prototype until a MacBook — [Can we build and install the Klondike table prototype on iOS locally?](../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md)
+- Local iOS install, including disconnected play — [Can we build and install the Klondike table prototype on iOS locally?](../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md) and [How do we install the Klondike table prototype on a physical iPhone without a connected `flutter run`?](../klondike-solitaire-spec/issues/19-ios-disconnected-device-install.md)
 - CI

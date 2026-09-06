@@ -22,7 +22,7 @@ To install on a **physical iPhone** you own, not the App Store: USB-connect the 
 
 First launch: **New Game** or **About**. **Resume** appears after you leave an unfinished Game via **Start**. Win/loss end the Game (no Resume). New Game confirms when it would discard an unfinished Game.
 
-Cards are still placeholder faces/backs; About already credits Fomin/Atlas. Portrait and landscape both use classic top-row layout.
+Cards are still placeholder faces/backs; About already credits Fomin/Atlas. Portrait and landscape both put Foundations on the left and Stock/Waste on the right; **Left-handed** in Settings restores that pair on the left. **Waste on left** puts Waste to the left of Stock in both layouts.
 
 ## Analyze / format / test
 

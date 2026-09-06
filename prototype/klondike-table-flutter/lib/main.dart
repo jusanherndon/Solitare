@@ -89,6 +89,8 @@ class _KlondikeSessionState extends State<KlondikeSession> {
   bool _booted = false;
   bool _drawThree = false;
   bool _fastFinish = false;
+  bool _leftHanded = false;
+  bool _wasteOnLeft = false;
 
   @override
   void initState() {
@@ -100,11 +102,15 @@ class _KlondikeSessionState extends State<KlondikeSession> {
     final saved = await widget.store.load();
     final drawThree = await widget.settings.loadDrawThree();
     final fastFinish = await widget.settings.loadFastFinish();
+    final leftHanded = await widget.settings.loadLeftHanded();
+    final wasteOnLeft = await widget.settings.loadWasteOnLeft();
     if (!mounted) return;
     setState(() {
       _saved = saved;
       _drawThree = drawThree;
       _fastFinish = fastFinish;
+      _leftHanded = leftHanded;
+      _wasteOnLeft = wasteOnLeft;
       _booted = true;
     });
   }
@@ -207,6 +213,18 @@ class _KlondikeSessionState extends State<KlondikeSession> {
         setState(() => _fastFinish = next);
         unawaited(widget.settings.saveFastFinish(next));
       },
+      leftHanded: _leftHanded,
+      onToggleLeftHanded: () {
+        final next = !_leftHanded;
+        setState(() => _leftHanded = next);
+        unawaited(widget.settings.saveLeftHanded(next));
+      },
+      wasteOnLeft: _wasteOnLeft,
+      onToggleWasteOnLeft: () {
+        final next = !_wasteOnLeft;
+        setState(() => _wasteOnLeft = next);
+        unawaited(widget.settings.saveWasteOnLeft(next));
+      },
       onBackToStart: () => setState(() => _screen = _Screen.start),
       onSupport: () {
         unawaited(widget.openUrl(host.supportMailto));
@@ -271,6 +289,8 @@ class _KlondikeSessionState extends State<KlondikeSession> {
                   playEnabled: _screen == _Screen.table,
                   finishing: _screen == _Screen.finishing,
                   fastFinish: _fastFinish,
+                  leftHanded: _leftHanded,
+                  wasteOnLeft: _wasteOnLeft,
                   onAction: _onAction,
                   onStart: () {
                     final m = _table;

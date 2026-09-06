@@ -13,6 +13,10 @@ class ChromeNav {
     required this.onToggleDrawThree,
     required this.fastFinish,
     required this.onToggleFastFinish,
+    required this.leftHanded,
+    required this.onToggleLeftHanded,
+    required this.wasteOnLeft,
+    required this.onToggleWasteOnLeft,
     required this.onBackToStart,
     required this.onSupport,
     required this.onSource,
@@ -42,6 +46,10 @@ class ChromeNav {
   final VoidCallback onToggleDrawThree;
   final bool fastFinish;
   final VoidCallback onToggleFastFinish;
+  final bool leftHanded;
+  final VoidCallback onToggleLeftHanded;
+  final bool wasteOnLeft;
+  final VoidCallback onToggleWasteOnLeft;
   final VoidCallback onBackToStart;
   final VoidCallback onSupport;
   final VoidCallback onSource;

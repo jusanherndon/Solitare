@@ -206,6 +206,18 @@ class VariantASettings extends StatelessWidget {
               on: nav.fastFinish,
               onTap: nav.onToggleFastFinish,
             ),
+            const SizedBox(height: 12),
+            _SettingsToggle(
+              label: 'Left-handed',
+              on: nav.leftHanded,
+              onTap: nav.onToggleLeftHanded,
+            ),
+            const SizedBox(height: 12),
+            _SettingsToggle(
+              label: 'Waste on left',
+              on: nav.wasteOnLeft,
+              onTap: nav.onToggleWasteOnLeft,
+            ),
           ],
         ),
       ),

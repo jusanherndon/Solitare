@@ -25,6 +25,8 @@ class KlondikeTable extends StatefulWidget {
     this.playEnabled = true,
     this.finishing = false,
     this.fastFinish = false,
+    this.leftHanded = false,
+    this.wasteOnLeft = false,
   });
 
   final GameMeta meta;
@@ -34,6 +36,8 @@ class KlondikeTable extends StatefulWidget {
   final bool playEnabled;
   final bool finishing;
   final bool fastFinish;
+  final bool leftHanded;
+  final bool wasteOnLeft;
 
   static const finishFlight = Duration(milliseconds: 650);
   static const fastFinishFlight = Duration(milliseconds: 325);
@@ -226,6 +230,8 @@ class KlondikeTableState extends State<KlondikeTable>
                         hiddenIds: hidden,
                         hits: _hits,
                         drag: _drag,
+                        leftHanded: widget.leftHanded,
+                        wasteOnLeft: widget.wasteOnLeft,
                         onTap: (pile, i) => _dispatch(TapAction(pile, i)),
                         onAutoMove: (pile, i) =>
                             _dispatch(AutoMoveAction(pile, i)),
@@ -435,6 +441,8 @@ class _TopRow extends StatelessWidget {
     required this.hiddenIds,
     required this.hits,
     required this.drag,
+    required this.leftHanded,
+    required this.wasteOnLeft,
     required this.onTap,
     required this.onAutoMove,
     required this.onDrop,
@@ -448,6 +456,8 @@ class _TopRow extends StatelessWidget {
   final Set<String> hiddenIds;
   final HitRegistry hits;
   final DragController drag;
+  final bool leftHanded;
+  final bool wasteOnLeft;
   final void Function(PileRef pile, int? cardIndex) onTap;
   final void Function(PileRef pile, int? cardIndex) onAutoMove;
   final void Function(PileRef onto, PileRef from, int cardIndex) onDrop;
@@ -455,16 +465,43 @@ class _TopRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        StockPile(count: state.stock.length, size: card, onDraw: onDraw),
-        SizedBox(width: metrics.gap),
+    final spacer = SizedBox(
+      width:
+          (metrics.cardW * (state.drawType == DrawType.drawThree ? 0.7 : 0.35))
+              .clamp(12, 48),
+    );
+    final stock = StockPile(
+      count: state.stock.length,
+      size: card,
+      onDraw: onDraw,
+    );
+    final waste = InteractivePile(
+      key: ValueKey(state.drawType),
+      pile: const PileRef.waste(),
+      cards: state.waste,
+      size: card,
+      emptyLabel: 'Waste',
+      selectedIds: selected,
+      hiddenIds: hiddenIds,
+      hits: hits,
+      drag: drag,
+      onTap: onTap,
+      onAutoMove: onAutoMove,
+      onDrop: onDrop,
+      wasteFan: state.drawType == DrawType.drawThree,
+    );
+    final gap = SizedBox(width: metrics.gap);
+    final stockAndWaste = wasteOnLeft
+        ? <Widget>[waste, gap, stock]
+        : <Widget>[stock, gap, waste];
+    final foundations = <Widget>[
+      for (var i = 0; i < 4; i++) ...[
+        if (i > 0) SizedBox(width: metrics.gap),
         InteractivePile(
-          key: ValueKey(state.drawType),
-          pile: const PileRef.waste(),
-          cards: state.waste,
+          pile: PileRef.foundation(i),
+          cards: state.foundations[i],
           size: card,
-          emptyLabel: 'Waste',
+          emptyLabel: '',
           selectedIds: selected,
           hiddenIds: hiddenIds,
           hits: hits,
@@ -472,31 +509,13 @@ class _TopRow extends StatelessWidget {
           onTap: onTap,
           onAutoMove: onAutoMove,
           onDrop: onDrop,
-          wasteFan: state.drawType == DrawType.drawThree,
         ),
-        SizedBox(
-          width:
-              (metrics.cardW *
-                      (state.drawType == DrawType.drawThree ? 0.7 : 0.35))
-                  .clamp(12, 48),
-        ),
-        for (var i = 0; i < 4; i++) ...[
-          if (i > 0) SizedBox(width: metrics.gap),
-          InteractivePile(
-            pile: PileRef.foundation(i),
-            cards: state.foundations[i],
-            size: card,
-            emptyLabel: '',
-            selectedIds: selected,
-            hiddenIds: hiddenIds,
-            hits: hits,
-            drag: drag,
-            onTap: onTap,
-            onAutoMove: onAutoMove,
-            onDrop: onDrop,
-          ),
-        ],
       ],
+    ];
+    return Row(
+      children: leftHanded
+          ? [...stockAndWaste, spacer, ...foundations]
+          : [...foundations, const Spacer(), ...stockAndWaste],
     );
   }
 }
