@@ -14,11 +14,17 @@ flutter run -d linux        # desktop, for layout checks
 open -a Simulator && flutter run -d ios
 flutter build ios --simulator
 # Simulator app: build/ios/iphonesimulator/Runner.app
+flutter build ipa --export-method development
+# Device IPA: build/ios/ipa/klondike_table.ipa
+flutter devices
+flutter install -d <UDID> --use-application-binary=build/ios/ipa/klondike_table.ipa
 ```
 
 iOS needs **macOS and Xcode**. This prototype has no iOS plugins, so CocoaPods is not required (Flutter doctor may still warn).
 
-To install on a **physical iPhone** you own, not the App Store: USB-connect the phone and tap Trust This Computer; turn on Developer Mode (Settings → Privacy & Security); add your Apple ID in Xcode → Settings → Accounts; in `ios/Runner.xcworkspace`, Runner target → Signing & Capabilities, leave Automatically manage signing on and pick that Team; then `flutter run`. The first time the app is installed, Settings → General → VPN & Device Management → trust the developer certificate. A free Apple ID is enough. The paid Apple Developer Program is only for TestFlight / App Store.
+**Physical iPhone, connected debug:** USB-connect and tap Trust This Computer; turn on Developer Mode (Settings → Privacy & Security); add your Apple ID in Xcode → Settings → Accounts; in `ios/Runner.xcworkspace`, Runner target → Signing & Capabilities, leave Automatically manage signing on and pick that Team; then `flutter run`.
+
+**Physical iPhone, unplug and play** (the APK-sideload counterpart): same signing as above, then `flutter build ipa --export-method development` and USB `flutter install --use-application-binary=build/ios/ipa/klondike_table.ipa`. Do not use plain `flutter build ipa` (App Store export). Wireless install is unreliable; use USB. The first time on a **new** phone, if it will not launch: Settings → General → VPN & Device Management → trust the developer. Then unplug and tap **Klondike Table**. A free Apple ID is enough. The development profile expires after **7 days** — rebuild and reinstall. The paid Apple Developer Program is only for TestFlight / App Store. Details: [How do we install the Klondike table prototype on a physical iPhone without a connected `flutter run`?](../../.scratch/klondike-solitaire-spec/issues/19-ios-disconnected-device-install.md).
 
 First launch: **New Game** or **About**. **Resume** appears after you leave an unfinished Game via **Start**. Win/loss end the Game (no Resume). New Game confirms when it would discard an unfinished Game.
 

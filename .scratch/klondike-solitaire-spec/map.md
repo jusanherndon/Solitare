@@ -8,7 +8,7 @@ Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire 
 
 A written spec for Klondike Solitaire — a free, no-account, no-ads English Game for phones — covering the features in the app and how it looks, complete enough that a later session can implement it. Phones only, portrait and landscape. This map does not ship the app or list it on a store.
 
-**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 is the other map. Leftover on this map: launcher icon, and disconnected iOS device install.
+**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 is the other map. Leftover on this map: launcher icon.
 
 ## Notes
 
@@ -22,7 +22,6 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English Gam
 Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
 
 - `18` [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md) (`prototype`)
-- `19` [How do we install the Klondike table prototype on a physical iPhone without a connected `flutter run`?](issues/19-ios-disconnected-device-install.md) (`task`)
 
 ## Decisions so far
 
@@ -33,6 +32,7 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [What are the v1 rules for Undo, resume, tap, and drag?](issues/02-undo-resume-tap-drag.md) — Tap→tap and drag; auto-move on double-tap only (Foundation then Tableau); unlimited Undo in the current Game; Resume restores an unfinished Game plus Undo stack.
 - [Can we build and install the Klondike table prototype on Android locally?](issues/06-android-local-prototype-build.md) — Yes: `flutter build apk` in `prototype/klondike-table-flutter` with Flutter + Android SDK. Owner demonstrated.
 - [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md) — Yes: `flutter build ios --simulator` → `build/ios/iphonesimulator/Runner.app`; `flutter run -d ios` on Simulator. macOS + Xcode. Physical iPhone: free Apple ID Team + Developer Mode, not the paid program.
+- [How do we install the Klondike table prototype on a physical iPhone without a connected `flutter run`?](issues/19-ios-disconnected-device-install.md) — Yes, free Apple ID: `flutter build ipa --export-method development` → USB `flutter install --use-application-binary=build/ios/ipa/klondike_table.ipa`; trust developer on a new phone; 7-day profile. Not AirDrop.
 - [Which one-codebase toolkit should a beginner use to ship Klondike Solitaire?](https://github.com/jusanherndon/Solitare/issues/2) — Research recommended Expo (no local Mac for iOS). **Owner override after prototypes:** Flutter (`prototype/klondike-table-flutter`, [#22](https://github.com/jusanherndon/Solitare/pull/22)). Nicer to build with, faster to build, smaller APK; Expo table closed as worse to use and buggier ([#17](https://github.com/jusanherndon/Solitare/pull/17)). Official iOS still needs macOS + Xcode.
 - [What standard Klondike draw-one rules should the spec cite?](https://github.com/jusanherndon/Solitare/issues/4) — USPC/Bicycle Official Rules: draw-one, one pass (no redeal); alternating-color Tableau; Ace-to-King Foundations.
 - [Does v1 follow USPC Klondike strictly, or computer-Klondike conventions?](https://github.com/jusanherndon/Solitare/issues/8) — Computer-Klondike: unlimited Stock recycle + legal face-up subsequences (from `01` prototype feedback); #4 remains the printed citation.
