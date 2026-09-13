@@ -1,8 +1,37 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../game/rules.dart';
+
+/// iOS San Francisco paints heavier than Android Roboto at the same
+/// `fontSize`. Shrink face type so iPhone cards match the Pixel look.
+double _optical(double size) {
+  if (defaultTargetPlatform != TargetPlatform.iOS) return size;
+  return math.max(1, (size * 0.9).roundToDouble());
+}
+
+Widget _faceText(
+  String text, {
+  required Color color,
+  required double fontSize,
+  FontWeight weight = FontWeight.w700,
+  double letterSpacing = 0,
+}) {
+  return Text(
+    text,
+    textScaler: TextScaler.noScaling,
+    style: TextStyle(
+      color: color,
+      fontSize: _optical(fontSize),
+      height: 1,
+      fontWeight: weight,
+      letterSpacing: letterSpacing,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+  );
+}
 
 class CardSize {
   const CardSize(this.width, this.height);
@@ -57,14 +86,11 @@ class CardView extends StatelessWidget {
           child: emptyLabel == null || emptyLabel!.isEmpty
               ? null
               : Center(
-                  child: Text(
+                  child: _faceText(
                     emptyLabel!,
-                    style: TextStyle(
-                      color: const Color(0x73FFFFFF),
-                      fontSize: empty,
-                      fontWeight: FontWeight.w600,
-                      height: 1,
-                    ),
+                    color: const Color(0x73FFFFFF),
+                    fontSize: empty,
+                    weight: FontWeight.w600,
                   ),
                 ),
         ),
@@ -115,38 +141,27 @@ class CardView extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              _faceText(
                 rank,
-                style: TextStyle(
-                  color: color,
-                  fontSize: cornerRank,
-                  height: 1,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                ),
+                color: color,
+                fontSize: cornerRank,
+                letterSpacing: -0.5,
               ),
-              Text(
+              _faceText(
                 glyph,
-                style: TextStyle(
-                  color: color,
-                  fontSize: cornerSuit,
-                  height: 1,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                ),
+                color: color,
+                fontSize: cornerSuit,
+                letterSpacing: -0.5,
               ),
             ],
           ),
           Align(
             alignment: const Alignment(0, 0.45),
-            child: Text(
+            child: _faceText(
               glyph,
-              style: TextStyle(
-                color: color,
-                fontSize: center,
-                height: 1,
-                fontWeight: FontWeight.w600,
-              ),
+              color: color,
+              fontSize: center,
+              weight: FontWeight.w600,
             ),
           ),
         ],
