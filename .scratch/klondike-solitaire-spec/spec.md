@@ -39,7 +39,7 @@ Draw-one: a tap on the Stock turns one card onto the Waste, face-up.
 
 Draw-three: a tap on the Stock turns up to three cards onto the Waste, face-up, fanned. Only the last drawn (Waste top) is playable; playing it exposes the next in the fan. If fewer than three remain in the Stock, draw those.
 
-Tap an empty Stock to recycle the Waste onto the Stock face-down (unlimited, reversing order). In draw-three, leftovers and cards played off the Waste **shift** the groups of three on later passes. Empty Waste is labeled. Empty Stock shows a recycle glyph when the Waste can return.
+Tap an empty Stock to recycle the Waste onto the Stock face-down (unlimited, reversing order). In draw-three, leftovers and cards played off the Waste **shift** the groups of three on later passes. Empty Waste is an unlabeled dashed slot. Empty Stock shows a recycle glyph when the Waste can return.
 
 **Win.** All 52 cards sit on the Foundations, Ace through King of each suit.
 
@@ -118,7 +118,7 @@ Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep g
 - **Left-handed** Settings: the Stock/Waste pair on the left, four Foundations on the right (the pre-flip positions).
 - **Waste on left** Settings: Waste sits to the left of Stock in both the default and **Left-handed** layouts. Off keeps Waste to the right of Stock. Independent of which side of the board the pair sits on.
 - Tableau: seven columns below.
-- Empty Foundations are unlabeled dashed slots. Empty Waste is labeled. In draw-three the Waste fans up to three face-up cards; only the top is playable.
+- Empty Foundations are unlabeled dashed slots. Empty Waste is unlabeled. In draw-three the Waste fans up to three face-up cards; only the top is playable.
 - On a phone the table fills the screen (safe-area padded). Cards grow with the short side, capped so seven columns still fit. Portrait fans the Tableau more; landscape tightens the fan. Rank and suit type is larger than the first table prototype. Chrome is a bottom thumb dock: **Hint**, **Undo**, **New Game**, **Start**.
 
 **Cards.** Ship Dmitry Fomin’s English-pattern SVG faces and Atlas card back, CC0 1.0 — not Bicycle art, not a Rider Back, not Bellot LGPL. Jokers are not used. Prefer the blue-and-brown Atlas back ([research](../../docs/research/public-domain-card-assets.md)).

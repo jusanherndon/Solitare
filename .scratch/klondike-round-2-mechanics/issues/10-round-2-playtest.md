@@ -57,3 +57,11 @@ Hint loop-stop from a previous fix still works: the Hint loop stops. After the p
 ### agent — 2026-09-13T12:50:00Z
 
 Shipped in `prototype/klondike-table-flutter`: Hint does not show the reverse of a Waste, Tableau, or Foundation play for the next 5 player moves. After that window the reverse can be a Hint again if it is still legal. Loss still treats a reverse to an unseen face-up table as an **active Hint**. Spec: [spec.md](../../klondike-solitaire-spec/spec.md). Tests: `test/hint_test.dart`.
+
+### jusanherndon — 2026-09-13T13:18:00Z
+
+Empty Waste does not need a label. Keep calling it Waste in docs; do not show **Waste** on the slot.
+
+### agent — 2026-09-13T13:20:00Z
+
+Empty Waste is an unlabeled dashed slot, same as Foundations. Spec and [How should the Klondike table look and play on a phone in portrait and landscape?](../../klondike-solitaire-spec/issues/01-klondike-table-look-and-play.md) updated. **Waste on left** Settings is unchanged.

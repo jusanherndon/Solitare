@@ -175,7 +175,7 @@ v1 uses **layout A — classic top row** in both portrait and landscape. Same ar
 - Felt green. **Undo** and **New Game** top-right.
 - Top row: Stock then Waste on the left, four Foundations on the right, with a gap between Waste and Foundations.
 - Tableau: seven columns below. Face-down cards stack; face-up cards fan so the rank/suit peek.
-- Empty Foundations are unlabeled dashed slots — any Ace may start any empty pile. Empty Waste is labeled; empty Stock shows a recycle glyph when the Waste can return.
+- Empty Foundations are unlabeled dashed slots — any Ace may start any empty pile. Empty Waste is unlabeled; empty Stock shows a recycle glyph when the Waste can return.
 - Placeholder cards for this prototype: cream face, navy back, rank + suit glyphs. Fomin/Atlas art is a later product choice (`#3`).
 
 **Phone vs landscape vs desktop**
@@ -189,4 +189,8 @@ v1 uses **layout A — classic top row** in both portrait and landscape. Same ar
 - Draw-one. Tap empty Stock to recycle the Waste (computer-Klondike; already recorded on `#8`).
 
 Rejected: layout B (thumb dock), layout C (side rails), and the Expo table ([#17](https://github.com/jusanherndon/Solitare/pull/17)). Primary source: `prototype/klondike-table-flutter` ([#22](https://github.com/jusanherndon/Solitare/pull/22)).
+
+### agent — 2026-09-13
+
+Owner: empty Waste does not need a table label. Docs still call the pile Waste. Spec and table match Foundations: unlabeled dashed slot.
 

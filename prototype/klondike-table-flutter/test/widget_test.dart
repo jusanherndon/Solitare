@@ -336,6 +336,7 @@ void main() {
     final foundation = tester.getTopLeft(foundation0());
     expect(stock.dx, greaterThan(foundation.dx));
     expect(waste.dx, greaterThan(stock.dx));
+    expect(find.text('Waste'), findsNothing);
   });
 
   testWidgets('Left-handed Settings keeps Stock then Waste on the left', (

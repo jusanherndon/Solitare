@@ -11,17 +11,18 @@ The mechanic and table-chrome changes from that playtest locked in the spec and 
 - Domain: Klondike. Read `CONTEXT.md`. Use `/grilling`, `/domain-modeling`, `/prototype`, `/research` as the ticket type requires.
 - Playtest may still pull former out-of-scope items in. Do not treat the spec map’s old out-of-scope list as frozen.
 - Draw-one remains the default; draw-three is a second type ([How does draw-three difficulty work?](issues/04-draw-three.md)). **Auto-move** is still double-tap (Foundation then Tableau); **Hint** is table chrome ([How does Hint work, and where does it sit?](issues/05-hint.md)); **Finish** is a mid-Game overlay ([When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](issues/07-win-finish.md)).
-- Grilling or prototype first where the look or rules are unknown. Missed Auto-move and unresponsive chrome buttons are one **task** (reproduce and fix; may be timing). Implementation of resolved grilling: [Implement draw-three in the Flutter prototype](issues/11-draw-three.md), [Implement the Winning deal button](issues/12-winning-deal-button.md), [Implement Hint on the table](issues/13-hint.md), [Implement the last-resort loss check](issues/14-loss-check.md), [Implement the Finish overlay](issues/15-finish.md). [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) waits until those and the other open work are done.
+- Grilling or prototype first where the look or rules are unknown. Implementation of resolved grilling: [Implement draw-three in the Flutter prototype](issues/11-draw-three.md), [Implement the Winning deal button](issues/12-winning-deal-button.md), [Implement Hint on the table](issues/13-hint.md), [Implement the last-resort loss check](issues/14-loss-check.md), [Implement the Finish overlay](issues/15-finish.md). [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) is the remaining capture ticket.
 - Toolkit: Flutter, `prototype/klondike-table-flutter`. Store posting stays on the other two maps.
 
 ## Open tickets
 
 Local files under `issues/`. First unblocked unclaimed ticket in number order is the frontier.
 
-- `06` [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) (`task`)
-- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`, blocked by `06`)
+- `10` [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md) (`task`)
 
 ## Decisions so far
+
+- [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) — Miss gone after later round-2 table work; not reproduced. **Auto-move** still Hint’s first play for that card.
 
 - [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) — **B — Thumb dock**: **Hint**, **Undo**, **New Game**, **Start** as large gold-bordered tiles along the bottom; bigger rank/suit type.
 

@@ -480,7 +480,7 @@ class _TopRow extends StatelessWidget {
       pile: const PileRef.waste(),
       cards: state.waste,
       size: card,
-      emptyLabel: 'Waste',
+      emptyLabel: '',
       selectedIds: selected,
       hiddenIds: hiddenIds,
       hits: hits,

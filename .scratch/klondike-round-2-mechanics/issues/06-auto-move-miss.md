@@ -1,7 +1,7 @@
 # Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?
 
 Type: task
-Status: open
+Status: resolved
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md).
 
@@ -22,6 +22,10 @@ Reproduce in `prototype/klondike-table-flutter`. If Auto-move’s choice of pile
 - If the miss is timing or input-lock, the answer names the cause.
 - Double-tap matches the locked Auto-move rule on a phone-sized layout, and chrome buttons respond, or the spec is reopened with evidence.
 
+## Answer
+
+Owner confirmed after later round-2 table work that the miss is gone — not reproduced, not a spec change. **Auto-move** still double-tap: Foundation first if legal, otherwise a Tableau pile **Hint** would show (`legalHintPlays`). Chrome (**Hint**, **Undo**, **New Game**, **Start**) responds. Cause was not isolated; timing vs destination stays unknown.
+
 ## Comments
 
 ### jusanherndon — 2026-08-30
@@ -31,3 +35,7 @@ May be more than a missed Auto-move destination. Sometimes the buttons do not re
 ### agent — 2026-08-30
 
 Owner asked to sharpen Auto-move (destination, not just a missed tap). Double-tap now takes the first play **Hint** would show for that card: Foundation first if legal; no Foundation-to-Foundation; no Foundation Ace onto Tableau; a Foundation card onto Tableau only when a waiting Waste or Tableau card can play onto it; no built Tableau-run shift unless it frees a Foundation play. Shared list is `legalHintPlays` in `lib/game/plays.dart`. Chrome-button miss still open.
+
+### agent — 2026-09-13
+
+Owner: the miss resolved itself from later code changes. Closed on that; not reproduced.
