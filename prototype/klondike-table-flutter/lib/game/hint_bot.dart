@@ -9,7 +9,8 @@ import 'rules.dart';
 
 enum HintBotResult { win, skip }
 
-/// Play the first **new** Hint, else tap Stock. Looping or a **loss** is a skip.
+/// Play the first **new** Hint the button would show, else tap Stock.
+/// Looping or a **loss** is a skip. Loop-stopped reverses are not followed.
 HintBotResult followHints(
   int seed, {
   DrawType drawType = DrawType.drawOne,
@@ -31,14 +32,20 @@ HintBotResult followHintsOn(GameMeta meta, {int maxSteps = 8000}) {
     if (!seen.add(boardKey(state))) return HintBotResult.skip;
 
     if (hasActiveHint(state)) {
-      final play = hintCycle(state).first;
-      current = reduceMeta(
-        current,
-        GameMetaAction(
-          DropAction(play.onto, from: play.from, cardIndex: play.cardIndex),
-        ),
-      );
-      continue;
+      final cycle = hintCycle(state);
+      if (cycle.isNotEmpty) {
+        final play = cycle.first;
+        final preview = applyDrop(state, play.onto, play.from, play.cardIndex);
+        if (!state.seenFaceUp.contains(faceUpTableKey(preview))) {
+          current = reduceMeta(
+            current,
+            GameMetaAction(
+              DropAction(play.onto, from: play.from, cardIndex: play.cardIndex),
+            ),
+          );
+          continue;
+        }
+      }
     }
 
     if (state.stock.isNotEmpty || state.waste.isNotEmpty) {

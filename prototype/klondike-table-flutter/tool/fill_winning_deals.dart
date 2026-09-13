@@ -17,17 +17,40 @@ void main(List<String> args) {
       : args.contains('--one')
       ? DrawType.drawOne
       : null;
+  final checkOnly = args.contains('--check');
   final existing = _readExisting();
   final one = [...existing.$1];
   final three = [...existing.$2];
 
   if (only == null || only == DrawType.drawOne) {
-    _fill(DrawType.drawOne, one);
+    if (checkOnly) {
+      _check(DrawType.drawOne, one);
+    } else {
+      _fill(DrawType.drawOne, one);
+    }
   }
   if (only == null || only == DrawType.drawThree) {
-    _fill(DrawType.drawThree, three);
+    if (checkOnly) {
+      _check(DrawType.drawThree, three);
+    } else {
+      _fill(DrawType.drawThree, three);
+    }
   }
-  _write(one, three);
+  if (!checkOnly) {
+    _write(one, three);
+  }
+}
+
+void _check(DrawType drawType, List<int> kept) {
+  final label = drawType == DrawType.drawOne ? 'draw-one' : 'draw-three';
+  var drops = 0;
+  for (final seed in kept) {
+    if (followHints(seed, drawType: drawType) != HintBotResult.win) {
+      stdout.writeln('$label drop seed=$seed');
+      drops++;
+    }
+  }
+  stdout.writeln('$label: ${kept.length - drops}/${kept.length} still win');
 }
 
 (List<int>, List<int>) _readExisting() {

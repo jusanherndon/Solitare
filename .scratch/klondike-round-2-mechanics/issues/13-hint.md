@@ -39,3 +39,7 @@ Owner tweak: do not Hint a Foundation card back onto Tableau when that pull only
 
 Owner tweak: while a new play exists, do not Hint repeats (the undo of a Foundation pull wrapping with the waiting card moving onto it). Recreated from a table where 3♣ comes down onto 4♦: Hint was alternating 2♥ onto 3♣ and 3♣ going back up.
 
+### agent — 2026-09-13
+
+Owner tweak from [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md): persist the loop-stop for the next 5 player moves, so a new move does not immediately make the reverse a Hint again.
+

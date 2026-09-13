@@ -388,36 +388,46 @@ void main() {
     );
   });
 
-  test(
-    'Hint pulls a Foundation card when it frees a stacked waiting card',
-    () {
-      final state = board(
-        foundations: [
-          [c('hearts', 1), c('hearts', 2), c('hearts', 3), c('hearts', 4), c('hearts', 5), c('hearts', 6)],
-          [],
-          [c('diamonds', 1), c('diamonds', 2), c('diamonds', 3), c('diamonds', 4), c('diamonds', 5)],
-          [],
+  test('Hint pulls a Foundation card when it frees a stacked waiting card', () {
+    final state = board(
+      foundations: [
+        [
+          c('hearts', 1),
+          c('hearts', 2),
+          c('hearts', 3),
+          c('hearts', 4),
+          c('hearts', 5),
+          c('hearts', 6),
         ],
-        tableau: [
-          [c('spades', 7)],
-          [c('diamonds', 6), c('clubs', 5)],
-          [],
-          [],
-          [],
-          [],
-          [],
+        [],
+        [
+          c('diamonds', 1),
+          c('diamonds', 2),
+          c('diamonds', 3),
+          c('diamonds', 4),
+          c('diamonds', 5),
         ],
-      );
-      expect(
-        hintCycle(state).any(
-          (p) =>
-              p.from == const PileRef.foundation(0) &&
-              p.onto == const PileRef.tableau(0),
-        ),
-        isTrue,
-      );
-    },
-  );
+        [],
+      ],
+      tableau: [
+        [c('spades', 7)],
+        [c('diamonds', 6), c('clubs', 5)],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+    );
+    expect(
+      hintCycle(state).any(
+        (p) =>
+            p.from == const PileRef.foundation(0) &&
+            p.onto == const PileRef.tableau(0),
+      ),
+      isTrue,
+    );
+  });
 
   test(
     'Hint does not pull a Foundation card back down after it just went up',
@@ -576,4 +586,128 @@ void main() {
       isFalse,
     );
   });
+
+  test(
+    'Hint does not send a pulled Foundation card back up for the next 5 moves',
+    () {
+      final opening = board(
+        stock: [
+          for (var rank = 6; rank <= 11; rank++)
+            c('diamonds', rank, faceUp: false),
+        ],
+        foundations: [
+          [c('clubs', 1), c('clubs', 2), c('clubs', 3)],
+          [c('spades', 1), c('spades', 2)],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('diamonds', 4)],
+          [c('hearts', 4), c('spades', 3), c('hearts', 2)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      var meta = GameMeta(
+        present: opening.copyWith(seenFaceUp: {faceUpTableKey(opening)}),
+        past: const [],
+      );
+      meta = reduceMeta(
+        meta,
+        const GameMetaAction(
+          DropAction(
+            PileRef.tableau(0),
+            from: PileRef.foundation(0),
+            cardIndex: 2,
+          ),
+        ),
+      );
+      bool sendsClubs3Up(HintPlay p) =>
+          p.from == const PileRef.tableau(0) &&
+          p.onto == const PileRef.foundation(0);
+      final waitingTwo = HintPlay(
+        from: const PileRef.tableau(1),
+        cardIndex: 2,
+        onto: const PileRef.tableau(0),
+      );
+      for (var i = 0; i < hintLoopStopMoves; i++) {
+        meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+        final cycle = hintCycle(meta.present);
+        expect(
+          cycle.any(sendsClubs3Up),
+          isFalse,
+          reason: '3♣ going back up after draw ${i + 1}',
+        );
+        expect(cycle, contains(waitingTwo));
+      }
+      meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+      expect(
+        hintCycle(meta.present).any(sendsClubs3Up),
+        isTrue,
+        reason: 'loop-stop expires after 5 player moves',
+      );
+    },
+  );
+
+  test(
+    'Hint does not pull a just-played Foundation card back down for 5 moves',
+    () {
+      final opening = board(
+        stock: [
+          for (var rank = 6; rank <= 11; rank++)
+            c('diamonds', rank, faceUp: false),
+        ],
+        foundations: [
+          [c('clubs', 1), c('clubs', 2), c('clubs', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('diamonds', 5), c('clubs', 4)],
+          [c('hearts', 3)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      var meta = GameMeta(
+        present: opening.copyWith(seenFaceUp: {faceUpTableKey(opening)}),
+        past: const [],
+      );
+      meta = reduceMeta(
+        meta,
+        const GameMetaAction(
+          DropAction(
+            PileRef.foundation(0),
+            from: PileRef.tableau(0),
+            cardIndex: 1,
+          ),
+        ),
+      );
+      bool pullsClubs4(HintPlay p) =>
+          p.from == const PileRef.foundation(0) &&
+          p.onto == const PileRef.tableau(0);
+      expect(hintCycle(meta.present).any(pullsClubs4), isFalse);
+      for (var i = 0; i < hintLoopStopMoves; i++) {
+        meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+        expect(
+          hintCycle(meta.present).any(pullsClubs4),
+          isFalse,
+          reason: '4♣ pull after draw ${i + 1}',
+        );
+      }
+      meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+      expect(
+        hintCycle(meta.present).any(pullsClubs4),
+        isTrue,
+        reason: 'helpful pull can return after 5 player moves',
+      );
+    },
+  );
 }

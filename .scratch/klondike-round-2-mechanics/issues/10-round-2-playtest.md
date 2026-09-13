@@ -49,3 +49,11 @@ Want a **Settings** option so Waste can sit on either side of the draw pile. Def
 ### jusanherndon — 2026-09-06T16:00:00Z
 
 **Waste on left** must also apply in **Left-handed** layout, not only the right-hand default. Turning it on puts Waste to the left of Stock whether the pair is on the left or the right.
+
+### jusanherndon — 2026-09-13T12:45:00Z
+
+Hint loop-stop from a previous fix still works: the Hint loop stops. After the player makes another new move, a Hint loop can persist again. Want the loop-stop to persist for about the next 5 player moves.
+
+### agent — 2026-09-13T12:50:00Z
+
+Shipped in `prototype/klondike-table-flutter`: Hint does not show the reverse of a Waste, Tableau, or Foundation play for the next 5 player moves. After that window the reverse can be a Hint again if it is still legal. Loss still treats a reverse to an unseen face-up table as an **active Hint**. Spec: [spec.md](../../klondike-solitaire-spec/spec.md). Tests: `test/hint_test.dart`.

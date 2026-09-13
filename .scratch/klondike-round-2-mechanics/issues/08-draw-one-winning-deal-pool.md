@@ -27,3 +27,7 @@ A bot loss is a skip, not a proof the deal is unwinnable. Do not fill the draw-t
 ### agent — 2026-09-05
 
 Regenerated after Hint cycle changes. Dropped seeds 63 and 394 (bot skip); added 423 and 424. Pool still 150. `dart run tool/fill_winning_deals.dart --one`.
+
+### agent — 2026-09-13
+
+Regenerated after the 5-move Hint loop-stop. Bot skip on 88 of 150 (62 still win); filled back to 150. `dart run tool/fill_winning_deals.dart --one`.

@@ -25,3 +25,7 @@ After draw-three play is locked, run the same bot under **draw-three** rules: ra
 ### agent — 2026-09-05
 
 Regenerated after Hint cycle changes (same pass as draw-one). Dropped seeds 372, 447, 963, 1330; added 1403, 1412, 1419, 1429. Pool still 150. `dart run tool/fill_winning_deals.dart --three`.
+
+### agent — 2026-09-13
+
+Regenerated after the 5-move Hint loop-stop (same pass as draw-one). Bot skip on 100 of 150 (50 still win); filled back to 150. `dart run tool/fill_winning_deals.dart --three`.

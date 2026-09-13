@@ -32,7 +32,39 @@ Map<String, Object?> _stateJson(GameState s) => {
   'won': s.won,
   'drawType': s.drawType.name,
   'seenFaceUp': s.seenFaceUp.toList(),
+  'hintLoopStops': [for (final stop in s.hintLoopStops) _loopStopJson(stop)],
 };
+
+Map<String, Object?> _loopStopJson(HintLoopStop stop) => {
+  'cardId': stop.cardId,
+  'fromArea': stop.from.area.name,
+  'fromIndex': stop.from.index,
+  'ontoArea': stop.onto.area.name,
+  'ontoIndex': stop.onto.index,
+  'movesLeft': stop.movesLeft,
+};
+
+PileRef _pileRef(String area, int index) {
+  switch (area) {
+    case 'stock':
+      return const PileRef.stock();
+    case 'waste':
+      return const PileRef.waste();
+    case 'foundation':
+      return PileRef.foundation(index);
+    case 'tableau':
+      return PileRef.tableau(index);
+    default:
+      return const PileRef.waste();
+  }
+}
+
+HintLoopStop _loopStop(Map<String, dynamic> j) => HintLoopStop(
+  cardId: j['cardId'] as String,
+  from: _pileRef(j['fromArea'] as String, j['fromIndex'] as int),
+  onto: _pileRef(j['ontoArea'] as String, j['ontoIndex'] as int),
+  movesLeft: j['movesLeft'] as int,
+);
 
 GameState _state(Map<String, dynamic> j) => GameState(
   stock: [
@@ -59,6 +91,10 @@ GameState _state(Map<String, dynamic> j) => GameState(
     for (final k in (j['seenFaceUp'] as List<dynamic>? ?? const []))
       k as String,
   },
+  hintLoopStops: [
+    for (final s in (j['hintLoopStops'] as List<dynamic>? ?? const []))
+      _loopStop(s as Map<String, dynamic>),
+  ],
 );
 
 String encodeMeta(GameMeta meta) => jsonEncode({

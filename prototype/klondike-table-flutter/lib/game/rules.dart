@@ -79,6 +79,42 @@ class Selection {
   final int cardIndex;
 }
 
+/// How many later player moves a Hint reverse-stop lasts.
+const hintLoopStopMoves = 5;
+
+/// Do not Hint the reverse of this play until [movesLeft] later moves expire.
+class HintLoopStop {
+  const HintLoopStop({
+    required this.cardId,
+    required this.from,
+    required this.onto,
+    required this.movesLeft,
+  });
+
+  final String cardId;
+  final PileRef from;
+  final PileRef onto;
+  final int movesLeft;
+
+  HintLoopStop copyWith({int? movesLeft}) => HintLoopStop(
+    cardId: cardId,
+    from: from,
+    onto: onto,
+    movesLeft: movesLeft ?? this.movesLeft,
+  );
+
+  @override
+  bool operator ==(Object other) =>
+      other is HintLoopStop &&
+      cardId == other.cardId &&
+      from == other.from &&
+      onto == other.onto &&
+      movesLeft == other.movesLeft;
+
+  @override
+  int get hashCode => Object.hash(cardId, from, onto, movesLeft);
+}
+
 class GameState {
   const GameState({
     required this.stock,
@@ -89,6 +125,7 @@ class GameState {
     this.won = false,
     this.drawType = DrawType.drawOne,
     this.seenFaceUp = const {},
+    this.hintLoopStops = const [],
   });
 
   final List<PlayingCard> stock;
@@ -99,6 +136,7 @@ class GameState {
   final bool won;
   final DrawType drawType;
   final Set<String> seenFaceUp;
+  final List<HintLoopStop> hintLoopStops;
 
   GameState copyWith({
     List<PlayingCard>? stock,
@@ -109,6 +147,7 @@ class GameState {
     bool? won,
     DrawType? drawType,
     Set<String>? seenFaceUp,
+    List<HintLoopStop>? hintLoopStops,
   }) {
     return GameState(
       stock: stock ?? this.stock,
@@ -121,6 +160,7 @@ class GameState {
       won: won ?? this.won,
       drawType: drawType ?? this.drawType,
       seenFaceUp: seenFaceUp ?? this.seenFaceUp,
+      hintLoopStops: hintLoopStops ?? this.hintLoopStops,
     );
   }
 }

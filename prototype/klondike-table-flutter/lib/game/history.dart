@@ -27,6 +27,48 @@ class GameMeta {
   );
 }
 
+Map<String, PileRef> _faceUpHomes(GameState state) {
+  final homes = <String, PileRef>{};
+  for (final c in state.waste) {
+    homes[c.id] = const PileRef.waste();
+  }
+  for (var i = 0; i < 4; i++) {
+    for (final c in state.foundations[i]) {
+      homes[c.id] = PileRef.foundation(i);
+    }
+  }
+  for (var i = 0; i < 7; i++) {
+    for (final c in state.tableau[i]) {
+      homes[c.id] = PileRef.tableau(i);
+    }
+  }
+  return homes;
+}
+
+List<HintLoopStop> _nextLoopStops(GameState before, GameState after) {
+  final aged = [
+    for (final stop in before.hintLoopStops)
+      if (stop.movesLeft > 0) stop.copyWith(movesLeft: stop.movesLeft - 1),
+  ];
+  final beforeHomes = _faceUpHomes(before);
+  final afterHomes = _faceUpHomes(after);
+  for (final id in afterHomes.keys) {
+    final from = beforeHomes[id];
+    final onto = afterHomes[id];
+    if (from == null || onto == null) continue;
+    if (from.sameAs(onto)) continue;
+    aged.add(
+      HintLoopStop(
+        cardId: id,
+        from: from,
+        onto: onto,
+        movesLeft: hintLoopStopMoves,
+      ),
+    );
+  }
+  return aged;
+}
+
 String boardKey(GameState state) {
   Object card(PlayingCard c) => [c.id, c.suit, c.rank, c.faceUp];
   return [
@@ -103,6 +145,7 @@ GameMeta reduceMeta(GameMeta state, MetaAction action) {
       }
       final recorded = next.copyWith(
         seenFaceUp: {...state.present.seenFaceUp, faceUpTableKey(next)},
+        hintLoopStops: _nextLoopStops(state.present, next),
       );
       return state.copyWith(
         present: recorded,

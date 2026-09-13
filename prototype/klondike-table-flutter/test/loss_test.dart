@@ -129,4 +129,20 @@ void main() {
     );
     expect(restored.present.seenFaceUp, {'already-seen'});
   });
+
+  test('Resume codec round-trips Hint loop-stops', () {
+    final stop = HintLoopStop(
+      cardId: 'clubs-3',
+      from: const PileRef.foundation(0),
+      onto: const PileRef.tableau(0),
+      movesLeft: 4,
+    );
+    final state = board(
+      waste: [c('hearts', 1)],
+    ).copyWith(hintLoopStops: [stop]);
+    final restored = decodeMeta(
+      encodeMeta(GameMeta(present: state, past: const [])),
+    );
+    expect(restored.present.hintLoopStops, [stop]);
+  });
 }
