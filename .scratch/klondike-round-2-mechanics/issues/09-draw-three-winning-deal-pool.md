@@ -18,7 +18,7 @@ After draw-three play is locked, run the same bot under **draw-three** rules: ra
 
 ## Answer
 
-**150** draw-three seeds in `prototype/klondike-table-flutter/lib/game/winning_deal_pool.dart` (`drawThreeWinningDealSeeds`), distinct list from draw-one. Same hint-follow bot under **draw-three** rules; a draw-one **win** was not copied in. Filled by `dart run tool/fill_winning_deals.dart` (1361 deals tried).
+**150** draw-three seeds in `src/klondike-table-flutter/lib/game/winning_deal_pool.dart` (`drawThreeWinningDealSeeds`), distinct list from draw-one. Same hint-follow bot under **draw-three** rules; a draw-one **win** was not copied in. Filled by `dart run tool/fill_winning_deals.dart` (1361 deals tried).
 
 ## Comments
 

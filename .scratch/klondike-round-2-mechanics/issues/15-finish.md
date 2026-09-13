@@ -8,7 +8,7 @@ From [When all cards are face-up and a win is possible, how does the Game finish
 
 ## Question
 
-Put **Finish** in `prototype/klondike-table-flutter` as locked: overlay **You can finish.** when the gate holds; filled **Finish** then **Continue**; real cards to the Foundations, then **You won!**; **Continue** hides it for the rest of the Game. Not **Auto-move**, not **Hint**, not a Settings toggle. Do not reopen the grilling. Headline wording may change later; do not block on a look pass.
+Put **Finish** in `src/klondike-table-flutter` as locked: overlay **You can finish.** when the gate holds; filled **Finish** then **Continue**; real cards to the Foundations, then **You won!**; **Continue** hides it for the rest of the Game. Not **Auto-move**, not **Hint**, not a Settings toggle. Do not reopen the grilling. Headline wording may change later; do not block on a look pass.
 
 ## Done when
 

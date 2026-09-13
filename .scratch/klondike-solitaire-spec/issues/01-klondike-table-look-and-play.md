@@ -140,7 +140,7 @@ Started a Flutter/Dart twin on branch `prototype_fultter` so we can compare the 
 **Not runnable until you scaffold platforms.** From the repo root:
 
 ```bash
-cd prototype/klondike-table-flutter
+cd src/klondike-table-flutter
 flutter create . --platforms=linux,web,android,ios --project-name klondike_table --org com.solitare
 ```
 
@@ -165,7 +165,7 @@ Same locked layout A (classic top row), draw-one + Waste recycle, tap→tap, dra
 
 Reasons: nicer to build with, took less time to build, smaller APK. This overrides the [#2](https://github.com/jusanherndon/Solitare/issues/2) Expo research recommendation for the spec.
 
-**React to:** `prototype/klondike-table-flutter` (`flutter run` / `flutter build apk`). Layout A (classic top row) and play (draw-one + Waste recycle, tap→tap, drag, double-click auto-move, Undo, New Game) still locked. Ticket stays open until portrait/landscape look-and-play answers are captured.
+**React to:** `src/klondike-table-flutter` (`flutter run` / `flutter build apk`). Layout A (classic top row) and play (draw-one + Waste recycle, tap→tap, drag, double-click auto-move, Undo, New Game) still locked. Ticket stays open until portrait/landscape look-and-play answers are captured.
 
 ## Answer
 
@@ -188,7 +188,7 @@ v1 uses **layout A — classic top row** in both portrait and landscape. Same ar
 - Double-tap / double-click auto-moves: Foundation first, then any legal Tableau.
 - Draw-one. Tap empty Stock to recycle the Waste (computer-Klondike; already recorded on `#8`).
 
-Rejected: layout B (thumb dock), layout C (side rails), and the Expo table ([#17](https://github.com/jusanherndon/Solitare/pull/17)). Primary source: `prototype/klondike-table-flutter` ([#22](https://github.com/jusanherndon/Solitare/pull/22)).
+Rejected: layout B (thumb dock), layout C (side rails), and the Expo table ([#17](https://github.com/jusanherndon/Solitare/pull/17)). Primary source: `src/klondike-table-flutter` ([#22](https://github.com/jusanherndon/Solitare/pull/22)).
 
 ### agent — 2026-09-13
 

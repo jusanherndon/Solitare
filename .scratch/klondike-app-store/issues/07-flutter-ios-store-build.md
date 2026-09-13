@@ -7,7 +7,7 @@ Related: local Simulator/device prototype is [Can we build and install the Klond
 
 ## Question
 
-How do we produce a store-signed iOS build of Klondike Solitaire from the Flutter tree (`prototype/klondike-table-flutter` today, product app later) and upload it to App Store Connect?
+How do we produce a store-signed iOS build of Klondike Solitaire from the Flutter tree (`src/klondike-table-flutter` today, product app later) and upload it to App Store Connect?
 
 Research against Apple and Flutter primary docs. Cover at least:
 

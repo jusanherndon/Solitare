@@ -4,7 +4,7 @@ Type: task
 Status: open
 Blocked by: 06
 
-From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md). Last ticket on [Round 2 of making the app mechanics](../map.md) — wait until the other open work is done and the round 2 decisions are playable in `prototype/klondike-table-flutter`.
+From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md). Last ticket on [Round 2 of making the app mechanics](../map.md) — wait until the other open work is done and the round 2 decisions are playable in `src/klondike-table-flutter`.
 
 ## Question
 
@@ -24,7 +24,7 @@ Do not start until:
 - [Implement the last-resort loss check](issues/14-loss-check.md)
 - [Implement the Finish overlay](issues/15-finish.md)
 
-Run `prototype/klondike-table-flutter` (`flutter run` on a connected device, or `flutter build apk` and sideload). Do not treat this as store QA. iOS stays on [Can we build and install the Klondike table prototype on iOS locally?](../../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md).
+Run `src/klondike-table-flutter` (`flutter run` on a connected device, or `flutter build apk` and sideload). Do not treat this as store QA. iOS stays on [Can we build and install the Klondike table prototype on iOS locally?](../../klondike-solitaire-spec/issues/07-ios-local-prototype-build.md).
 
 ## Done when
 
@@ -56,7 +56,7 @@ Hint loop-stop from a previous fix still works: the Hint loop stops. After the p
 
 ### agent — 2026-09-13T12:50:00Z
 
-Shipped in `prototype/klondike-table-flutter`: Hint does not show the reverse of a Waste, Tableau, or Foundation play for the next 5 player moves. After that window the reverse can be a Hint again if it is still legal. Loss still treats a reverse to an unseen face-up table as an **active Hint**. Spec: [spec.md](../../klondike-solitaire-spec/spec.md). Tests: `test/hint_test.dart`.
+Shipped in `src/klondike-table-flutter`: Hint does not show the reverse of a Waste, Tableau, or Foundation play for the next 5 player moves. After that window the reverse can be a Hint again if it is still legal. Loss still treats a reverse to an unseen face-up table as an **active Hint**. Spec: [spec.md](../../klondike-solitaire-spec/spec.md). Tests: `test/hint_test.dart`.
 
 ### jusanherndon — 2026-09-13T13:18:00Z
 

@@ -16,7 +16,7 @@ Parked — owner is not ready to lock listing visuals yet.
 
 What Play listing visuals does v1 use: 512×512 store icon (32-bit PNG with alpha), 1024×500 feature graphic (JPEG or 24-bit PNG, no alpha), and at least two phone screenshots (preferably three at ≥1080×1920) showing the Game in use?
 
-React to the Flutter table prototype (`prototype/klondike-table-flutter`). Screenshots must show Tableau, Foundations, Stock, and Waste in play — not a splash only. Phones only; no tablet/TV/Wear classes. Apple 6.9″ screenshot sizes are out of scope here.
+React to the Flutter table prototype (`src/klondike-table-flutter`). Screenshots must show Tableau, Foundations, Stock, and Waste in play — not a splash only. Phones only; no tablet/TV/Wear classes. Apple 6.9″ screenshot sizes are out of scope here.
 
 ## Comments
 
@@ -41,7 +41,7 @@ Bottom bar / ← → cycles **A Ace on felt**, **B Corner crop**, **C Fan**. Sam
 | B | Extreme A♠ corner crop | Mark + listing copy, no table photo |
 | C | Fan of three (navy back, Q♥, K♠) | Cards only; tiny name |
 
-**Screenshots** (placeholder cards, not Fomin/Atlas): `shots/portrait-play.png` (mid-Game: Waste + two Foundation Aces), `shots/landscape-play.png` (same Game, rotated), `shots/portrait-deal.png` (opening deal — drop if it reads as splash). Recapture: `cd prototype/klondike-table-flutter && flutter test test/listing_shots_test.dart`.
+**Screenshots** (placeholder cards, not Fomin/Atlas): `shots/portrait-play.png` (mid-Game: Waste + two Foundation Aces), `shots/landscape-play.png` (same Game, rotated), `shots/portrait-deal.png` (opening deal — drop if it reads as splash). Recapture: `cd src/klondike-table-flutter && flutter test test/listing_shots_test.dart`.
 
 React: steal bits, reject a family, keep/drop the opening-deal shot. Not shipped art; no “kids.”
 

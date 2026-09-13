@@ -10,7 +10,7 @@ Klondike Solitaire listed and downloadable on the Apple App Store as a free, no-
 
 - Domain: Klondike. Read `CONTEXT.md`. In-app features and look live on [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) — do not invent Game rules or table chrome here.
 - Privacy-policy tickets are **shared** with [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md): one live URL. Claim and resolve both maps’ privacy tickets together; do not publish twice.
-- Passion project; the owner is new to app development. Flutter (`prototype/klondike-table-flutter`). Store name: Klondike Solitaire. Official iOS still needs macOS + Xcode.
+- Passion project; the owner is new to app development. Flutter (`src/klondike-table-flutter`). Store name: Klondike Solitaire. Official iOS still needs macOS + Xcode.
 - This map includes enrollment, hosting the privacy policy, listing assets, and the store build. Task tickets do that work. Do not implement the Game here.
 - Skills: `/research`, `/grilling`, `/prototype` as the ticket type requires.
 

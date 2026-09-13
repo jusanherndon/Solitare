@@ -18,7 +18,7 @@ This ticket stays open — still need owner grilling on Undo depth, resume-after
 
 ### jusanherndon — 2026-08-23T20:34:00Z
 
-React to the **Flutter** table (`prototype/klondike-table-flutter`), not Expo. [#22](https://github.com/jusanherndon/Solitare/pull/22) won the comparison; [#17](https://github.com/jusanherndon/Solitare/pull/17) closed as worse to use and buggier. Play already in the Flutter twin: Undo next to New Game, tap→tap + drag, double-click auto-move. Resume-after-leave still ungrilled.
+React to the **Flutter** table (`src/klondike-table-flutter`), not Expo. [#22](https://github.com/jusanherndon/Solitare/pull/22) won the comparison; [#17](https://github.com/jusanherndon/Solitare/pull/17) closed as worse to use and buggier. Play already in the Flutter twin: Undo next to New Game, tap→tap + drag, double-click auto-move. Resume-after-leave still ungrilled.
 
 ## Answer
 

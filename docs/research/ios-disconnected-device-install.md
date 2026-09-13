@@ -15,7 +15,7 @@ Sources are Apple and Flutter primary docs, plus one local demonstration on 2026
 No paid [Apple Developer Program](https://developer.apple.com/programs/enroll/) membership. A free Apple Account signed into Xcode is a **Personal Team**. ([Developer account overview](https://developer.apple.com/help/account/basics/about-your-developer-account/))
 
 ```bash
-cd prototype/klondike-table-flutter
+cd src/klondike-table-flutter
 flutter build ipa --export-method development
 flutter install -d <UDID> --use-application-binary=build/ios/ipa/klondike_table.ipa
 ```

@@ -2,7 +2,7 @@
 
 **Ticket:** [How do we produce a store-signed iOS build from this Flutter project?](../../.scratch/klondike-app-store/issues/07-flutter-ios-store-build.md)
 
-**Constraints (this map):** plan only. Do not enroll, sign, archive, or upload in this ticket. Do not change the Flutter prototype. The tree today is `prototype/klondike-table-flutter`; the product app later uses the same official Flutter iOS release path. No Expo / EAS. Listing assets, privacy policy, age rating, and enrollment *cost* live in [store listing requirements](store-listing-requirements.md) — this note is the binary + upload path only.
+**Constraints (this map):** plan only. Do not enroll, sign, archive, or upload in this ticket. Do not change the Flutter tree in this ticket. The app lives at `src/klondike-table-flutter` and uses the official Flutter iOS release path. No Expo / EAS. Listing assets, privacy policy, age rating, and enrollment *cost* live in [store listing requirements](store-listing-requirements.md) — this note is the binary + upload path only.
 
 Sources are Apple and Flutter primary docs, fetched 2026-08-29.
 
@@ -139,7 +139,7 @@ Re-check if later plugins add their own crypto. Apple still says you are respons
 - **Enroll, archive, or upload now.** Later task tickets do that.
 - **TestFlight vs Submit for Review.** Upload creates a processed build. Internal TestFlight and “Submit for Review” are separate Connect steps after processing. Flutter documents both as later release steps. Apple: after beta testing the final build, submit to App Review. ([Build and release an iOS app](https://docs.flutter.dev/deployment/ios); [Distributing your app for beta testing and releases](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases); [Upload builds](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/))
 - **A successful local Simulator/`flutter run` iOS build.** That is [the spec-map local prototype ticket](../../.scratch/klondike-solitaire-spec/issues/07-ios-local-prototype-build.md) (`flutter build ios` / Simulator), still waiting on a MacBook.
-- **Changing `prototype/klondike-table-flutter`.** It is a throwaway table prototype (`version: 0.0.0`, display name “Klondike Table”). The product app will use the same `flutter build ipa` path, with a real bundle ID, version `x.y.z+build`, store icon, and the encryption key above.
+- **Changing `src/klondike-table-flutter`.** The app lives here (`version: 0.0.0`, display name “Klondike Table”). A store IPA still needs a real bundle ID, version `x.y.z+build`, store icon, and the encryption key above.
 - **CI, Fastlane, Codemagic, Expo, EAS, Xcode Cloud.** Optional; not the beginner path.
 - **Listing copy, screenshots, privacy nutrition labels, age rating.** [store listing requirements](store-listing-requirements.md).
 - **Mac notarization / Developer ID / `notarytool`.** iOS App Store apps are not notarized that way.

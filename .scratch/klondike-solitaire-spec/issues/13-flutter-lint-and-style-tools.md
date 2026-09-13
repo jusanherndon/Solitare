@@ -3,13 +3,13 @@
 Type: research
 Status: resolved
 
-Related: toolkit decision (Flutter, `prototype/klondike-table-flutter`) and ADR-0001 (prefer few dependencies).
+Related: toolkit decision (Flutter, `src/klondike-table-flutter`) and ADR-0001 (prefer few dependencies).
 
 ## Question
 
 Which official and widely used Flutter/Dart automated tools should this repo adopt so agents and humans catch errors early and keep a consistent coding style?
 
-The Flutter tree already has `prototype/klondike-table-flutter/analysis_options.yaml` including `package:flutter_lints/flutter.yaml`, but `pubspec.yaml` does not declare `flutter_lints`. Start there. Owner is new to app development; prefer a small, well-documented set over a large custom rule pile.
+The Flutter tree already has `src/klondike-table-flutter/analysis_options.yaml` including `package:flutter_lints/flutter.yaml`, but `pubspec.yaml` does not declare `flutter_lints`. Start there. Owner is new to app development; prefer a small, well-documented set over a large custom rule pile.
 
 Research against primary sources (dart.dev, flutter.dev, package READMEs owned by the Dart/Flutter teams or the lint-set authors). Cover at least:
 
@@ -99,11 +99,11 @@ Optional later (not v1 of this stack): analyzer `language: strict-casts / strict
 
 ### Current prototype gap
 
-`prototype/klondike-table-flutter/analysis_options.yaml` already `include`s `package:flutter_lints/flutter.yaml` (the `flutter create` text). `pubspec.yaml` does **not** list `flutter_lints` — only `flutter` and `flutter_test`. The include cannot resolve without the package ([usage step 1](https://pub.dev/packages/flutter_lints)). README currently says “Dart / Flutter SDK only (no pub packages)”; adding `flutter_lints` as a *dev* dependency is the official exception and does not ship in the APK.
+`src/klondike-table-flutter/analysis_options.yaml` already `include`s `package:flutter_lints/flutter.yaml` (the `flutter create` text). `pubspec.yaml` does **not** list `flutter_lints` — only `flutter` and `flutter_test`. The include cannot resolve without the package ([usage step 1](https://pub.dev/packages/flutter_lints)). README currently says “Dart / Flutter SDK only (no pub packages)”; adding `flutter_lints` as a *dev* dependency is the official exception and does not ship in the APK.
 
 ### Local commands
 
-From `prototype/klondike-table-flutter`:
+From `src/klondike-table-flutter`:
 
 ```bash
 flutter pub get

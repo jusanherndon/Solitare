@@ -5,7 +5,7 @@ Status: open
 
 Shared with [What bundle ID and application ID does v1 use?](../klondike-app-store/issues/05-store-identifiers.md) — one reverse-DNS id for both stores; claim and resolve both together.
 
-The Flutter prototype currently uses `com.solitare.klondike_table` with a TODO to pick a unique application ID (`prototype/klondike-table-flutter/android/app/build.gradle.kts`).
+The Flutter prototype currently uses `com.solitare.klondike_table` with a TODO to pick a unique application ID (`src/klondike-table-flutter/android/app/build.gradle.kts`).
 
 ## Question
 

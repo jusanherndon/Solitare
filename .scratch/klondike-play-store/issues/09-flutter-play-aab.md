@@ -7,7 +7,7 @@ Related: a local debug/sideload APK is already done on [Can we build and install
 
 ## Question
 
-How do we produce a Play-uploadable **Android App Bundle** of Klondike Solitaire from the Flutter tree (`prototype/klondike-table-flutter` today, product app later), including the target API level Play requires?
+How do we produce a Play-uploadable **Android App Bundle** of Klondike Solitaire from the Flutter tree (`src/klondike-table-flutter` today, product app later), including the target API level Play requires?
 
 Research against Flutter and Google Play primary docs. Cover at least:
 

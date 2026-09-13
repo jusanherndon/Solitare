@@ -14,7 +14,7 @@ Taps on the table sometimes fail. Two symptoms may be the same bug:
 
 Owner’s later note: this may be **timing** — a gesture window, animation, or input lock — not Auto-move’s destination rule being wrong. Investigate both symptoms together. Treat as a bug, not a rules change, until a play proves the spec is wrong.
 
-Reproduce in `prototype/klondike-table-flutter`. If Auto-move’s choice of pile is the miss, fix so a double-tap still prefers Foundation if legal, otherwise a legal Tableau pile ([What are the v1 rules for Undo, resume, tap, and drag?](../../klondike-solitaire-spec/issues/02-undo-resume-tap-drag.md)). If taps are dropped or delayed, find that cause and fix so chrome buttons and double-tap still fire when the player intends them. Record the failing case (and whether it was destination vs timing) in the answer.
+Reproduce in `src/klondike-table-flutter`. If Auto-move’s choice of pile is the miss, fix so a double-tap still prefers Foundation if legal, otherwise a legal Tableau pile ([What are the v1 rules for Undo, resume, tap, and drag?](../../klondike-solitaire-spec/issues/02-undo-resume-tap-drag.md)). If taps are dropped or delayed, find that cause and fix so chrome buttons and double-tap still fire when the player intends them. Record the failing case (and whether it was destination vs timing) in the answer.
 
 ## Done when
 

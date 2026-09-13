@@ -1,5 +1,5 @@
 name: klondike_table
-description: Phone prototype matching the v1 spec (felt-banner chrome + table).
+description: Klondike Solitaire (felt-banner chrome + table).
 publish_to: none
 version: 0.0.0
 

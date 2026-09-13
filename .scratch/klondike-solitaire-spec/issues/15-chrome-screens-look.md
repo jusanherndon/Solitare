@@ -11,7 +11,7 @@ How should the start screen, About, win screen, and loss screen look on a phone 
 
 Contents and behavior are already locked on `09`, `11`, and `14`. This ticket is look and feel: layout, type, how the win overlay feels cool and the loss overlay feels bad, how much of the table shows around those overlays, and what animations play through them. Start screen and About have no table behind them.
 
-Produce a cheap throwaway prototype the owner can react to. Extend `prototype/klondike-table-flutter` (Layout A is already the table source). This is not the product app.
+Produce a cheap throwaway prototype the owner can react to. Extend `src/klondike-table-flutter` (Layout A is already the table source). This is not the product app.
 
 Phones only, English only. No Settings. Do not reopen play rules, Resume, or button sets.
 
@@ -29,4 +29,4 @@ v1 uses **A — Felt banner**. Same felt green (`#1F6B45`) and chrome-button lan
 
 **Table chrome** (from `11`): **Undo**, **New Game**, **Start** — same chrome buttons, top-right. The New Game confirm from `11` uses this same felt card + chrome-button language.
 
-Rejected: **B — Letterbox** (cinematic bars, huge type) and **C — Bottom sheet** (card fan + sheet). Primary source: `prototype/klondike-table-flutter` on branch `prototype/chrome-screens-look` (yellow bars are prototype chrome, not product).
+Rejected: **B — Letterbox** (cinematic bars, huge type) and **C — Bottom sheet** (card fan + sheet). Primary source: `src/klondike-table-flutter` on branch `prototype/chrome-screens-look` (yellow bars are prototype chrome, not product).

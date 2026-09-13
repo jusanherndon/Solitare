@@ -1,13 +1,13 @@
-# Klondike Solitaire — Flutter prototype (spec v1)
+# Klondike Solitaire
 
-Throwaway phone app that follows [spec.md](../../.scratch/klondike-solitaire-spec/spec.md). Felt-banner chrome (start, About, win, loss) plus layout A table and a bottom thumb dock (**Hint**, **Undo**, **New Game**, **Start**). Not the store product.
+Phone app that follows [spec.md](../../.scratch/klondike-solitaire-spec/spec.md). Felt-banner chrome (start, About, win, loss) plus layout A table and a bottom thumb dock (**Hint**, **Undo**, **New Game**, **Start**).
 
 **Playtest:** [What bugs or changes turn up when the owner runs the prototype on Android?](../../.scratch/klondike-solitaire-spec/issues/17-android-playtest.md)
 
 ## Run
 
 ```bash
-cd prototype/klondike-table-flutter
+cd src/klondike-table-flutter
 flutter run                 # connected Android device
 flutter build apk           # sideload: build/app/outputs/flutter-apk/app-release.apk
 flutter run -d linux        # desktop, for layout checks
@@ -20,7 +20,7 @@ flutter devices
 flutter install -d <UDID> --use-application-binary=build/ios/ipa/klondike_table.ipa
 ```
 
-iOS needs **macOS and Xcode**. This prototype has no iOS plugins, so CocoaPods is not required (Flutter doctor may still warn).
+iOS needs **macOS and Xcode**. This tree has no iOS plugins, so CocoaPods is not required (Flutter doctor may still warn).
 
 **Physical iPhone, connected debug:** USB-connect and tap Trust This Computer; turn on Developer Mode (Settings → Privacy & Security); add your Apple ID in Xcode → Settings → Accounts; in `ios/Runner.xcworkspace`, Runner target → Signing & Capabilities, leave Automatically manage signing on and pick that Team; then `flutter run`.
 

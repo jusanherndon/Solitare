@@ -8,7 +8,7 @@ From [When is a Game a loss?](issues/03-loss-check.md). Spec: [spec.md](../../kl
 
 ## Question
 
-Replace the cheap Stock-empty / Waste-empty **loss** check in `prototype/klondike-table-flutter` with the locked last-resort check: not a **win**, no active Hints, and no Stock or Waste card (including buried draw-three and face-down Stock) that can play on the current Tableau or a Foundation. Repeats do not block a loss. Dimmed **Hint** is not itself a loss. Persist seen face-up tables with **Undo** and **Resume**. Overlay actions unchanged. Do not reopen the grilling.
+Replace the cheap Stock-empty / Waste-empty **loss** check in `src/klondike-table-flutter` with the locked last-resort check: not a **win**, no active Hints, and no Stock or Waste card (including buried draw-three and face-down Stock) that can play on the current Tableau or a Foundation. Repeats do not block a loss. Dimmed **Hint** is not itself a loss. Persist seen face-up tables with **Undo** and **Resume**. Overlay actions unchanged. Do not reopen the grilling.
 
 ## Done when
 

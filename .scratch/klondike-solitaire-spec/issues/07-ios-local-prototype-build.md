@@ -10,7 +10,7 @@ Supports [How should the Klondike table look and play on a phone in portrait and
 
 Can we produce a Simulator- or device-installable iOS build of the Flutter Klondike table prototype on a local machine?
 
-The comparison prototype is `prototype/klondike-table-flutter` (see `01`). Starting point: `flutter build ios` / `flutter run` on a Simulator. Local iOS compilation needs macOS and Xcode — the owner override of [#2](https://github.com/jusanherndon/Solitare/issues/2) (Flutter instead of Expo) dropped the EAS cloud path that avoided a Mac.
+The comparison prototype is `src/klondike-table-flutter` (see `01`). Starting point: `flutter build ios` / `flutter run` on a Simulator. Local iOS compilation needs macOS and Xcode — the owner override of [#2](https://github.com/jusanherndon/Solitare/issues/2) (Flutter instead of Expo) dropped the EAS cloud path that avoided a Mac.
 
 This ticket is done when repo docs name the command, the machine requirements, and where the `.ipa` or Simulator app lands, and a successful local build has been demonstrated.
 
@@ -18,7 +18,7 @@ Not store submission, not CI, and not the product app — a local prototype arti
 
 ## Done when
 
-- One documented command produces a local iOS build from `prototype/klondike-table-flutter` (`flutter build ios` / `flutter run` on Simulator is the starting point).
+- One documented command produces a local iOS build from `src/klondike-table-flutter` (`flutter build ios` / `flutter run` on Simulator is the starting point).
 - README states that macOS + Xcode are required, and where the artifact is written.
 - A successful local build has been demonstrated (Simulator is enough).
 
@@ -38,6 +38,6 @@ Demonstrated on this MacBook: Xcode 26.6, Flutter 3.47.2, iPhone 17 Simulator (i
 
 ## Answer
 
-Yes. On this MacBook, `cd prototype/klondike-table-flutter && flutter build ios --simulator` produces `build/ios/iphonesimulator/Runner.app`. `flutter run -d ios` installs it on the Simulator. macOS + Xcode are required; CocoaPods is not, for this plugin-free prototype. Command and paths are in that prototype README.
+Yes. On this MacBook, `cd src/klondike-table-flutter && flutter build ios --simulator` produces `build/ios/iphonesimulator/Runner.app`. `flutter run -d ios` installs it on the Simulator. macOS + Xcode are required; CocoaPods is not, for this plugin-free prototype. Command and paths are in that prototype README.
 
 A physical iPhone you own does **not** need the paid Apple Developer Program. It does need a one-time Apple ID Team in Xcode (Automatically manage signing), Developer Mode, Trust This Computer, and trusting the developer certificate on the phone, then `flutter run`. Paid enrollment / TestFlight / store IPA stay on [Post Klondike Solitaire to the App Store](../../klondike-app-store/map.md).

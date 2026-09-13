@@ -7,7 +7,7 @@ From [How does draw-three difficulty work?](issues/04-draw-three.md). Spec: [spe
 
 ## Question
 
-Put **draw-three** in `prototype/klondike-table-flutter` as locked: **Settings** toggle **Draw three** (off = **draw-one**), Waste fan of up to three with only the top playable, recycle shift, **Undo** of a whole Stock tap, **Resume** restores the Game’s type. Do not reopen the grilling. The **Winning deal** button stays on [Implement the Winning deal button](issues/12-winning-deal-button.md); the draw-three pool stays on [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md).
+Put **draw-three** in `src/klondike-table-flutter` as locked: **Settings** toggle **Draw three** (off = **draw-one**), Waste fan of up to three with only the top playable, recycle shift, **Undo** of a whole Stock tap, **Resume** restores the Game’s type. Do not reopen the grilling. The **Winning deal** button stays on [Implement the Winning deal button](issues/12-winning-deal-button.md); the draw-three pool stays on [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md).
 
 ## Done when
 
@@ -17,7 +17,7 @@ Put **draw-three** in `prototype/klondike-table-flutter` as locked: **Settings**
 
 ## Answer
 
-**Draw-three** is in `prototype/klondike-table-flutter`. **Settings** (start screen) has **Draw three**, off by default, persisted apart from **Resume**. A deal locks the type; **Resume** restores it. Waste fans up to three in draw-three (top only playable). A Stock tap is one **Undo**. Tests: `test/draw_three_test.dart`, Settings/Resume widget tests.
+**Draw-three** is in `src/klondike-table-flutter`. **Settings** (start screen) has **Draw three**, off by default, persisted apart from **Resume**. A deal locks the type; **Resume** restores it. Waste fans up to three in draw-three (top only playable). A Stock tap is one **Undo**. Tests: `test/draw_three_test.dart`, Settings/Resume widget tests.
 
 ## Comments
 

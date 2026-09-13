@@ -4,7 +4,7 @@
 
 **Related (do not re-open):** a local sideload APK is already documented on [Can we build and install the Klondike table prototype on Android locally?](../../.scratch/klondike-solitaire-spec/issues/06-android-local-prototype-build.md). Play does not accept that APK for a new app.
 
-**Out of scope:** enrolling Play Console, uploading a binary, or changing `prototype/klondike-table-flutter`. This is the Flutter HOW; spec-level AAB/API 36 facts already live in [store-listing-requirements.md](store-listing-requirements.md).
+**Out of scope:** enrolling Play Console, uploading a binary, or changing `src/klondike-table-flutter`. This is the Flutter HOW; spec-level AAB/API 36 facts already live in [store-listing-requirements.md](store-listing-requirements.md).
 
 Sources are Flutter docs, Play Console Help, and Android Developers, plus this machine’s Flutter SDK defaults, fetched 2026-08-29.
 
@@ -38,10 +38,10 @@ The resolved local ticket used `flutter build apk` and wrote `build/app/outputs/
 
 `flutter build` **defaults to a release build**. Flutter’s `appbundle` help says `--release` is the default mode and that release builds are the ones suitable for app stores. Debug mode is for a fast development cycle; it is not optimized for size or deployment. ([Build and release an Android app](https://docs.flutter.dev/deployment/android); [Flutter’s build modes](https://docs.flutter.dev/testing/build-modes); this machine’s `flutter build appbundle -h`)
 
-Documented release path, from the project directory (`prototype/klondike-table-flutter` today, product app later):
+Documented release path, from `src/klondike-table-flutter`:
 
 ```bash
-cd prototype/klondike-table-flutter
+cd src/klondike-table-flutter
 flutter build appbundle
 ```
 
@@ -63,7 +63,7 @@ Do **not** pass `--debug` for a closed-testing or production release. Play’s *
 
 Klondike is a new phone Game. A first submit on or after that date must target API 36. (Today is 29 August 2026; the floor is two days away.)
 
-**What this prototype actually sets.** `prototype/klondike-table-flutter/android/app/build.gradle.kts` does not hard-code SDK numbers. It uses Flutter’s Gradle extension:
+**What this tree actually sets.** `src/klondike-table-flutter/android/app/build.gradle.kts` does not hard-code SDK numbers. It uses Flutter’s Gradle extension:
 
 ```kotlin
 compileSdk = flutter.compileSdkVersion
@@ -114,7 +114,7 @@ Package name / `applicationId` is **fixed** after the first artifact upload. Set
 
 ## The prototype signs release with debug keys — that cannot ship
 
-`prototype/klondike-table-flutter/android/app/build.gradle.kts` still has Flutter’s template:
+`src/klondike-table-flutter/android/app/build.gradle.kts` still has Flutter’s template:
 
 ```kotlin
 release {
@@ -178,7 +178,7 @@ No Mac is required for the Android AAB.
 
 ## Recommended command sequence (plan only)
 
-Do this on the product Flutter tree when it exists; until then the commands are the same under `prototype/klondike-table-flutter`. Do **not** run the keystore or Gradle edits in this research ticket.
+Do this under `src/klondike-table-flutter`. Do **not** run the keystore or Gradle edits in this research ticket.
 
 1. Confirm `flutter --version` is current stable (3.35+ so `flutter.targetSdkVersion` is 36). Confirm `ANDROID_HOME` and `flutter doctor` Android toolchain.
 2. Create `~/upload-keystore.jks` with `keytool` (RSA 2048, alias `upload`). Back it up offline. Never commit it.

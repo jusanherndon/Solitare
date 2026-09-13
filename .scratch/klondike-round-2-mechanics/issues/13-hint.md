@@ -8,7 +8,7 @@ From [How does Hint work, and where does it sit?](issues/05-hint.md). Spec: [spe
 
 ## Question
 
-Put **Hint** in `prototype/klondike-table-flutter` as locked: table chrome **Hint**, **Undo**, **New Game**, **Start**; ghost of one legal face-up play; new then repeats; dim when empty; wrap; cancel without locking the player in. Not **Auto-move**. Do not reopen the grilling. The **loss** check stays on [Implement the last-resort loss check](issues/14-loss-check.md). Chrome look stays on [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) — current felt pills are fine until that prototype lands.
+Put **Hint** in `src/klondike-table-flutter` as locked: table chrome **Hint**, **Undo**, **New Game**, **Start**; ghost of one legal face-up play; new then repeats; dim when empty; wrap; cancel without locking the player in. Not **Auto-move**. Do not reopen the grilling. The **loss** check stays on [Implement the last-resort loss check](issues/14-loss-check.md). Chrome look stays on [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) — current felt pills are fine until that prototype lands.
 
 ## Done when
 

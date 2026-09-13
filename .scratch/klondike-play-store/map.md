@@ -10,7 +10,7 @@ Klondike Solitaire listed and downloadable on Google Play as a free, no-account,
 
 - Domain: Klondike. Read `CONTEXT.md`. In-app features and look live on [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) — do not invent Game rules or table chrome here.
 - Privacy-policy tickets are **shared** with [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md): one live URL. Claim and resolve both maps’ privacy tickets together; do not publish twice.
-- Passion project; the owner is new to app development. Flutter (`prototype/klondike-table-flutter`). Store name: Klondike Solitaire. Local debug APKs are already possible; Play wants an **Android App Bundle**, not that APK. Flutter 3.47.2 already targets API 36; the remaining store-binary gap is **upload-key signing**, not an SDK bump.
+- Passion project; the owner is new to app development. Flutter (`src/klondike-table-flutter`). Store name: Klondike Solitaire. Local debug APKs are already possible; Play wants an **Android App Bundle**, not that APK. Flutter 3.47.2 already targets API 36; the remaining store-binary gap is **upload-key signing**, not an SDK bump.
 - This map includes enrollment, hosting the privacy policy, listing assets, closed testing, and the store build. Task tickets do that work. Do not implement the Game here.
 - Skills: `/research`, `/grilling`, `/prototype` as the ticket type requires.
 

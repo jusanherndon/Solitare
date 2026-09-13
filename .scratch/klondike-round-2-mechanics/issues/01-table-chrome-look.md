@@ -29,7 +29,7 @@ Five table-chrome looks on the live Flutter table (not a polish of the felt pill
 - **D — 2×2 island** — compact keypad (bottom in portrait, right in landscape)
 - **E — Hint-first stack** — Hint as a wide gold bar, the other three in a row under it
 
-Run: `cd prototype/klondike-table-flutter && flutter run` (device) or `flutter run -d linux`. The yellow bar is prototype chrome, not product. Ticket stays open until a look is picked.
+Run: `cd src/klondike-table-flutter && flutter run` (device) or `flutter run -d linux`. The yellow bar is prototype chrome, not product. Ticket stays open until a look is picked.
 
 ## Answer
 
@@ -37,4 +37,4 @@ Run: `cd prototype/klondike-table-flutter && flutter run` (device) or `flutter r
 
 Rejected: **A — Billboard strip**, **C — Split play / leave**, **D — 2×2 island**, **E — Hint-first stack**, and the old top-right felt pills.
 
-Folded into `prototype/klondike-table-flutter` (`_ThumbDock` in `lib/ui/klondike_table.dart`). Spec updated. The five looks were not parked on a throwaway branch (other uncommitted work in the tree).
+Folded into `src/klondike-table-flutter` (`_ThumbDock` in `lib/ui/klondike_table.dart`). Spec updated. The five looks were not parked on a throwaway branch (other uncommitted work in the tree).

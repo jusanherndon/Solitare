@@ -7,7 +7,7 @@ Follows [Can we build and install the Klondike table prototype on iOS locally?](
 
 ## Question
 
-How do we load `prototype/klondike-table-flutter` onto a physical iPhone the owner owns so the app can be played with the Mac disconnected — the iOS counterpart of Android APK sideload?
+How do we load `src/klondike-table-flutter` onto a physical iPhone the owner owns so the app can be played with the Mac disconnected — the iOS counterpart of Android APK sideload?
 
 `flutter run` stays available for connected debug. This ticket is the other mode: install, unplug, play. The owner asked for that non-connected path for testing.
 
@@ -17,7 +17,7 @@ Not App Store, not TestFlight, not CI.
 
 ## Done when
 
-- One documented command sequence installs the prototype on a physical iPhone from `prototype/klondike-table-flutter` without leaving a `flutter run` session attached.
+- One documented command sequence installs the prototype on a physical iPhone from `src/klondike-table-flutter` without leaving a `flutter run` session attached.
 - After install, the app launches and can be played with the cable unplugged.
 - README states that path next to the existing `flutter run` physical-iPhone steps.
 - A successful disconnected install has been demonstrated.
@@ -47,7 +47,7 @@ Xcode → Settings → Accounts should already have the Apple ID that owns that 
 ### Commands (Mac)
 
 ```bash
-cd prototype/klondike-table-flutter
+cd src/klondike-table-flutter
 flutter build ipa --export-method development
 # IPA: build/ios/ipa/klondike_table.ipa
 

@@ -8,7 +8,7 @@ From [What is a winning deal, and how do you start one?](issues/02-winning-deal.
 
 ## Question
 
-Wire **Winning deal** in `prototype/klondike-table-flutter`: a button immediately next to **New Game** on the start screen, win overlay, and loss overlay; hidden on the table. Same confirm as **New Game**. After confirm (or with no confirm), deal from the pool for the type in **Settings** and start a new Undo stack. Cannot be undone back into the previous Game. Do not reopen the grilling. Do not fill the pools here.
+Wire **Winning deal** in `src/klondike-table-flutter`: a button immediately next to **New Game** on the start screen, win overlay, and loss overlay; hidden on the table. Same confirm as **New Game**. After confirm (or with no confirm), deal from the pool for the type in **Settings** and start a new Undo stack. Cannot be undone back into the previous Game. Do not reopen the grilling. Do not fill the pools here.
 
 ## Done when
 
