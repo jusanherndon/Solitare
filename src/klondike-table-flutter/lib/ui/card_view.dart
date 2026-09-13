@@ -5,11 +5,10 @@ import 'package:flutter/widgets.dart';
 
 import '../game/rules.dart';
 
-/// iOS San Francisco paints heavier than Android Roboto at the same
-/// `fontSize`. Shrink face type so iPhone cards match the Pixel look.
-double _optical(double size) {
+/// iOS suit glyphs sit small in the em square compared with Android.
+double _suitSize(double size) {
   if (defaultTargetPlatform != TargetPlatform.iOS) return size;
-  return math.max(1, (size * 0.9).roundToDouble());
+  return math.max(1, (size * 1.2).roundToDouble());
 }
 
 Widget _faceText(
@@ -24,7 +23,7 @@ Widget _faceText(
     textScaler: TextScaler.noScaling,
     style: TextStyle(
       color: color,
-      fontSize: _optical(fontSize),
+      fontSize: fontSize,
       height: 1,
       fontWeight: weight,
       letterSpacing: letterSpacing,
@@ -150,7 +149,7 @@ class CardView extends StatelessWidget {
               _faceText(
                 glyph,
                 color: color,
-                fontSize: cornerSuit,
+                fontSize: _suitSize(cornerSuit),
                 letterSpacing: -0.5,
               ),
             ],
@@ -160,7 +159,7 @@ class CardView extends StatelessWidget {
             child: _faceText(
               glyph,
               color: color,
-              fontSize: center,
+              fontSize: _suitSize(center),
               weight: FontWeight.w600,
             ),
           ),
