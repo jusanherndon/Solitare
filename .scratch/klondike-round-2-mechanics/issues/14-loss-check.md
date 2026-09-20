@@ -18,7 +18,11 @@ Replace the cheap Stock-empty / Waste-empty **loss** check in `src/klondike-tabl
 
 ## Answer
 
-Last-resort `isLoss` in `lib/game/loss.dart`: not a win, no **active Hint** (new face-up play only), and no Stock or Waste card that can play on the current table — including buried draw-three and face-down Stock. Repeats do not block. Seen face-up tables sit on each Undo snapshot and round-trip in Resume. Tests: `test/loss_test.dart`.
+Last-resort `isLoss` in `lib/game/loss.dart`: not a win, no **active Hint** (new face-up play only), no new Tableau-run shift, and no Stock or Waste card that draw or recycle can turn up as the Waste top and play on the current table. A buried draw-three card the stride never turns up does not block a loss. Repeats do not block. Seen face-up tables sit on each Undo snapshot and round-trip in Resume. Tests: `test/loss_test.dart`.
 
 ## Comments
+
+### agent — 2026-09-19
+
+Owner reversed the buried-draw-three peek: walk draw and recycle. A card the stride never turns up is a **loss**.
 

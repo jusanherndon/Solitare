@@ -26,11 +26,15 @@ Decide: Waste fan (how many face-up, which card is playable), recycle, and how t
 
 **Recycle shift (locked):** Recycle is the same as draw-one (Waste onto Stock face-down, reversing order). A last draw of 1 or 2 is a short fan. Playing off the Waste and leftovers change the groups of three, so a buried card can become the top on a later pass. No cap on recycle count. If the remaining count stays a multiple of three and nothing is played from the Waste, the same tops can repeat.
 
-**Loss (locked):** No separate draw-three full pass. The Stock-emptied-once boolean is dropped on [When is a Game a loss?](issues/03-loss-check.md) for both types. A buried draw-three card that could play on the current table still blocks **loss**.
+**Loss (locked):** No separate draw-three full pass. The Stock-emptied-once boolean is dropped on [When is a Game a loss?](issues/03-loss-check.md) for both types. Walk draw and recycle: a buried draw-three card the stride never turns up does **not** block **loss**.
 
 **Settings screen (locked):** Dedicated screen from the **start screen** only; back to the start screen like **About**. One control: **Draw three**, off by default (draw-one). Persist on the phone, independent of **Resume**. No confirm on the toggle. **New Game** still confirms only when it would discard an unfinished Game. **Winning deal** uses this saved type for the pool. Nothing else on the screen yet. The table does not label the type beyond the Waste fan.
 
 **Undo (locked):** A Stock tap is one draw. **Undo** returns every card that tap moved to the Waste back onto the Stock, face-down, in the order they left. Playing the Waste top is its own Undo. Recycle is one Undo. No partial undo of a three-card fan.
+
+### agent — 2026-09-19
+
+Owner: a three-card draw-three Waste with no legal play is a **loss**. Loss walks draw and recycle; a buried card the stride never turns up no longer blocks the overlay.
 
 ## Answer
 
@@ -44,6 +48,6 @@ The saved type applies only to the next **New Game** or **Winning deal**. It is 
 
 **Undo.** A Stock tap is one draw: **Undo** returns every card that tap moved, face-down, in the order they left. Playing the Waste top is its own Undo. Recycle is one Undo. No partial undo of a three-card fan.
 
-**Loss.** Same last-resort check as draw-one on [When is a Game a loss?](issues/03-loss-check.md). No full-pass boolean. A buried draw-three card that could play on the current table still blocks the overlay.
+**Loss.** Same last-resort check as draw-one on [When is a Game a loss?](issues/03-loss-check.md). No full-pass boolean. Walk draw and recycle: a buried draw-three card that the stride never turns up does **not** block the overlay.
 
 Pool: [Fill and ship the draw-three winning-deal pool](issues/09-draw-three-winning-deal-pool.md).

@@ -71,18 +71,101 @@ void main() {
     },
   );
 
-  test('a buried draw-three Waste Ace blocks a loss', () {
-    final state = board(
-      drawType: DrawType.drawThree,
-      waste: [c('clubs', 1), c('hearts', 5)],
-      tableau: [
-        [c('hearts', 2)],
-        ..._emptyTableau().skip(1),
-      ],
-    );
-    expect(hasActiveHint(state), isFalse);
-    expect(isLoss(state), isFalse);
-  });
+  test(
+    'a buried draw-three Waste Ace that recycle cannot turn up is a loss',
+    () {
+      final state = board(
+        drawType: DrawType.drawThree,
+        waste: [c('clubs', 1), c('hearts', 5)],
+        tableau: [
+          [c('hearts', 2)],
+          ..._emptyTableau().skip(1),
+        ],
+      );
+      expect(hasActiveHint(state), isFalse);
+      expect(isLoss(state), isTrue);
+    },
+  );
+
+  test(
+    'a draw-three Stock Ace that the next draw turns up blocks a loss',
+    () {
+      final state = board(
+        drawType: DrawType.drawThree,
+        stock: [c('clubs', 1, faceUp: false)],
+        waste: [c('hearts', 5)],
+        tableau: [
+          [c('hearts', 2)],
+          ..._emptyTableau().skip(1),
+        ],
+      );
+      expect(hasActiveHint(state), isFalse);
+      expect(isLoss(state), isFalse);
+    },
+  );
+
+  test(
+    'a buried draw-three Waste Queen that never becomes the top is a loss',
+    () {
+      final state = board(
+        drawType: DrawType.drawThree,
+        waste: [c('clubs', 12), c('spades', 6), c('spades', 11)],
+        tableau: [
+          [c('hearts', 13)],
+          ..._emptyTableau().skip(1),
+        ],
+      );
+      expect(hasActiveHint(state), isFalse);
+      expect(cardCanPlayOnTable(c('clubs', 12), state), isTrue);
+      expect(isLoss(state), isTrue);
+    },
+  );
+
+  test(
+    'draw-three Waste 6-Q-J cannot play on a black King, so that is a loss',
+    () {
+      final state = board(
+        drawType: DrawType.drawThree,
+        waste: [c('spades', 6), c('clubs', 12), c('spades', 11)],
+        foundations: [
+          [c('spades', 1), c('spades', 2)],
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [c('clubs', 1)],
+          [c('diamonds', 1)],
+        ],
+        tableau: [
+          [c('hearts', 13), c('spades', 12)],
+          [c('diamonds', 13, faceUp: false), c('diamonds', 3)],
+          [c('spades', 13)],
+          ..._emptyTableau().skip(3),
+        ],
+      );
+      expect(cardCanPlayOnTable(c('clubs', 12), state), isFalse);
+      expect(hasActiveHint(state), isFalse);
+      expect(isLoss(state), isTrue);
+    },
+  );
+
+  test(
+    'a draw-three Waste Ace that a later recycle turns up blocks a loss',
+    () {
+      final state = board(
+        drawType: DrawType.drawThree,
+        waste: [
+          c('hearts', 5),
+          c('spades', 6),
+          c('clubs', 1),
+          c('clubs', 7),
+        ],
+        tableau: [
+          [c('hearts', 2)],
+          ..._emptyTableau().skip(1),
+        ],
+      );
+      expect(hasActiveHint(state), isFalse);
+      expect(isLoss(state), isFalse);
+    },
+  );
 
   test('a new Tableau-run shift onto another pile is not a loss', () {
     final state = board(

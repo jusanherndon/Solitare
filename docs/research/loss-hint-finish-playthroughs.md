@@ -24,7 +24,7 @@ After each successful play, draw, recycle, Auto-move, or Undo, the table checks 
 | System | Gate today |
 | --- | --- |
 | **Hint** | Legal face-up plays, with usefulness filters and a 5-move reverse loop-stop. Dim when the *shown* list is empty. |
-| **Loss** (`You lost.`) | Not a win, no **active Hint** (a *new* face-up table, ignoring loop-stop), and no Stock/Waste card that could play on the current table — including buried draw-three and face-down Stock. |
+| **Loss** (`You lost.`) | Not a win, no **active Hint** (a *new* face-up table, ignoring loop-stop), and no Stock/Waste card that draw or recycle can turn up as the Waste top and play on the current table. A buried draw-three card the stride never turns up does not block a loss. |
 | **Finish** (`You can finish.`) | Stock empty, **every** card face-up, and Foundation-only plays from Waste top then Tableau tops reach a win. |
 
 Loop-stop is **Hint display only**. Loss still treats the reverse as an active Hint. That split is the main chrome bug below.
@@ -49,7 +49,7 @@ Draw-one: **49 / 2000** (2.5%) returned to a seen table without a win or loss. E
 
 Typical shape: loop-stop dims Hint, the bot (and a Hint-follower) draws/recycles or takes the next shown play, and the face-up table repeats. Seed 8 still had 2 Stock cards and face-down Tableau when it looped.
 
-Draw-three: **1685 / 2000** (84%) looped. Almost all of those (**1631**) are “a Stock/Waste card *can* play, but draw-three never makes it the Waste top.” The bot recycles through a seen fan. A human would also spin the Stock forever. Loss peeks buried cards, so **You lost.** never opens. Spec prefers a missed overlay over a premature loss; draw-three pays for that constantly.
+Draw-three: **1685 / 2000** (84%) looped. Almost all of those (**1631**) were “a Stock/Waste card *can* play, but draw-three never makes it the Waste top.” The bot recycled through a seen fan. A human would also spin the Stock forever. Loss used to peek buried cards, so **You lost.** never opened. Loss now walks draw and recycle: a card only blocks a loss if it can become the Waste top. Those 1631 Games should now be losses.
 
 ### 3. Hint ping-pong
 
@@ -61,7 +61,7 @@ Owner tweaks already drop Foundation Ace onto Tableau, King-empty hops, unhelpfu
 
 - loop-stop hides the *useful* play, not only the reverse
 - new plays after the window re-open the reverse
-- draw-three buried cards are “active” for loss but never a Hint (Hint does not inspect Stock)
+- draw-three buried cards were “active” for loss but never a Hint (Hint does not inspect Stock); loss now only counts cards the stride can turn up
 
 ---
 
@@ -88,7 +88,7 @@ So **You lost.** is last-resort relative to *Hint’s useful list*, not relative
 
 ### 7. Draw-three: buried playable card, no overlay, no progress
 
-1631 games. Loss is correct per spec (peek Stock/Waste). The fail screen simply never arrives. Improving **You lost.** for draw-three means a different buried-card rule: e.g. only cards the current stride can actually turn up, or a recycle cap.
+1631 games in the 2026-09-19 sample. Loss peeked every Stock/Waste card, so **You lost.** never opened. Owner later locked the opposite: walk draw and recycle, and if no Waste top that pass can play, it is a **loss**. Implemented in `lib/game/loss.dart`.
 
 ---
 
@@ -161,6 +161,6 @@ Priority if the goal is “these three screens feel right”:
 1. **Stuck chrome** — if Hint is dimmed and Stock/Waste cannot produce a play *the player can actually make*, show **You lost.** even when loop-stop is hiding a reverse. Or: loop-stop should not dim the *forward* play, only the reverse.
 2. **Finish peel gate** — drop “every card face-up”; keep empty Stock + Foundation-only peel that flips as it goes. Observed safe earlier point: **6** still face-down. Overlay copy can stay **You can finish.**
 3. **Loss vs remaining drags** — decide whether breaking a built cascade (seed 1) should delay **You lost.** King hops and Foundation Ace-down probably should not.
-4. **Draw-three loss** — peeking every buried Stock/Waste card prevents the fail screen for most deals. A stride-aware peek would make **You lost.** appear when the fan cannot surface the play.
+4. **Draw-three loss** — done: walk draw and recycle; a buried card the stride never turns up is a **loss**.
 
 Leave **winning deal** as the “engine knows a win from 7 face-up cards” path. Do not merge that into Finish.

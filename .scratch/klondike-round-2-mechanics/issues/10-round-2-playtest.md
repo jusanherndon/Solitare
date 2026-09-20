@@ -69,3 +69,7 @@ Empty Waste is an unlabeled dashed slot, same as Foundations. Spec and [How shou
 ### agent — 2026-09-19
 
 The 5-move Hint reverse window is gone. Reverse-stop lasts while the card still sits where the play put it; Hint still shows that reverse if it is the only new play left and Stock and Waste are empty. Spec: [spec.md](../../klondike-solitaire-spec/spec.md).
+
+### agent — 2026-09-19
+
+Draw-three **You lost.** now walks the Stock and Waste the way you draw: if no Waste top that pass can play, it is a **loss**. A buried card that recycle never turns up no longer holds the overlay back.

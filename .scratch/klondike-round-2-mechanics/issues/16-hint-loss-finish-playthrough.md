@@ -9,7 +9,7 @@ The owner wants those three systems to feel better: **You lost.**, **Hint**, **Y
 
 A Hint-follow probe (`src/klondike-table-flutter/tool/probe_playthroughs.dart`) played 2000 draw-one and 2000 draw-three deals. Full write-up: [loss-hint-finish-playthroughs.md](../../../docs/research/loss-hint-finish-playthroughs.md).
 
-**Hint.** Loop-stop dims the button while an **active Hint** still blocks a **loss** (about half of draw-one Games). 23 draw-one Games were stuck: empty Stock/Waste, dimmed Hint, no overlay (seed 17). 49 draw-one Games looped a seen table (seed 8). Draw-three mostly recycles forever (1685 / 2000) because a buried card peeks as playable but never becomes Waste top.
+**Hint.** Loop-stop dims the button while an **active Hint** still blocks a **loss** (about half of draw-one Games). 23 draw-one Games were stuck: empty Stock/Waste, dimmed Hint, no overlay (seed 17). 49 draw-one Games looped a seen table (seed 8). Draw-three used to recycle forever (1685 / 2000) because a buried card peeked as playable but never became Waste top; loss now treats that as a **loss**.
 
 **Loss.** Almost every **You lost.** still leaves a legal drag Hint has filtered (break a built cascade, King-empty hop, Foundation Ace back down). Seed 1 can still drop 5♥ onto 6♠ when the overlay fires. Spec prefers a missed overlay; this is the opposite.
 
@@ -18,3 +18,7 @@ A Hint-follow probe (`src/klondike-table-flutter/tool/probe_playthroughs.dart`) 
 Replay: `dart run tool/probe_playthroughs.dart --seed 17` (from `src/klondike-table-flutter`).
 
 ## Comments
+
+### agent — 2026-09-19
+
+Owner: a draw-three fan you cannot play is a **loss**. Loss now walks draw and recycle instead of peeking buried cards. That closes research item 7 (unreachable Waste tops blocking **You lost.**).

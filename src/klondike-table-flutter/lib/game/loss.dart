@@ -2,6 +2,7 @@
 library;
 
 import 'hint.dart';
+import 'reducer.dart';
 import 'rules.dart';
 
 bool cardCanPlayOnTable(PlayingCard card, GameState state) {
@@ -16,14 +17,22 @@ bool cardCanPlayOnTable(PlayingCard card, GameState state) {
   return false;
 }
 
+String _stockWasteKey(GameState state) =>
+    '${state.stock.map((c) => c.id).join(',')}|${state.waste.map((c) => c.id).join(',')}';
+
+/// True when draw or recycle can turn up a Waste top that plays on this table.
 bool stockOrWasteCanPlay(GameState state) {
-  for (final card in state.waste) {
-    if (cardCanPlayOnTable(card, state)) return true;
+  var cursor = state;
+  final seen = <String>{};
+  while (true) {
+    if (!seen.add(_stockWasteKey(cursor))) return false;
+    if (cursor.waste.isNotEmpty &&
+        cardCanPlayOnTable(cursor.waste.last, state)) {
+      return true;
+    }
+    if (cursor.stock.isEmpty && cursor.waste.isEmpty) return false;
+    cursor = draw(cursor);
   }
-  for (final card in state.stock) {
-    if (cardCanPlayOnTable(card, state)) return true;
-  }
-  return false;
 }
 
 bool isLoss(GameState state) =>
