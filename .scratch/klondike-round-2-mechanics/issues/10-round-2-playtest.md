@@ -73,3 +73,7 @@ The 5-move Hint reverse window is gone. Reverse-stop lasts while the card still 
 ### agent — 2026-09-19
 
 Draw-three **You lost.** now walks the Stock and Waste the way you draw: if no Waste top that pass can play, it is a **loss**. A buried card that recycle never turns up no longer holds the overlay back.
+
+### agent — 2026-09-20
+
+A reverse-stop no longer blocks **You lost.** while Hint is hiding that reverse. If Stock/Waste cannot produce a play and no unused Tableau-run shift remains, the overlay shows.

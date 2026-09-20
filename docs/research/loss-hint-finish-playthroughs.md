@@ -24,10 +24,10 @@ After each successful play, draw, recycle, Auto-move, or Undo, the table checks 
 | System | Gate today |
 | --- | --- |
 | **Hint** | Legal face-up plays, with usefulness filters and a 5-move reverse loop-stop. Dim when the *shown* list is empty. |
-| **Loss** (`You lost.`) | Not a win, no **active Hint** (a *new* face-up table, ignoring loop-stop), and no Stock/Waste card that draw or recycle can turn up as the Waste top and play on the current table. A buried draw-three card the stride never turns up does not block a loss. |
+| **Loss** (`You lost.`) | Not a win, no **active Hint** (a *new* play Hint would show — reverse-stop does not count while hidden), and no Stock/Waste card that draw or recycle can turn up as the Waste top and play on the current table. A buried draw-three card the stride never turns up does not block a loss. |
 | **Finish** (`You can finish.`) | Stock empty, **every** card face-up, and Foundation-only plays from Waste top then Tableau tops reach a win. |
 
-Loop-stop is **Hint display only**. Loss still treats the reverse as an active Hint. That split is the main chrome bug below.
+Loop-stop used to be **Hint display only**; loss treated the reverse as an active Hint. Loss now ignores a reverse while Hint hides it, so dimmed Hint plus no reachable Stock/Waste play can open **You lost.**
 
 ---
 
@@ -158,7 +158,7 @@ On constructed tables (and seed 17-style endgames), loop-stop can dim Hint on th
 
 Priority if the goal is “these three screens feel right”:
 
-1. **Stuck chrome** — if Hint is dimmed and Stock/Waste cannot produce a play *the player can actually make*, show **You lost.** even when loop-stop is hiding a reverse. Or: loop-stop should not dim the *forward* play, only the reverse.
+1. **Stuck chrome** — done: if Hint is dimmed and Stock/Waste cannot produce a play *the player can actually make*, show **You lost.** even when loop-stop is hiding a reverse.
 2. **Finish peel gate** — drop “every card face-up”; keep empty Stock + Foundation-only peel that flips as it goes. Observed safe earlier point: **6** still face-down. Overlay copy can stay **You can finish.**
 3. **Loss vs remaining drags** — decide whether breaking a built cascade (seed 1) should delay **You lost.** King hops and Foundation Ace-down probably should not.
 4. **Draw-three loss** — done: walk draw and recycle; a buried card the stride never turns up is a **loss**.

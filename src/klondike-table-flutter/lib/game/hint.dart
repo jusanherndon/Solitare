@@ -68,9 +68,10 @@ List<HintPlay> hintCycle(GameState state) {
   return repeats;
 }
 
-/// Active Hint for loss: a play that would leave an unseen face-up table.
+/// Active Hint for loss: a new play Hint would actually show.
+/// A reverse-stop does not count while Hint hides it.
 bool hasActiveHint(GameState state) {
-  for (final play in legalHintPlays(state)) {
+  for (final play in hintCycle(state)) {
     if (_isNew(state, play)) return true;
   }
   return false;

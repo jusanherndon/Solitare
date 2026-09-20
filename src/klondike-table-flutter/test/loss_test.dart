@@ -229,6 +229,55 @@ void main() {
     expect(isLoss(state), isTrue);
   });
 
+  test(
+    'a loop-stopped reverse does not block a loss while Waste remains',
+    () {
+      final opening = board(
+        waste: [c('spades', 6)],
+        tableau: [
+          [c('hearts', 1)],
+          ..._emptyTableau().skip(1),
+        ],
+      );
+      final state = opening.copyWith(
+        seenFaceUp: {faceUpTableKey(opening)},
+        hintLoopStops: [
+          HintLoopStop(
+            cardId: 'hearts-1',
+            from: const PileRef.foundation(1),
+            onto: const PileRef.tableau(0),
+          ),
+        ],
+      );
+      expect(hintCycle(state), isEmpty);
+      expect(isLoss(state), isTrue);
+    },
+  );
+
+  test(
+    'a loop-stopped reverse still blocks a loss when Stock and Waste are empty',
+    () {
+      final opening = board(
+        tableau: [
+          [c('hearts', 1)],
+          ..._emptyTableau().skip(1),
+        ],
+      );
+      final state = opening.copyWith(
+        seenFaceUp: {faceUpTableKey(opening)},
+        hintLoopStops: [
+          HintLoopStop(
+            cardId: 'hearts-1',
+            from: const PileRef.foundation(1),
+            onto: const PileRef.tableau(0),
+          ),
+        ],
+      );
+      expect(hintCycle(state), isNotEmpty);
+      expect(isLoss(state), isFalse);
+    },
+  );
+
   test('Undo drops face-up tables that only existed after the undone play', () {
     var meta = GameMeta(present: dealGame(seed: 1), past: const []);
     final openingSeen = {...meta.present.seenFaceUp};

@@ -72,13 +72,17 @@ Amended on [How does draw-three difficulty work?](issues/04-draw-three.md): **dr
 
 Owner: a draw-three fan with nowhere to play those cards is a **loss**. Loss now walks draw and recycle instead of peeking every buried card. A card that the stride never turns up does not block **You lost.** Spec and `CONTEXT.md` **Loss** match.
 
+### agent — 2026-09-20
+
+Owner: filter reverse-stops out of the loss check. A hidden reverse does not block **You lost.** when the other gates hold. Hint still shows that reverse if Stock and Waste are empty.
+
 ## Answer
 
 A **loss** is last resort. Prefer a missed overlay over a premature **You lost.** No full-pass boolean (dropped for both draw types on [How does draw-three difficulty work?](issues/04-draw-three.md)).
 
 A Game is a **loss** when it is not a **win** and both hold:
 
-1. **No active Hints** — no legal face-up play that would leave an unseen face-up table (Waste, Foundations, face-up Tableau). Repeats do not block a loss. Dimmed **Hint** is not itself a loss. Peeking face-down Tableau or the Stock is not an active Hint ([How does Hint work, and where does it sit?](issues/05-hint.md)).
+1. **No active Hints** — no legal face-up play Hint would show as new (Waste, Foundations, face-up Tableau). Repeats do not block a loss. A reverse-stop does not block a loss while Hint hides it. Dimmed **Hint** is not itself a loss. Peeking face-down Tableau or the Stock is not an active Hint ([How does Hint work, and where does it sit?](issues/05-hint.md)).
 2. **No Stock or Waste card** that draw or recycle can turn up as the Waste top and that then plays onto the **current** Tableau or a Foundation. Face-down Stock counts when a later tap can make it the top. A buried draw-three card the stride never turns up does not block a loss. Recycle is a repeat unless this clause says a reachable card can play now.
 
 **Repeat.** A table already seen this Game, comparing only face-up cards. **Undo** drops tables that only existed after the undone play. Seen tables persist with the unfinished Game and the Undo stack so **Resume** restores them.

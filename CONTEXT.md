@@ -69,5 +69,5 @@ An opening layout from which at least one sequence of legal plays reaches a win 
 _Avoid_: guaranteed win (as in the player cannot lose), solvable seed, winning Game
 
 **Loss**:
-A Game that is not a win: no active Hint, no unused Tableau-run shift onto another pile that would leave an unseen face-up table (a King already on an empty pile hopping does not count), and no Stock or Waste card that draw or recycle can turn up as the Waste top and play onto the current Tableau or a Foundation. A buried draw-three card the stride never turns up does not block a loss. Repeats of a seen face-up table do not block a loss.
+A Game that is not a win: no active Hint (a new play Hint would show — a reverse-stop does not count while Hint hides it), no unused Tableau-run shift onto another pile that would leave an unseen face-up table (a King already on an empty pile hopping does not count), and no Stock or Waste card that draw or recycle can turn up as the Waste top and play onto the current Tableau or a Foundation. A buried draw-three card the stride never turns up does not block a loss. Repeats of a seen face-up table do not block a loss.
 _Avoid_: stuck, fail, game over (as the outcome name)
