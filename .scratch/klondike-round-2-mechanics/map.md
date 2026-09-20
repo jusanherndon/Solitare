@@ -34,7 +34,7 @@ Local files under `issues/`. First unblocked unclaimed ticket in number order is
 - [Fill and ship the draw-one winning-deal pool](issues/08-draw-one-winning-deal-pool.md) — 150 draw-one seeds in `winning_deal_pool.dart`; bot follows new Hint then Stock.
 
 - [Implement the Finish overlay](issues/15-finish.md) — Overlay when Foundation-only win is ready; **Finish** completes; **Continue** hides it for the rest of the Game.
-- [Implement the last-resort loss check](issues/14-loss-check.md) — No active Hint, no new Tableau-run shift, and no Stock/Waste play draw or recycle can turn up; a buried draw-three card the stride never turns up is a **loss**.
+- [Implement the last-resort loss check](issues/14-loss-check.md) — No active Hint and no Stock/Waste play draw or recycle can turn up; a buried draw-three card the stride never turns up is a **loss**. A Hint-skipped Tableau-run shift does not block the overlay.
 - [Implement Hint on the table](issues/13-hint.md) — Table chrome **Hint**; ghost cycle new-then-repeats; dim when empty.
 - [Implement draw-three in the Flutter prototype](issues/11-draw-three.md) — Settings **Draw three**; Waste fan; type locked at deal; **Resume** restores it.
 

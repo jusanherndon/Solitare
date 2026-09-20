@@ -76,4 +76,8 @@ Draw-three **You lost.** now walks the Stock and Waste the way you draw: if no W
 
 ### agent — 2026-09-20
 
-A reverse-stop no longer blocks **You lost.** while Hint is hiding that reverse. If Stock/Waste cannot produce a play and no unused Tableau-run shift remains, the overlay shows.
+A reverse-stop no longer blocks **You lost.** while Hint is hiding that reverse. If Stock/Waste cannot produce a play, the overlay shows even when a Hint-skipped Tableau-run shift remains.
+
+### agent — 2026-09-20
+
+Compared to xcode-settings commit `34588e2`: Hint reverse-stop stays. The Tableau-run-shift loss gate is dropped so **You lost.** can fire again.

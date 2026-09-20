@@ -18,7 +18,7 @@ Replace the cheap Stock-empty / Waste-empty **loss** check in `src/klondike-tabl
 
 ## Answer
 
-Last-resort `isLoss` in `lib/game/loss.dart`: not a win, no **active Hint** (a new play Hint would show — reverse-stop does not count while hidden), no new Tableau-run shift, and no Stock or Waste card that draw or recycle can turn up as the Waste top and play on the current table. A buried draw-three card the stride never turns up does not block a loss. Repeats do not block. Seen face-up tables sit on each Undo snapshot and round-trip in Resume. Tests: `test/loss_test.dart`.
+Last-resort `isLoss` in `lib/game/loss.dart`: not a win, no **active Hint** (a new play Hint would show — reverse-stop does not count while hidden), and no Stock or Waste card that draw or recycle can turn up as the Waste top and play on the current table. A buried draw-three card the stride never turns up does not block a loss. A Hint-skipped Tableau-run shift does not block a loss. Repeats do not block. Seen face-up tables sit on each Undo snapshot and round-trip in Resume. Tests: `test/loss_test.dart`.
 
 ## Comments
 
@@ -29,4 +29,8 @@ Owner reversed the buried-draw-three peek: walk draw and recycle. A card the str
 ### agent — 2026-09-20
 
 Owner: a reverse-stop no longer blocks **You lost.** while Hint hides it. If the other loss gates hold, show the overlay.
+
+### agent — 2026-09-20
+
+Owner: keep Hint reverse-stop, but restore the **loss** screen. A Hint-skipped Tableau-run shift no longer blocks **You lost.** — that gate is what hid the overlay after [34588e2](https://github.com/jusanherndon/Solitare/commit/34588e25e93c9effb2dab7724c8e658b88bbd82d).
 

@@ -160,7 +160,7 @@ Priority if the goal is “these three screens feel right”:
 
 1. **Stuck chrome** — done: if Hint is dimmed and Stock/Waste cannot produce a play *the player can actually make*, show **You lost.** even when loop-stop is hiding a reverse.
 2. **Finish peel gate** — drop “every card face-up”; keep empty Stock + Foundation-only peel that flips as it goes. Observed safe earlier point: **6** still face-down. Overlay copy can stay **You can finish.**
-3. **Loss vs remaining drags** — decide whether breaking a built cascade (seed 1) should delay **You lost.** King hops and Foundation Ace-down probably should not.
+3. **Loss vs remaining drags** — done: a Hint-skipped built cascade does **not** delay **You lost.** (back to the `34588e2` loss gate). King hops and Foundation Ace-down still do not count as active Hints.
 4. **Draw-three loss** — done: walk draw and recycle; a buried card the stride never turns up is a **loss**.
 
 Leave **winning deal** as the “engine knows a win from 7 face-up cards” path. Do not merge that into Finish.

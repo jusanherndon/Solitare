@@ -76,6 +76,10 @@ Owner: a draw-three fan with nowhere to play those cards is a **loss**. Loss now
 
 Owner: filter reverse-stops out of the loss check. A hidden reverse does not block **You lost.** when the other gates hold. Hint still shows that reverse if Stock and Waste are empty.
 
+### agent — 2026-09-20
+
+Owner compared HEAD to `34588e2`: keep Hint reverse-stop, drop the Tableau-run-shift loss gate so **You lost.** shows again. Hint still skips those shifts; they just do not hold the overlay.
+
 ## Answer
 
 A **loss** is last resort. Prefer a missed overlay over a premature **You lost.** No full-pass boolean (dropped for both draw types on [How does draw-three difficulty work?](issues/04-draw-three.md)).

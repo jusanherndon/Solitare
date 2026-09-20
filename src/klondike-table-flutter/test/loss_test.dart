@@ -167,7 +167,7 @@ void main() {
     },
   );
 
-  test('a new Tableau-run shift onto another pile is not a loss', () {
+  test('a new Tableau-run shift onto another pile is still a loss', () {
     final state = board(
       tableau: [
         [c('clubs', 6), c('hearts', 5), c('spades', 4)],
@@ -181,7 +181,7 @@ void main() {
     );
     expect(hasActiveHint(state), isFalse);
     expect(hintCycle(state), isEmpty);
-    expect(isLoss(state), isFalse);
+    expect(isLoss(state), isTrue);
   });
 
   test('a King hopping from one empty pile to another is still a loss', () {

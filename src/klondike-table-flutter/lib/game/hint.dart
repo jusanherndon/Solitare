@@ -77,28 +77,6 @@ bool hasActiveHint(GameState state) {
   return false;
 }
 
-/// Built Tableau run onto another pile that Hint skips, if it is still new.
-/// King-empty hops do not count.
-bool hasNewBuiltRunShift(GameState state) {
-  for (var i = 0; i < 7; i++) {
-    final from = PileRef.tableau(i);
-    final pile = state.tableau[i];
-    for (var idx = 1; idx < pile.length; idx++) {
-      if (!tableauRunIsLegal(pile, idx)) continue;
-      if (!skipBuiltTableauShift(state, from, idx)) continue;
-      final moving = pile.sublist(idx);
-      for (var t = 0; t < 7; t++) {
-        if (t == i) continue;
-        final onto = PileRef.tableau(t);
-        if (!canMoveOnto(moving, onto, state)) continue;
-        final play = HintPlay(from: from, cardIndex: idx, onto: onto);
-        if (_isNew(state, play)) return true;
-      }
-    }
-  }
-  return false;
-}
-
 class HintCursor {
   HintCursor(this.plays);
   final List<HintPlay> plays;

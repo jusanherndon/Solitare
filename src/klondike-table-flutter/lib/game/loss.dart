@@ -1,4 +1,4 @@
-/// Last-resort loss: no active Hint, no new Tableau-run shift, no Stock/Waste play.
+/// Last-resort loss: no active Hint, no Stock/Waste play the player can turn up.
 library;
 
 import 'hint.dart';
@@ -36,7 +36,4 @@ bool stockOrWasteCanPlay(GameState state) {
 }
 
 bool isLoss(GameState state) =>
-    !state.won &&
-    !hasActiveHint(state) &&
-    !hasNewBuiltRunShift(state) &&
-    !stockOrWasteCanPlay(state);
+    !state.won && !hasActiveHint(state) && !stockOrWasteCanPlay(state);
