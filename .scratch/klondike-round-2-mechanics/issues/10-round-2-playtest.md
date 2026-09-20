@@ -65,3 +65,7 @@ Empty Waste does not need a label. Keep calling it Waste in docs; do not show **
 ### agent — 2026-09-13T13:20:00Z
 
 Empty Waste is an unlabeled dashed slot, same as Foundations. Spec and [How should the Klondike table look and play on a phone in portrait and landscape?](../../klondike-solitaire-spec/issues/01-klondike-table-look-and-play.md) updated. **Waste on left** Settings is unchanged.
+
+### agent — 2026-09-19
+
+The 5-move Hint reverse window is gone. Reverse-stop lasts while the card still sits where the play put it; Hint still shows that reverse if it is the only new play left and Stock and Waste are empty. Spec: [spec.md](../../klondike-solitaire-spec/spec.md).

@@ -84,6 +84,39 @@ void main() {
     expect(isLoss(state), isFalse);
   });
 
+  test('a new Tableau-run shift onto another pile is not a loss', () {
+    final state = board(
+      tableau: [
+        [c('clubs', 6), c('hearts', 5), c('spades', 4)],
+        [c('spades', 6)],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+    );
+    expect(hasActiveHint(state), isFalse);
+    expect(hintCycle(state), isEmpty);
+    expect(isLoss(state), isFalse);
+  });
+
+  test('a King hopping from one empty pile to another is still a loss', () {
+    final state = board(
+      tableau: [
+        [c('hearts', 13)],
+        [c('hearts', 2)],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+    );
+    expect(hintCycle(state), isEmpty);
+    expect(isLoss(state), isTrue);
+  });
+
   test('repeats do not block a loss', () {
     final after = board(
       tableau: [
@@ -135,7 +168,6 @@ void main() {
       cardId: 'clubs-3',
       from: const PileRef.foundation(0),
       onto: const PileRef.tableau(0),
-      movesLeft: 4,
     );
     final state = board(
       waste: [c('hearts', 1)],

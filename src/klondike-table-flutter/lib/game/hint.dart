@@ -18,7 +18,7 @@ PlayingCard? _playCard(GameState state, HintPlay play) {
   return pile[play.cardIndex];
 }
 
-/// Reverse of a recent Waste / Tableau / Foundation play. Lasts five moves.
+/// Reverse of a play while that card still sits where the play put it.
 bool _blockedByLoopStop(GameState state, HintPlay play) {
   final moving = _playCard(state, play);
   if (moving == null) return false;
@@ -42,19 +42,29 @@ bool _blockedByLoopStop(GameState state, HintPlay play) {
 /// New plays first. Repeats are omitted while any new play exists, so Hint
 /// does not wrap between a useful play and undoing a Foundation pull.
 /// Repeat Foundation pulls stay omitted even when they are the only plays.
-/// Reverse of a play stays omitted for [hintLoopStopMoves] later moves.
+/// Reverse of a play stays omitted while that card still sits where the play
+/// put it. Draws do not bring it back. If every new play is such a reverse
+/// and Stock and Waste are empty, Hint still shows those plays.
 List<HintPlay> hintCycle(GameState state) {
   final news = <HintPlay>[];
+  final stoppedNews = <HintPlay>[];
   final repeats = <HintPlay>[];
   for (final play in legalHintPlays(state)) {
-    if (_blockedByLoopStop(state, play)) continue;
+    final stopped = _blockedByLoopStop(state, play);
     if (_isNew(state, play)) {
-      news.add(play);
+      if (stopped) {
+        stoppedNews.add(play);
+      } else {
+        news.add(play);
+      }
     } else if (play.from.area != PileArea.foundation) {
-      repeats.add(play);
+      if (!stopped) repeats.add(play);
     }
   }
   if (news.isNotEmpty) return news;
+  if (stoppedNews.isNotEmpty && state.stock.isEmpty && state.waste.isEmpty) {
+    return stoppedNews;
+  }
   return repeats;
 }
 
@@ -62,6 +72,28 @@ List<HintPlay> hintCycle(GameState state) {
 bool hasActiveHint(GameState state) {
   for (final play in legalHintPlays(state)) {
     if (_isNew(state, play)) return true;
+  }
+  return false;
+}
+
+/// Built Tableau run onto another pile that Hint skips, if it is still new.
+/// King-empty hops do not count.
+bool hasNewBuiltRunShift(GameState state) {
+  for (var i = 0; i < 7; i++) {
+    final from = PileRef.tableau(i);
+    final pile = state.tableau[i];
+    for (var idx = 1; idx < pile.length; idx++) {
+      if (!tableauRunIsLegal(pile, idx)) continue;
+      if (!skipBuiltTableauShift(state, from, idx)) continue;
+      final moving = pile.sublist(idx);
+      for (var t = 0; t < 7; t++) {
+        if (t == i) continue;
+        final onto = PileRef.tableau(t);
+        if (!canMoveOnto(moving, onto, state)) continue;
+        final play = HintPlay(from: from, cardIndex: idx, onto: onto);
+        if (_isNew(state, play)) return true;
+      }
+    }
   }
   return false;
 }

@@ -29,3 +29,7 @@ Regenerated after Hint cycle changes (same pass as draw-one). Dropped seeds 372,
 ### agent — 2026-09-13
 
 Regenerated after the 5-move Hint loop-stop (same pass as draw-one). Bot skip on 100 of 150 (50 still win); filled back to 150. `dart run tool/fill_winning_deals.dart --three`.
+
+### agent — 2026-09-19
+
+Regenerated after Hint reverse-stop no longer expires at 5 moves (same pass as draw-one). Dropped 46 of 150; added 4295–5034. Pool still 150. `dart run tool/fill_winning_deals.dart --three`.

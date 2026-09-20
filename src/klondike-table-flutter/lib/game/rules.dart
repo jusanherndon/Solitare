@@ -79,40 +79,27 @@ class Selection {
   final int cardIndex;
 }
 
-/// How many later player moves a Hint reverse-stop lasts.
-const hintLoopStopMoves = 5;
-
-/// Do not Hint the reverse of this play until [movesLeft] later moves expire.
+/// Do not Hint the reverse of this play while the card still sits at [onto].
 class HintLoopStop {
   const HintLoopStop({
     required this.cardId,
     required this.from,
     required this.onto,
-    required this.movesLeft,
   });
 
   final String cardId;
   final PileRef from;
   final PileRef onto;
-  final int movesLeft;
-
-  HintLoopStop copyWith({int? movesLeft}) => HintLoopStop(
-    cardId: cardId,
-    from: from,
-    onto: onto,
-    movesLeft: movesLeft ?? this.movesLeft,
-  );
 
   @override
   bool operator ==(Object other) =>
       other is HintLoopStop &&
       cardId == other.cardId &&
       from == other.from &&
-      onto == other.onto &&
-      movesLeft == other.movesLeft;
+      onto == other.onto;
 
   @override
-  int get hashCode => Object.hash(cardId, from, onto, movesLeft);
+  int get hashCode => Object.hash(cardId, from, onto);
 }
 
 class GameState {

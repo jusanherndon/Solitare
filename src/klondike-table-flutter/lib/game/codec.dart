@@ -41,7 +41,6 @@ Map<String, Object?> _loopStopJson(HintLoopStop stop) => {
   'fromIndex': stop.from.index,
   'ontoArea': stop.onto.area.name,
   'ontoIndex': stop.onto.index,
-  'movesLeft': stop.movesLeft,
 };
 
 PileRef _pileRef(String area, int index) {
@@ -63,7 +62,6 @@ HintLoopStop _loopStop(Map<String, dynamic> j) => HintLoopStop(
   cardId: j['cardId'] as String,
   from: _pileRef(j['fromArea'] as String, j['fromIndex'] as int),
   onto: _pileRef(j['ontoArea'] as String, j['ontoIndex'] as int),
-  movesLeft: j['movesLeft'] as int,
 );
 
 GameState _state(Map<String, dynamic> j) => GameState(

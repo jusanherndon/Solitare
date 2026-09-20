@@ -22,6 +22,8 @@ Local files under `issues/`. First unblocked unclaimed ticket in number order is
 
 ## Decisions so far
 
+- [What do Hint, Loss, and Finish do wrong across many Games?](issues/16-hint-loss-finish-playthrough.md) — Hint-follow probe, 2000+2000 deals. Loop-stop can dim Hint with no overlay (seed 17). **You lost.** fires while filtered drags remain (seed 1). Finish peel can already win with 6 face-down (seed 21). Notes: [loss-hint-finish-playthroughs.md](../../docs/research/loss-hint-finish-playthroughs.md).
+
 - [Why do Auto-move and chrome buttons sometimes miss a tap, and what should they do?](issues/06-auto-move-miss.md) — Miss gone after later round-2 table work; not reproduced. **Auto-move** still Hint’s first play for that card.
 
 - [How should Undo, New Game, and Start look?](issues/01-table-chrome-look.md) — **B — Thumb dock**: **Hint**, **Undo**, **New Game**, **Start** as large gold-bordered tiles along the bottom; bigger rank/suit type.

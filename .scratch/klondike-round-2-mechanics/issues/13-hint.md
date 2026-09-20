@@ -43,3 +43,7 @@ Owner tweak: while a new play exists, do not Hint repeats (the undo of a Foundat
 
 Owner tweak from [What bugs or changes turn up when the owner playtests round 2 on Android?](issues/10-round-2-playtest.md): persist the loop-stop for the next 5 player moves, so a new move does not immediately make the reverse a Hint again.
 
+### agent — 2026-09-19
+
+Dropped the 5-move window. Reverse-stop lasts while the card still sits where the play put it (draws do not expire it). If that would hide every new play and Stock and Waste are empty, Hint still shows those plays. Spec: [spec.md](../../klondike-solitaire-spec/spec.md). Tests: `test/hint_test.dart`.
+

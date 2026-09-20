@@ -58,7 +58,7 @@ List<HintPlay> legalHintPlays(GameState state) {
           !_foundationPullHelps(state, moving.first, onto)) {
         continue;
       }
-      if (_skipBuiltTableauShift(state, from, cardIndex)) continue;
+      if (skipBuiltTableauShift(state, from, cardIndex)) continue;
       plays.add(HintPlay(from: from, cardIndex: cardIndex, onto: onto));
     }
   }
@@ -99,7 +99,7 @@ bool _canPlayOnFoundation(PlayingCard card, GameState state) {
 /// Skip Tableau-to-Tableau of a run already stacked, unless it frees a
 /// Foundation play. A King already on an empty pile hopping to another
 /// empty pile does not help.
-bool _skipBuiltTableauShift(GameState state, PileRef from, int cardIndex) {
+bool skipBuiltTableauShift(GameState state, PileRef from, int cardIndex) {
   if (from.area != PileArea.tableau) return false;
   final pile = state.tableau[from.index];
   if (cardIndex == 0) {

@@ -46,27 +46,22 @@ Map<String, PileRef> _faceUpHomes(GameState state) {
 }
 
 List<HintLoopStop> _nextLoopStops(GameState before, GameState after) {
-  final aged = [
-    for (final stop in before.hintLoopStops)
-      if (stop.movesLeft > 0) stop.copyWith(movesLeft: stop.movesLeft - 1),
-  ];
   final beforeHomes = _faceUpHomes(before);
   final afterHomes = _faceUpHomes(after);
+  final next = <String, HintLoopStop>{};
+  for (final stop in before.hintLoopStops) {
+    final home = afterHomes[stop.cardId];
+    if (home == null || !home.sameAs(stop.onto)) continue;
+    next[stop.cardId] = stop;
+  }
   for (final id in afterHomes.keys) {
     final from = beforeHomes[id];
     final onto = afterHomes[id];
     if (from == null || onto == null) continue;
     if (from.sameAs(onto)) continue;
-    aged.add(
-      HintLoopStop(
-        cardId: id,
-        from: from,
-        onto: onto,
-        movesLeft: hintLoopStopMoves,
-      ),
-    );
+    next[id] = HintLoopStop(cardId: id, from: from, onto: onto);
   }
-  return aged;
+  return next.values.toList();
 }
 
 String boardKey(GameState state) {
