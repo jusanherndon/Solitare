@@ -313,6 +313,14 @@ void main() {
     expect(meta.present.seenFaceUp, openingSeen);
   });
 
+  test('Resume codec round-trips the deal seed', () {
+    final state = dealGame(seed: 99);
+    final restored = decodeMeta(
+      encodeMeta(GameMeta(present: state, past: const [])),
+    );
+    expect(restored.present.seed, 99);
+  });
+
   test('Resume codec round-trips seen face-up tables', () {
     final state = board(waste: [c('hearts', 1)], seenFaceUp: {'already-seen'});
     final restored = decodeMeta(

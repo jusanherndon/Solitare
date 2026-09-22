@@ -56,7 +56,8 @@ class _Board {
       won = state.won,
       drawType = state.drawType,
       seenFaceUp = state.seenFaceUp,
-      hintLoopStops = state.hintLoopStops;
+      hintLoopStops = state.hintLoopStops,
+      seed = state.seed;
 
   List<PlayingCard> stock;
   List<PlayingCard> waste;
@@ -67,6 +68,7 @@ class _Board {
   DrawType drawType;
   Set<String> seenFaceUp;
   List<HintLoopStop> hintLoopStops;
+  int? seed;
 
   GameState freeze() => GameState(
     stock: stock,
@@ -78,6 +80,7 @@ class _Board {
     drawType: drawType,
     seenFaceUp: seenFaceUp,
     hintLoopStops: hintLoopStops,
+    seed: seed,
   );
 
   List<PlayingCard> pileOf(PileRef pile) {

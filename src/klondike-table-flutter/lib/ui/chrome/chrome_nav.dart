@@ -17,6 +17,14 @@ class ChromeNav {
     required this.onToggleLeftHanded,
     required this.wasteOnLeft,
     required this.onToggleWasteOnLeft,
+    required this.debug,
+    required this.onToggleDebug,
+    this.debugLine,
+    this.debugNotice,
+    required this.onCopySeed,
+    required this.onDealClipboardSeed,
+    required this.onCopyGame,
+    required this.onLoadGame,
     required this.onBackToStart,
     required this.onSupport,
     required this.onSource,
@@ -50,6 +58,14 @@ class ChromeNav {
   final VoidCallback onToggleLeftHanded;
   final bool wasteOnLeft;
   final VoidCallback onToggleWasteOnLeft;
+  final bool debug;
+  final VoidCallback onToggleDebug;
+  final String? debugLine;
+  final String? debugNotice;
+  final VoidCallback onCopySeed;
+  final VoidCallback onDealClipboardSeed;
+  final VoidCallback onCopyGame;
+  final VoidCallback onLoadGame;
   final VoidCallback onBackToStart;
   final VoidCallback onSupport;
   final VoidCallback onSource;

@@ -195,28 +195,78 @@ class VariantASettings extends StatelessWidget {
           children: [
             Row(children: [_BannerBtn('Start', onTap: nav.onBackToStart)]),
             const SizedBox(height: 28),
-            _SettingsToggle(
-              label: 'Draw three',
-              on: nav.drawThree,
-              onTap: nav.onToggleDrawThree,
-            ),
-            const SizedBox(height: 12),
-            _SettingsToggle(
-              label: 'Fast Finish',
-              on: nav.fastFinish,
-              onTap: nav.onToggleFastFinish,
-            ),
-            const SizedBox(height: 12),
-            _SettingsToggle(
-              label: 'Left-handed',
-              on: nav.leftHanded,
-              onTap: nav.onToggleLeftHanded,
-            ),
-            const SizedBox(height: 12),
-            _SettingsToggle(
-              label: 'Waste on left',
-              on: nav.wasteOnLeft,
-              onTap: nav.onToggleWasteOnLeft,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _SettingsToggle(
+                      label: 'Draw three',
+                      on: nav.drawThree,
+                      onTap: nav.onToggleDrawThree,
+                    ),
+                    const SizedBox(height: 12),
+                    _SettingsToggle(
+                      label: 'Fast Finish',
+                      on: nav.fastFinish,
+                      onTap: nav.onToggleFastFinish,
+                    ),
+                    const SizedBox(height: 12),
+                    _SettingsToggle(
+                      label: 'Left-handed',
+                      on: nav.leftHanded,
+                      onTap: nav.onToggleLeftHanded,
+                    ),
+                    const SizedBox(height: 12),
+                    _SettingsToggle(
+                      label: 'Waste on left',
+                      on: nav.wasteOnLeft,
+                      onTap: nav.onToggleWasteOnLeft,
+                    ),
+                    const SizedBox(height: 12),
+                    _SettingsToggle(
+                      label: 'Debug',
+                      on: nav.debug,
+                      onTap: nav.onToggleDebug,
+                    ),
+                    if (nav.debug) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        nav.debugLine ??
+                            'No Game. Deal one, or load a snapshot.',
+                        style: const TextStyle(
+                          color: _cream,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          height: 1.3,
+                        ),
+                      ),
+                      if (nav.debugNotice != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          nav.debugNotice!,
+                          style: const TextStyle(
+                            color: Color(0xFFFFE082),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 12),
+                      _BannerBtn('Copy seed', onTap: nav.onCopySeed),
+                      const SizedBox(height: 10),
+                      _BannerBtn(
+                        'Deal clipboard seed',
+                        onTap: nav.onDealClipboardSeed,
+                      ),
+                      const SizedBox(height: 10),
+                      _BannerBtn('Copy Game', onTap: nav.onCopyGame),
+                      const SizedBox(height: 10),
+                      _BannerBtn('Load Game', onTap: nav.onLoadGame),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ],
         ),
