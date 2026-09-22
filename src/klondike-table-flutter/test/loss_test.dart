@@ -87,22 +87,19 @@ void main() {
     },
   );
 
-  test(
-    'a draw-three Stock Ace that the next draw turns up blocks a loss',
-    () {
-      final state = board(
-        drawType: DrawType.drawThree,
-        stock: [c('clubs', 1, faceUp: false)],
-        waste: [c('hearts', 5)],
-        tableau: [
-          [c('hearts', 2)],
-          ..._emptyTableau().skip(1),
-        ],
-      );
-      expect(hasActiveHint(state), isFalse);
-      expect(isLoss(state), isFalse);
-    },
-  );
+  test('a draw-three Stock Ace that the next draw turns up blocks a loss', () {
+    final state = board(
+      drawType: DrawType.drawThree,
+      stock: [c('clubs', 1, faceUp: false)],
+      waste: [c('hearts', 5)],
+      tableau: [
+        [c('hearts', 2)],
+        ..._emptyTableau().skip(1),
+      ],
+    );
+    expect(hasActiveHint(state), isFalse);
+    expect(isLoss(state), isFalse);
+  });
 
   test(
     'a buried draw-three Waste Queen that never becomes the top is a loss',
@@ -135,8 +132,8 @@ void main() {
         ],
         tableau: [
           [c('hearts', 13), c('spades', 12)],
-          [c('diamonds', 13, faceUp: false), c('diamonds', 3)],
-          [c('spades', 13)],
+          [c('diamonds', 13, faceUp: false), c('diamonds', 8)],
+          [],
           ..._emptyTableau().skip(3),
         ],
       );
@@ -151,12 +148,7 @@ void main() {
     () {
       final state = board(
         drawType: DrawType.drawThree,
-        waste: [
-          c('hearts', 5),
-          c('spades', 6),
-          c('clubs', 1),
-          c('clubs', 7),
-        ],
+        waste: [c('hearts', 5), c('spades', 6), c('clubs', 1), c('clubs', 7)],
         tableau: [
           [c('hearts', 2)],
           ..._emptyTableau().skip(1),
@@ -167,7 +159,44 @@ void main() {
     },
   );
 
-  test('a new Tableau-run shift onto another pile is still a loss', () {
+  test('a Foundation 3 that can come down is not a loss', () {
+    final state = board(
+      foundations: [
+        [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+        [],
+        [],
+        [],
+      ],
+      tableau: [
+        [c('spades', 4)],
+        ..._emptyTableau().skip(1),
+      ],
+    );
+    expect(hasActiveHint(state), isTrue);
+    expect(isLoss(state), isFalse);
+  });
+
+  test('a Foundation Ace that can come down is still a loss', () {
+    final state = board(
+      foundations: [
+        [c('clubs', 1)],
+        [],
+        [],
+        [],
+      ],
+      tableau: [
+        [c('hearts', 2)],
+        ..._emptyTableau().skip(1),
+      ],
+    );
+    expect(
+      hintCycle(state).any((p) => p.from.area == PileArea.foundation),
+      isFalse,
+    );
+    expect(isLoss(state), isTrue);
+  });
+
+  test('a new Tableau-run shift onto another pile is not a loss', () {
     final state = board(
       tableau: [
         [c('clubs', 6), c('hearts', 5), c('spades', 4)],
@@ -179,9 +208,9 @@ void main() {
         [],
       ],
     );
-    expect(hasActiveHint(state), isFalse);
-    expect(hintCycle(state), isEmpty);
-    expect(isLoss(state), isTrue);
+    expect(hasActiveHint(state), isTrue);
+    expect(hintCycle(state), isNotEmpty);
+    expect(isLoss(state), isFalse);
   });
 
   test('a King hopping from one empty pile to another is still a loss', () {
@@ -229,30 +258,27 @@ void main() {
     expect(isLoss(state), isTrue);
   });
 
-  test(
-    'a loop-stopped reverse does not block a loss while Waste remains',
-    () {
-      final opening = board(
-        waste: [c('spades', 6)],
-        tableau: [
-          [c('hearts', 1)],
-          ..._emptyTableau().skip(1),
-        ],
-      );
-      final state = opening.copyWith(
-        seenFaceUp: {faceUpTableKey(opening)},
-        hintLoopStops: [
-          HintLoopStop(
-            cardId: 'hearts-1',
-            from: const PileRef.foundation(1),
-            onto: const PileRef.tableau(0),
-          ),
-        ],
-      );
-      expect(hintCycle(state), isEmpty);
-      expect(isLoss(state), isTrue);
-    },
-  );
+  test('a loop-stopped reverse blocks a loss when Waste cannot play', () {
+    final opening = board(
+      waste: [c('spades', 6)],
+      tableau: [
+        [c('hearts', 1)],
+        ..._emptyTableau().skip(1),
+      ],
+    );
+    final state = opening.copyWith(
+      seenFaceUp: {faceUpTableKey(opening)},
+      hintLoopStops: [
+        HintLoopStop(
+          cardId: 'hearts-1',
+          from: const PileRef.foundation(1),
+          onto: const PileRef.tableau(0),
+        ),
+      ],
+    );
+    expect(hintCycle(state), isNotEmpty);
+    expect(isLoss(state), isFalse);
+  });
 
   test(
     'a loop-stopped reverse still blocks a loss when Stock and Waste are empty',

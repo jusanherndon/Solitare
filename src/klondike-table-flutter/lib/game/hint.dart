@@ -44,7 +44,10 @@ bool _blockedByLoopStop(GameState state, HintPlay play) {
 /// Repeat Foundation pulls stay omitted even when they are the only plays.
 /// Reverse of a play stays omitted while that card still sits where the play
 /// put it. Draws do not bring it back. If every new play is such a reverse
-/// and Stock and Waste are empty, Hint still shows those plays.
+/// and draw or recycle cannot help, Hint still shows those plays.
+/// Last-resort Tableau-run rehomes and Foundation pulls (not Ace-downs)
+/// come after every useful new play, and only when draw or recycle cannot
+/// help, so **You lost.** does not fire while the player can still try them.
 List<HintPlay> hintCycle(GameState state) {
   final news = <HintPlay>[];
   final stoppedNews = <HintPlay>[];
@@ -62,14 +65,23 @@ List<HintPlay> hintCycle(GameState state) {
     }
   }
   if (news.isNotEmpty) return news;
-  if (stoppedNews.isNotEmpty && state.stock.isEmpty && state.waste.isEmpty) {
+  final drawCannotHelp = !stockOrWasteCanPlay(state);
+  if (stoppedNews.isNotEmpty && drawCannotHelp) {
     return stoppedNews;
+  }
+  if (drawCannotHelp) {
+    final lastResort = <HintPlay>[];
+    for (final play in lastResortHintPlays(state)) {
+      if (_isNew(state, play)) lastResort.add(play);
+    }
+    if (lastResort.isNotEmpty) return lastResort;
   }
   return repeats;
 }
 
 /// Active Hint for loss: a new play Hint would actually show.
 /// A reverse-stop does not count while Hint hides it.
+/// Last-resort rehomes count once Hint would show them.
 bool hasActiveHint(GameState state) {
   for (final play in hintCycle(state)) {
     if (_isNew(state, play)) return true;

@@ -145,7 +145,7 @@ void main() {
     expect(report.lossWhileStillWinnable, isFalse);
   });
 
-  test('probe marks a Hint-skipped Tableau-run shift when You lost. fires', () {
+  test('probe follows a Tableau-run shift then loses when nothing remains', () {
     final state = board(
       tableau: [
         [c('clubs', 6), c('hearts', 5), c('spades', 4)],
@@ -159,13 +159,8 @@ void main() {
     );
     final report = probeOn(GameMeta(present: state, past: const []));
     expect(report.outcome, ProbeOutcome.loss);
-    expect(report.lossWhileNewTablePlay, isTrue);
-    expect(report.remainingPlayKinds['builtTableauShift'], greaterThan(0));
-    expect(
-      report.lossWhileStillWinnable,
-      isFalse,
-      reason: 'partial board cannot reach a 52-card win',
-    );
+    expect(report.steps, greaterThan(0));
+    expect(report.lossWhileStillWinnable, isFalse);
   });
 
   test(
