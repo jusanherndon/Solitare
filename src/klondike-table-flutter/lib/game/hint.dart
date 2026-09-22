@@ -48,6 +48,8 @@ bool _blockedByLoopStop(GameState state, HintPlay play) {
 /// Last-resort Tableau-run rehomes and Foundation pulls (not Ace-downs)
 /// come after every useful new play, and only when draw or recycle cannot
 /// help, so **You lost.** does not fire while the player can still try them.
+/// A last-resort play must expose a face-down card, make Stock or Waste
+/// playable, or unlock a new greedy Hint — churn rehomes do not count.
 List<HintPlay> hintCycle(GameState state) {
   final news = <HintPlay>[];
   final stoppedNews = <HintPlay>[];
@@ -72,11 +74,41 @@ List<HintPlay> hintCycle(GameState state) {
   if (drawCannotHelp) {
     final lastResort = <HintPlay>[];
     for (final play in lastResortHintPlays(state)) {
-      if (_isNew(state, play)) lastResort.add(play);
+      if (_isNew(state, play) && _lastResortHelps(state, play)) {
+        lastResort.add(play);
+      }
     }
     if (lastResort.isNotEmpty) return lastResort;
   }
   return repeats;
+}
+
+bool _lastResortHelps(GameState state, HintPlay play) {
+  final next = applyDrop(state, play.onto, play.from, play.cardIndex);
+  if (identical(next, state)) return false;
+  if (_exposesFaceDown(state, next)) return true;
+  if (stockOrWasteCanPlay(next)) return true;
+  final stepped = next.copyWith(
+    seenFaceUp: {...state.seenFaceUp, faceUpTableKey(next)},
+  );
+  for (final follow in legalHintPlays(stepped)) {
+    if (follow.from.sameAs(play.onto) && follow.onto.sameAs(play.from)) {
+      continue;
+    }
+    if (_blockedByLoopStop(stepped, follow)) continue;
+    if (_isNew(stepped, follow)) return true;
+  }
+  return false;
+}
+
+bool _exposesFaceDown(GameState before, GameState after) {
+  for (var i = 0; i < 7; i++) {
+    final was = {for (final card in before.tableau[i]) card.id: card.faceUp};
+    for (final card in after.tableau[i]) {
+      if (card.faceUp && was[card.id] == false) return true;
+    }
+  }
+  return false;
 }
 
 /// Active Hint for loss: a new play Hint would actually show.

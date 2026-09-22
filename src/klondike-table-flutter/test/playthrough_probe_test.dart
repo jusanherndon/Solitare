@@ -145,7 +145,7 @@ void main() {
     expect(report.lossWhileStillWinnable, isFalse);
   });
 
-  test('probe follows a Tableau-run shift then loses when nothing remains', () {
+  test('probe loses immediately when a Tableau-run shift unlocks nothing', () {
     final state = board(
       tableau: [
         [c('clubs', 6), c('hearts', 5), c('spades', 4)],
@@ -159,7 +159,6 @@ void main() {
     );
     final report = probeOn(GameMeta(present: state, past: const []));
     expect(report.outcome, ProbeOutcome.loss);
-    expect(report.steps, greaterThan(0));
     expect(report.lossWhileStillWinnable, isFalse);
   });
 

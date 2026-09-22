@@ -178,20 +178,20 @@ void main() {
   });
 
   test(
-    'Hint last-resort prefers rehoming a run onto a King over a short break',
+    'Hint last-resort prefers the leftmost Foundation pull that unlocks a draw',
     () {
       final state = board(
+        stock: [c('clubs', 2, faceUp: false)],
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
         tableau: [
-          [
-            c('clubs', 13),
-            c('diamonds', 12),
-            c('clubs', 11),
-            c('hearts', 10),
-            c('clubs', 9),
-            c('hearts', 8),
-          ],
-          [c('spades', 9)],
-          [c('spades', 13)],
+          [c('spades', 4)],
+          [c('clubs', 4)],
+          [],
           [],
           [],
           [],
@@ -201,16 +201,16 @@ void main() {
       expect(
         hintCycle(state).first,
         HintPlay(
-          from: const PileRef.tableau(0),
-          cardIndex: 1,
-          onto: const PileRef.tableau(2),
+          from: const PileRef.foundation(0),
+          cardIndex: 2,
+          onto: const PileRef.tableau(0),
         ),
       );
     },
   );
 
   test(
-    'Hint shifts a Tableau run onto another legal parent as a last resort',
+    'Hint does not last-resort a Tableau rehome that cannot uncover a play',
     () {
       final state = board(
         tableau: [
@@ -223,15 +223,8 @@ void main() {
           [],
         ],
       );
-      expect(
-        hintCycle(state).any(
-          (p) =>
-              p.from == const PileRef.tableau(0) &&
-              p.onto == const PileRef.tableau(1),
-        ),
-        isTrue,
-      );
-      expect(hasActiveHint(state), isTrue);
+      expect(hintCycle(state), isEmpty);
+      expect(hasActiveHint(state), isFalse);
     },
   );
 
@@ -605,9 +598,10 @@ void main() {
   );
 
   test(
-    'Hint last-resort pulls a Foundation 3 onto Tableau when draw cannot help',
+    'Hint last-resort pulls a Foundation 3 when that unlocks a Stock play',
     () {
       final state = board(
+        stock: [c('clubs', 2, faceUp: false)],
         foundations: [
           [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
           [],
@@ -632,6 +626,35 @@ void main() {
         ),
         isTrue,
       );
+      expect(hasActiveHint(state), isTrue);
+    },
+  );
+
+  test(
+    'Hint does not last-resort pull a Foundation 3 that unlocks nothing',
+    () {
+      final state = board(
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('spades', 4)],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(
+        hintCycle(state).any((p) => p.from.area == PileArea.foundation),
+        isFalse,
+      );
+      expect(hasActiveHint(state), isFalse);
     },
   );
 
@@ -836,7 +859,7 @@ void main() {
   );
 
   test(
-    'Hint last-resort still shows a loop-stopped Tableau rehome when draw cannot help',
+    'Hint does not last-resort a loop-stopped Tableau rehome that unlocks nothing',
     () {
       final opening = board(
         stock: [c('clubs', 9, faceUp: false)],
@@ -866,9 +889,9 @@ void main() {
               p.from == const PileRef.tableau(0) &&
               p.onto == const PileRef.tableau(1),
         ),
-        isTrue,
+        isFalse,
       );
-      expect(hasActiveHint(state), isTrue);
+      expect(hasActiveHint(state), isFalse);
     },
   );
 }
