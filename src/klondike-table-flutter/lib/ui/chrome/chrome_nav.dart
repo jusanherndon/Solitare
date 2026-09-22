@@ -25,6 +25,7 @@ class ChromeNav {
     required this.onDealClipboardSeed,
     required this.onCopyGame,
     required this.onLoadGame,
+    required this.onCopyMoves,
     required this.onBackToStart,
     required this.onSupport,
     required this.onSource,
@@ -66,6 +67,7 @@ class ChromeNav {
   final VoidCallback onDealClipboardSeed;
   final VoidCallback onCopyGame;
   final VoidCallback onLoadGame;
+  final VoidCallback onCopyMoves;
   final VoidCallback onBackToStart;
   final VoidCallback onSupport;
   final VoidCallback onSource;

@@ -344,6 +344,39 @@ void main() {
     expect(find.text('Winning deal'), findsOneWidget);
   });
 
+  testWidgets('Debug Copy moves is on the loss overlay', (tester) async {
+    final store = MemoryResumeStore();
+    await store.save(
+      GameMeta(
+        present: board(
+          tableau: [
+            [c('hearts', 2)],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+          ],
+        ),
+        past: const [],
+      ),
+    );
+    _mockClipboard(tester);
+    await _pumpApp(
+      tester,
+      store: store,
+      settings: MemorySettingsStore(debug: true),
+    );
+    await tester.tap(find.text('Resume'));
+    await tester.pump();
+    expect(find.text('You lost.'), findsOneWidget);
+    expect(find.text('Copy moves'), findsOneWidget);
+    await tester.tap(find.text('Copy moves'));
+    await tester.pump();
+    expect(_clipboardText, contains('(no moves yet)'));
+  });
+
   Finder foundation0() => find.byWidgetPredicate(
     (w) => w is InteractivePile && w.pile == const PileRef.foundation(0),
   );
@@ -460,6 +493,7 @@ void main() {
     expect(find.text('Deal clipboard seed'), findsOneWidget);
     expect(find.text('Copy Game'), findsOneWidget);
     expect(find.text('Load Game'), findsOneWidget);
+    expect(find.text('Copy moves'), findsOneWidget);
   });
 
   testWidgets('Debug persists independent of Draw three', (tester) async {
@@ -516,5 +550,31 @@ void main() {
     expect(table.meta.present.seed, 7);
     expect(table.meta.present.waste, isNotEmpty);
     expect(boardKey(table.meta.present), boardKey(meta.present));
+  });
+
+  testWidgets('Debug Copy moves puts the Undo path on the clipboard', (
+    tester,
+  ) async {
+    var meta = initMeta(seed: 8);
+    meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+    _mockClipboard(tester, encodeMeta(meta));
+    await _pumpApp(tester, settings: MemorySettingsStore(debug: true));
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Load Game'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.textContaining('1. Draw'), findsWidgets);
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Copy moves'));
+    await tester.pump();
+    await tester.tap(find.text('Copy moves'));
+    await tester.pump();
+    expect(_clipboardText, contains('Seed 8'));
+    expect(_clipboardText, contains('1. Draw'));
+    expect(find.text('Copied moves'), findsOneWidget);
   });
 }

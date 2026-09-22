@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 import '../game/deal.dart';
+import '../game/debug_log.dart';
 import '../game/finish.dart';
 import '../game/hint.dart';
 import '../game/history.dart';
@@ -335,7 +336,10 @@ class KlondikeTableState extends State<KlondikeTable>
                 top: metrics.insets.top + 4,
                 child: IgnorePointer(
                   child: Text(
-                    debugGameLine(_state, undos: widget.meta.past.length),
+                    [
+                      debugGameLine(_state, undos: widget.meta.past.length),
+                      ?debugLastMove(widget.meta),
+                    ].join('\n'),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Color(0xFFFFE082),

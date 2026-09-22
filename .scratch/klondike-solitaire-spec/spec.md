@@ -77,7 +77,7 @@ v1 always opens on a dedicated **start screen**. An unfinished Game does not ski
 
 **Start screen.** Title **Klondike Solitaire**. Actions: **New Game**, **Winning deal**, **Resume**, **Settings**, **About**. Resume is hidden unless an unfinished Game exists (first launch, and after a win or a loss). No table behind this screen. Back from About or Settings returns here.
 
-**Settings.** Felt banner like About (no table behind). A **Start** chrome button top-left. Controls: **Draw three**, off by default (**draw-one**); **Left-handed**, off by default (Stock and Waste on the right); **Waste on left**, off by default (Waste to the right of Stock); **Debug**, off by default. Persist on the phone, independent of Resume. No confirm on a toggle. **Draw three** applies only to the next **New Game** or **Winning deal**; the type is fixed when the deal starts. **Left-handed** and **Waste on left** apply as soon as they return to the table. **Debug** shows the current deal seed, draw type, and Undo depth, and lets you copy that seed, deal a seed from the clipboard, copy a Game snapshot, or load a snapshot — enough to recreate a mid-Game table, not only the opening.
+**Settings.** Felt banner like About (no table behind). A **Start** chrome button top-left. Controls: **Draw three**, off by default (**draw-one**); **Left-handed**, off by default (Stock and Waste on the right); **Waste on left**, off by default (Waste to the right of Stock); **Debug**, off by default. Persist on the phone, independent of Resume. No confirm on a toggle. **Draw three** applies only to the next **New Game** or **Winning deal**; the type is fixed when the deal starts. **Left-handed** and **Waste on left** apply as soon as they return to the table. **Debug** shows the current deal seed, draw type, and Undo depth, and lets you copy that seed, deal a seed from the clipboard, copy a Game snapshot, load a snapshot, or copy the move log (each successful play, Draw, and Recycle on the Undo path, tagged Hint / last-resort / not Hint) — enough to recreate a mid-Game table and show which plays Hint would have offered.
 
 **About** (this inventory, in this order):
 
@@ -102,7 +102,7 @@ Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, 
 
 **Finish overlay.** Headline **You can finish.** (wording may change in a look pass). Actions: filled **Finish**, then **Continue**. No Start, New Game, Winning deal, or Undo. Table stays visible behind, dimmed like the win overlay, still in color. **Finish** moves remaining cards onto the Foundations (Waste top, then Tableau left to right; Foundations left to right), then the win overlay; cannot stop or Undo. **Continue** returns to the table and hides this overlay for the rest of the Game.
 
-**Loss overlay.** Headline **You lost.** Actions: **Start**, **New Game**, **Winning deal**, and **Undo** (back to the table, last move reversed). Undo is the only way back into that Game.
+**Loss overlay.** Headline **You lost.** Actions: **Start**, **New Game**, **Winning deal**, and **Undo** (back to the table, last move reversed). Undo is the only way back into that Game. While **Debug** is on, **Copy moves** is also on this overlay so the log can be shared without leaving.
 
 From a win or a loss, **Start** goes to the start screen (Resume hidden). **New Game** and **Winning deal** deal with no confirm.
 
@@ -127,7 +127,7 @@ Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep g
 
 **About (felt banner).** Cream body type, gold underlined tappable rows. A **Start** chrome button top-left. No table behind.
 
-**Settings (felt banner).** Same as About: cream body, **Start** chrome button top-left, no table behind. **Draw three**, **Left-handed**, **Waste on left**, and **Debug** toggles. Debug extras (seed line, copy/deal/load) only while **Debug** is on.
+**Settings (felt banner).** Same as About: cream body, **Start** chrome button top-left, no table behind. **Draw three**, **Left-handed**, **Waste on left**, and **Debug** toggles. Debug extras (seed line, copy/deal/load, copy moves) only while **Debug** is on. The table overlay also shows the last recorded move.
 
 **Win overlay.** Table visible around a centered dark rounded card with a gold border. **You won!** in gold. **Start**, then filled **New Game**, then **Winning deal** next to **New Game**. Dim the table (~40%). Gold sparkles rise through the open felt.
 

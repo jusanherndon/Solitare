@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 
 import 'game/codec.dart';
 import 'game/deal.dart';
+import 'game/debug_log.dart';
 import 'game/finish.dart';
 import 'game/history.dart';
 import 'game/loss.dart';
@@ -210,6 +211,16 @@ class _KlondikeSessionState extends State<KlondikeSession> {
     }
   }
 
+  Future<void> _copyMoves() async {
+    final table = _table ?? _saved;
+    if (table == null) {
+      await _setDebugNotice('No Game. Deal one, or load a snapshot.');
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: debugMoveLog(table)));
+    await _setDebugNotice('Copied moves');
+  }
+
   bool _offersFinish(GameMeta meta) =>
       canFinish(meta.present) && !meta.finishContinued && !meta.present.won;
 
@@ -319,6 +330,9 @@ class _KlondikeSessionState extends State<KlondikeSession> {
       },
       onLoadGame: () {
         unawaited(_loadGame());
+      },
+      onCopyMoves: () {
+        unawaited(_copyMoves());
       },
       onBackToStart: () => setState(() => _screen = _Screen.start),
       onSupport: () {
