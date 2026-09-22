@@ -216,6 +216,32 @@ void main() {
     expect(find.text('Winning deal'), findsOneWidget);
   });
 
+  testWidgets('Debug Copy moves on You won includes Finish plays', (
+    tester,
+  ) async {
+    final store = MemoryResumeStore();
+    await store.save(finishable());
+    _mockClipboard(tester);
+    await _pumpApp(
+      tester,
+      store: store,
+      settings: MemorySettingsStore(debug: true),
+    );
+    await tester.tap(find.text('Resume'));
+    await tester.pump();
+    await tester.tap(find.text('Finish'));
+    await tester.pump();
+    for (var i = 0; i < 12; i++) {
+      await tester.pump(KlondikeTable.finishFlight);
+    }
+    expect(find.text('You won!'), findsOneWidget);
+    expect(find.text('Copy moves'), findsOneWidget);
+    await tester.tap(find.text('Copy moves'));
+    await tester.pump();
+    expect(_clipboardText, contains('K♠ Waste → Foundation 1'));
+    expect(_clipboardText, contains('K♥ Tableau 1 → Foundation 2'));
+  });
+
   testWidgets('Settings Fast Finish is off by default and can turn on', (
     tester,
   ) async {

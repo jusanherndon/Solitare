@@ -409,6 +409,10 @@ class VariantAWin extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     _BannerBtn('Start', onTap: nav.onWinStart),
+                    if (nav.debug) ...[
+                      const SizedBox(height: 8),
+                      _BannerBtn('Copy moves', onTap: nav.onCopyMoves),
+                    ],
                     const SizedBox(height: 8),
                     _dealButtons(
                       onNewGame: nav.onWinNewGame,

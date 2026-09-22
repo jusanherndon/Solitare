@@ -125,4 +125,35 @@ void main() {
     expect(debugLastMove(initMeta(seed: 8)), isNull);
     expect(debugLastMove(_played(before, draw(before))), '1. Draw 7♥');
   });
+
+  test('Finish keeps every Foundation play on the move log', () {
+    List<PlayingCard> run(String suit, int through) => [
+      for (var r = 1; r <= through; r++) c(suit, r),
+    ];
+    final before = board(
+      waste: [c('spades', 13)],
+      foundations: [
+        run('spades', 12),
+        run('hearts', 12),
+        run('diamonds', 12),
+        run('clubs', 12),
+      ],
+      tableau: [
+        [c('hearts', 13)],
+        [c('diamonds', 13)],
+        [c('clubs', 13)],
+        [],
+        [],
+        [],
+        [],
+      ],
+    );
+    var meta = GameMeta(present: before, past: const []);
+    meta = reduceMeta(meta, const FinishMetaAction());
+    final log = debugMoveLog(meta);
+    expect(log, contains('1. K♠ Waste → Foundation 1'));
+    expect(log, contains('2. K♥ Tableau 1 → Foundation 2'));
+    expect(log, contains('3. K♦ Tableau 2 → Foundation 3'));
+    expect(log, contains('4. K♣ Tableau 3 → Foundation 4'));
+  });
 }
