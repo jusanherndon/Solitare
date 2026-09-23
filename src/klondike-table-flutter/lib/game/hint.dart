@@ -121,6 +121,16 @@ bool hasActiveHint(GameState state) {
   return false;
 }
 
+/// Auto-move: greedy Hint for this card, else a last-resort Hint for it.
+HintPlay? autoMoveHintPlay(GameState state, PileRef from, int cardIndex) {
+  final greedy = autoMovePlay(state, from, cardIndex);
+  if (greedy != null) return greedy;
+  for (final play in hintCycle(state)) {
+    if (play.from.sameAs(from) && play.cardIndex == cardIndex) return play;
+  }
+  return null;
+}
+
 class HintCursor {
   HintCursor(this.plays);
   final List<HintPlay> plays;

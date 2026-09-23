@@ -2,6 +2,7 @@
 library;
 
 import 'deal.dart';
+import 'hint.dart';
 import 'plays.dart';
 import 'rules.dart';
 
@@ -216,7 +217,7 @@ GameState applyAutoMove(GameState state, PileRef from, int? cardIndex) {
     }
   }
 
-  final play = autoMovePlay(state, from, idx);
+  final play = autoMoveHintPlay(state, from, idx);
   if (play == null) {
     return state.copyWith(selection: null);
   }

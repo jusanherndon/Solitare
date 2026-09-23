@@ -82,7 +82,7 @@ List<HintPlay> legalHintPlays(GameState state) {
 }
 
 /// First useful play for this source. Foundation destinations before Tableau.
-/// Last-resort rehomes are Hint/loss only — Auto-move does not break a built run.
+/// Last-resort Auto-move uses Hint's cycle, not this list.
 HintPlay? autoMovePlay(GameState state, PileRef from, int cardIndex) {
   for (final play in legalHintPlays(state)) {
     if (play.from.sameAs(from) && play.cardIndex == cardIndex) return play;
