@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:flutter/services.dart';
+import 'package:klondike_table/game/codec.dart';
 import 'package:klondike_table/game/deal.dart';
 import 'package:klondike_table/game/history.dart';
+import 'package:klondike_table/game/reducer.dart';
 import 'package:klondike_table/game/resume_store.dart';
 import 'package:klondike_table/game/rules.dart';
 import 'package:klondike_table/game/settings_store.dart';
@@ -14,6 +17,28 @@ import 'package:klondike_table/ui/interactive_pile.dart';
 import 'package:klondike_table/ui/klondike_table.dart';
 
 import 'board.dart';
+
+String? _clipboardText;
+
+void _mockClipboard(WidgetTester tester, [String? text]) {
+  _clipboardText = text;
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (call) async {
+      switch (call.method) {
+        case 'Clipboard.setData':
+          final args = call.arguments as Map<dynamic, dynamic>?;
+          _clipboardText = args?['text'] as String?;
+          return null;
+        case 'Clipboard.getData':
+          return <String, dynamic>{'text': _clipboardText};
+        case 'Clipboard.hasStrings':
+          return _clipboardText != null && _clipboardText!.isNotEmpty;
+      }
+      return null;
+    },
+  );
+}
 
 Future<void> _pumpApp(
   WidgetTester tester, {
@@ -96,7 +121,7 @@ void main() {
     expect(find.text('Fast Finish'), findsOneWidget);
     expect(find.text('Left-handed'), findsOneWidget);
     expect(find.text('Waste on left'), findsOneWidget);
-    expect(find.text('Off'), findsNWidgets(4));
+    expect(find.text('Off'), findsNWidgets(5));
     await tester.tap(find.text('Draw three'));
     await tester.pump();
     expect(find.text('On'), findsOneWidget);
@@ -191,6 +216,32 @@ void main() {
     expect(find.text('Winning deal'), findsOneWidget);
   });
 
+  testWidgets('Debug Copy moves on You won includes Finish plays', (
+    tester,
+  ) async {
+    final store = MemoryResumeStore();
+    await store.save(finishable());
+    _mockClipboard(tester);
+    await _pumpApp(
+      tester,
+      store: store,
+      settings: MemorySettingsStore(debug: true),
+    );
+    await tester.tap(find.text('Resume'));
+    await tester.pump();
+    await tester.tap(find.text('Finish'));
+    await tester.pump();
+    for (var i = 0; i < 12; i++) {
+      await tester.pump(KlondikeTable.finishFlight);
+    }
+    expect(find.text('You won!'), findsOneWidget);
+    expect(find.text('Copy moves'), findsOneWidget);
+    await tester.tap(find.text('Copy moves'));
+    await tester.pump();
+    expect(_clipboardText, contains('K♠ Waste → Foundation 1'));
+    expect(_clipboardText, contains('K♥ Tableau 1 → Foundation 2'));
+  });
+
   testWidgets('Settings Fast Finish is off by default and can turn on', (
     tester,
   ) async {
@@ -198,11 +249,11 @@ void main() {
     await tester.tap(find.text('Settings'));
     await tester.pump();
     expect(find.text('Fast Finish'), findsOneWidget);
-    expect(find.text('Off'), findsNWidgets(4));
+    expect(find.text('Off'), findsNWidgets(5));
     await tester.tap(find.text('Fast Finish'));
     await tester.pump();
     expect(find.text('On'), findsOneWidget);
-    expect(find.text('Off'), findsNWidgets(3));
+    expect(find.text('Off'), findsNWidgets(4));
   });
 
   testWidgets('Fast Finish persists independent of Draw three', (tester) async {
@@ -319,6 +370,39 @@ void main() {
     expect(find.text('Winning deal'), findsOneWidget);
   });
 
+  testWidgets('Debug Copy moves is on the loss overlay', (tester) async {
+    final store = MemoryResumeStore();
+    await store.save(
+      GameMeta(
+        present: board(
+          tableau: [
+            [c('hearts', 2)],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+          ],
+        ),
+        past: const [],
+      ),
+    );
+    _mockClipboard(tester);
+    await _pumpApp(
+      tester,
+      store: store,
+      settings: MemorySettingsStore(debug: true),
+    );
+    await tester.tap(find.text('Resume'));
+    await tester.pump();
+    expect(find.text('You lost.'), findsOneWidget);
+    expect(find.text('Copy moves'), findsOneWidget);
+    await tester.tap(find.text('Copy moves'));
+    await tester.pump();
+    expect(_clipboardText, contains('(no moves yet)'));
+  });
+
   Finder foundation0() => find.byWidgetPredicate(
     (w) => w is InteractivePile && w.pile == const PileRef.foundation(0),
   );
@@ -419,5 +503,104 @@ void main() {
     await tester.pump();
     expect(await settings.loadWasteOnLeft(), isTrue);
     expect(await settings.loadLeftHanded(), isFalse);
+  });
+
+  testWidgets('Settings Debug is off by default and can turn on', (
+    tester,
+  ) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    expect(find.text('Debug'), findsOneWidget);
+    expect(find.text('Copy seed'), findsNothing);
+    await tester.tap(find.text('Debug'));
+    await tester.pump();
+    expect(find.text('Copy seed'), findsOneWidget);
+    expect(find.text('Deal clipboard seed'), findsOneWidget);
+    expect(find.text('Copy Game'), findsOneWidget);
+    expect(find.text('Load Game'), findsOneWidget);
+    expect(find.text('Copy moves'), findsOneWidget);
+  });
+
+  testWidgets('Debug persists independent of Draw three', (tester) async {
+    final settings = MemorySettingsStore();
+    await _pumpApp(tester, settings: settings);
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Debug'));
+    await tester.pump();
+    expect(await settings.loadDebug(), isTrue);
+    expect(await settings.loadDrawThree(), isFalse);
+  });
+
+  testWidgets('Debug shows the current seed after New Game', (tester) async {
+    await _pumpApp(tester, settings: MemorySettingsStore(debug: true));
+    await tester.tap(find.text('New Game'));
+    await tester.pump();
+    final table = tester.widget<KlondikeTable>(find.byType(KlondikeTable));
+    final seed = table.meta.present.seed;
+    expect(seed, isNotNull);
+    expect(find.textContaining('Seed $seed'), findsWidgets);
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    expect(find.textContaining('Seed $seed'), findsOneWidget);
+    expect(find.textContaining('Draw-one'), findsOneWidget);
+  });
+
+  testWidgets('Debug deals a clipboard seed', (tester) async {
+    _mockClipboard(tester, '42');
+    await _pumpApp(tester, settings: MemorySettingsStore(debug: true));
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Deal clipboard seed'));
+    await tester.pump();
+    await tester.pump();
+    final table = tester.widget<KlondikeTable>(find.byType(KlondikeTable));
+    expect(table.meta.present.seed, 42);
+    expect(boardKey(table.meta.present), boardKey(dealGame(seed: 42)));
+  });
+
+  testWidgets('Debug Load Game restores a clipboard snapshot', (tester) async {
+    var meta = initMeta(seed: 7);
+    meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+    _mockClipboard(tester, encodeMeta(meta));
+    await _pumpApp(tester, settings: MemorySettingsStore(debug: true));
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Load Game'));
+    await tester.pump();
+    await tester.pump();
+    final table = tester.widget<KlondikeTable>(find.byType(KlondikeTable));
+    expect(table.meta.present.seed, 7);
+    expect(table.meta.present.waste, isNotEmpty);
+    expect(boardKey(table.meta.present), boardKey(meta.present));
+  });
+
+  testWidgets('Debug Copy moves puts the Undo path on the clipboard', (
+    tester,
+  ) async {
+    var meta = initMeta(seed: 8);
+    meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+    _mockClipboard(tester, encodeMeta(meta));
+    await _pumpApp(tester, settings: MemorySettingsStore(debug: true));
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.tap(find.text('Load Game'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.textContaining('1. Draw'), findsWidgets);
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.tap(find.text('Settings'));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Copy moves'));
+    await tester.pump();
+    await tester.tap(find.text('Copy moves'));
+    await tester.pump();
+    expect(_clipboardText, contains('Seed 8'));
+    expect(_clipboardText, contains('1. Draw'));
+    expect(find.text('Copied moves'), findsOneWidget);
   });
 }

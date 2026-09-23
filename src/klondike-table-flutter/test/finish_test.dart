@@ -123,7 +123,11 @@ void main() {
     var meta = GameMeta(present: state, past: [state]);
     meta = reduceMeta(meta, const FinishMetaAction());
     expect(meta.present.won, isTrue);
-    expect(meta.past, isEmpty);
+    expect(meta.past, isNotEmpty);
+    final won = meta.present;
+    meta = reduceMeta(meta, const UndoMetaAction());
+    expect(meta.present.won, isTrue);
+    expect(boardKey(meta.present), boardKey(won));
   });
 
   test('each Finish step moves one card onto a Foundation', () {
@@ -151,6 +155,8 @@ void main() {
     expect(meta.present.won, isFalse);
     expect(meta.present.waste, isEmpty);
     expect(meta.present.foundations[0].last.rank, 13);
+    expect(meta.past, hasLength(1));
+    expect(boardKey(meta.past.first), boardKey(state));
   });
 
   test('Resume restores the Continue opted-out flag', () {
