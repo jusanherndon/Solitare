@@ -109,22 +109,35 @@ class ContinueFinishMetaAction extends MetaAction {
 GameMeta reduceMeta(GameMeta state, MetaAction action) {
   switch (action) {
     case UndoMetaAction():
-      if (state.past.isEmpty) return state;
+      if (state.present.won || state.past.isEmpty) return state;
       final past = [...state.past];
       final present = past.removeLast();
       return state.copyWith(present: present, past: past);
     case FinishMetaAction():
-      return GameMeta(
-        present: applyFinish(state.present),
-        past: const [],
-        finishContinued: state.finishContinued,
-      );
+      var meta = state;
+      for (var i = 0; i < 52; i++) {
+        if (meta.present.won) break;
+        final stepped = applyFinishStep(meta.present);
+        final next = stepped.copyWith(
+          won: isWin(stepped.foundations),
+          selection: null,
+        );
+        if (boardKey(next) == boardKey(meta.present)) break;
+        meta = meta.copyWith(present: next, past: [...meta.past, meta.present]);
+      }
+      return meta;
     case FinishStepMetaAction():
-      final next = applyFinishStep(state.present);
-      return GameMeta(
-        present: next.copyWith(won: isWin(next.foundations), selection: null),
-        past: const [],
-        finishContinued: state.finishContinued,
+      final stepped = applyFinishStep(state.present);
+      final next = stepped.copyWith(
+        won: isWin(stepped.foundations),
+        selection: null,
+      );
+      if (boardKey(next) == boardKey(state.present)) {
+        return state.copyWith(present: next);
+      }
+      return state.copyWith(
+        present: next,
+        past: [...state.past, state.present],
       );
     case ContinueFinishMetaAction():
       return state.copyWith(finishContinued: true);

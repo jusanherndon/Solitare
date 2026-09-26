@@ -141,6 +141,25 @@ void main() {
     );
     final report = probeOn(GameMeta(present: state, past: const []));
     expect(report.outcome, ProbeOutcome.loss);
+    expect(report.lossWhileAnyTablePlay, isFalse);
+    expect(report.lossWhileStillWinnable, isFalse);
+  });
+
+  test('probe loses immediately when a Tableau-run shift unlocks nothing', () {
+    final state = board(
+      tableau: [
+        [c('clubs', 6), c('hearts', 5), c('spades', 4)],
+        [c('spades', 6)],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+    );
+    final report = probeOn(GameMeta(present: state, past: const []));
+    expect(report.outcome, ProbeOutcome.loss);
+    expect(report.lossWhileStillWinnable, isFalse);
   });
 
   test(

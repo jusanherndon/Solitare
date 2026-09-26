@@ -4,8 +4,12 @@ library;
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'game/codec.dart';
+import 'game/deal.dart';
+import 'game/debug_log.dart';
 import 'game/finish.dart';
 import 'game/history.dart';
 import 'game/loss.dart';
@@ -91,6 +95,8 @@ class _KlondikeSessionState extends State<KlondikeSession> {
   bool _fastFinish = false;
   bool _leftHanded = false;
   bool _wasteOnLeft = false;
+  bool _debug = false;
+  String? _debugNotice;
 
   @override
   void initState() {
@@ -104,6 +110,7 @@ class _KlondikeSessionState extends State<KlondikeSession> {
     final fastFinish = await widget.settings.loadFastFinish();
     final leftHanded = await widget.settings.loadLeftHanded();
     final wasteOnLeft = await widget.settings.loadWasteOnLeft();
+    final debug = await widget.settings.loadDebug();
     if (!mounted) return;
     setState(() {
       _saved = saved;
@@ -111,6 +118,7 @@ class _KlondikeSessionState extends State<KlondikeSession> {
       _fastFinish = fastFinish;
       _leftHanded = leftHanded;
       _wasteOnLeft = wasteOnLeft;
+      _debug = debug;
       _booted = true;
     });
   }
@@ -125,19 +133,92 @@ class _KlondikeSessionState extends State<KlondikeSession> {
     await widget.store.clear();
   }
 
-  void _dealToTable({bool fromPool = false}) {
+  void _dealToTable({bool fromPool = false, int? seed}) {
     final drawType = _drawThree ? DrawType.drawThree : DrawType.drawOne;
-    final seed = fromPool
+    final used = fromPool
         ? pickWinningDealSeed(drawType, widget.winningDealRandom)
-        : DateTime.now().millisecondsSinceEpoch;
-    final meta = initMeta(seed: seed, drawType: drawType);
+        : seed ?? DateTime.now().millisecondsSinceEpoch;
+    final meta = initMeta(seed: used, drawType: drawType);
     setState(() {
       _table = meta;
       _screen = _Screen.table;
       _confirm = false;
       _confirmWinning = false;
+      _debugNotice = null;
     });
     unawaited(_persistUnfinished(meta));
+  }
+
+  Future<void> _setDebugNotice(String notice) async {
+    if (!mounted) return;
+    setState(() => _debugNotice = notice);
+  }
+
+  Future<void> _copySeed() async {
+    final seed = _table?.present.seed;
+    if (seed == null) {
+      await _setDebugNotice('No seed. Deal a Game first.');
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: '$seed'));
+    await _setDebugNotice('Copied seed $seed');
+  }
+
+  Future<void> _dealClipboardSeed() async {
+    final data = await Clipboard.getData('text/plain');
+    final seed = int.tryParse(data?.text?.trim() ?? '');
+    if (seed == null) {
+      await _setDebugNotice('Clipboard is not a seed.');
+      return;
+    }
+    _dealToTable(seed: seed);
+    await _setDebugNotice('Dealt seed $seed');
+  }
+
+  Future<void> _copyGame() async {
+    final table = _table ?? _saved;
+    if (table == null) {
+      await _setDebugNotice('No Game to copy.');
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: encodeMeta(table)));
+    await _setDebugNotice('Copied Game snapshot');
+  }
+
+  Future<void> _loadGame() async {
+    final data = await Clipboard.getData('text/plain');
+    final raw = data?.text;
+    if (raw == null || raw.trim().isEmpty) {
+      await _setDebugNotice('Clipboard is empty.');
+      return;
+    }
+    try {
+      final meta = decodeMeta(raw);
+      setState(() {
+        _table = meta;
+        _screen = _playScreen(meta);
+        _confirm = false;
+        _confirmWinning = false;
+        _debugNotice = 'Loaded Game';
+      });
+      if (_screen == _Screen.win || _screen == _Screen.loss) {
+        unawaited(_clearSaved());
+        return;
+      }
+      unawaited(_persistUnfinished(meta));
+    } on Object {
+      await _setDebugNotice('Clipboard is not a Game snapshot.');
+    }
+  }
+
+  Future<void> _copyMoves() async {
+    final table = _table ?? _saved;
+    if (table == null) {
+      await _setDebugNotice('No Game. Deal one, or load a snapshot.');
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: debugMoveLog(table)));
+    await _setDebugNotice('Copied moves');
   }
 
   bool _offersFinish(GameMeta meta) =>
@@ -225,6 +306,34 @@ class _KlondikeSessionState extends State<KlondikeSession> {
         setState(() => _wasteOnLeft = next);
         unawaited(widget.settings.saveWasteOnLeft(next));
       },
+      debug: _debug,
+      onToggleDebug: () {
+        final next = !_debug;
+        setState(() {
+          _debug = next;
+          _debugNotice = null;
+        });
+        unawaited(widget.settings.saveDebug(next));
+      },
+      debugLine: _table == null
+          ? null
+          : debugGameLine(_table!.present, undos: _table!.past.length),
+      debugNotice: _debugNotice,
+      onCopySeed: () {
+        unawaited(_copySeed());
+      },
+      onDealClipboardSeed: () {
+        unawaited(_dealClipboardSeed());
+      },
+      onCopyGame: () {
+        unawaited(_copyGame());
+      },
+      onLoadGame: () {
+        unawaited(_loadGame());
+      },
+      onCopyMoves: () {
+        unawaited(_copyMoves());
+      },
       onBackToStart: () => setState(() => _screen = _Screen.start),
       onSupport: () {
         unawaited(widget.openUrl(host.supportMailto));
@@ -291,6 +400,7 @@ class _KlondikeSessionState extends State<KlondikeSession> {
                   fastFinish: _fastFinish,
                   leftHanded: _leftHanded,
                   wasteOnLeft: _wasteOnLeft,
+                  debug: _debug,
                   onAction: _onAction,
                   onStart: () {
                     final m = _table;

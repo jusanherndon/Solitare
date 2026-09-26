@@ -113,6 +113,7 @@ class GameState {
     this.drawType = DrawType.drawOne,
     this.seenFaceUp = const {},
     this.hintLoopStops = const [],
+    this.seed,
   });
 
   final List<PlayingCard> stock;
@@ -124,6 +125,7 @@ class GameState {
   final DrawType drawType;
   final Set<String> seenFaceUp;
   final List<HintLoopStop> hintLoopStops;
+  final int? seed;
 
   GameState copyWith({
     List<PlayingCard>? stock,
@@ -135,6 +137,7 @@ class GameState {
     DrawType? drawType,
     Set<String>? seenFaceUp,
     List<HintLoopStop>? hintLoopStops,
+    Object? seed = _absent,
   }) {
     return GameState(
       stock: stock ?? this.stock,
@@ -148,6 +151,7 @@ class GameState {
       drawType: drawType ?? this.drawType,
       seenFaceUp: seenFaceUp ?? this.seenFaceUp,
       hintLoopStops: hintLoopStops ?? this.hintLoopStops,
+      seed: identical(seed, _absent) ? this.seed : seed as int?,
     );
   }
 }

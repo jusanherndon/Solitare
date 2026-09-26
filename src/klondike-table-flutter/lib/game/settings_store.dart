@@ -12,6 +12,8 @@ abstract class SettingsStore {
   Future<void> saveLeftHanded(bool leftHanded);
   Future<bool> loadWasteOnLeft();
   Future<void> saveWasteOnLeft(bool wasteOnLeft);
+  Future<bool> loadDebug();
+  Future<void> saveDebug(bool debug);
 }
 
 class MemorySettingsStore implements SettingsStore {
@@ -20,15 +22,18 @@ class MemorySettingsStore implements SettingsStore {
     bool fastFinish = false,
     bool leftHanded = false,
     bool wasteOnLeft = false,
+    bool debug = false,
   }) : _drawThree = drawThree,
        _fastFinish = fastFinish,
        _leftHanded = leftHanded,
-       _wasteOnLeft = wasteOnLeft;
+       _wasteOnLeft = wasteOnLeft,
+       _debug = debug;
 
   bool _drawThree;
   bool _fastFinish;
   bool _leftHanded;
   bool _wasteOnLeft;
+  bool _debug;
 
   @override
   Future<bool> loadDrawThree() async => _drawThree;
@@ -56,6 +61,12 @@ class MemorySettingsStore implements SettingsStore {
   @override
   Future<void> saveWasteOnLeft(bool wasteOnLeft) async =>
       _wasteOnLeft = wasteOnLeft;
+
+  @override
+  Future<bool> loadDebug() async => _debug;
+
+  @override
+  Future<void> saveDebug(bool debug) async => _debug = debug;
 }
 
 class FileSettingsStore implements SettingsStore {
@@ -79,6 +90,7 @@ class FileSettingsStore implements SettingsStore {
       'fastFinish': false,
       'leftHanded': false,
       'wasteOnLeft': false,
+      'debug': false,
     };
     final file = await _file();
     if (!file.existsSync()) return Map<String, bool>.from(defaults);
@@ -99,6 +111,7 @@ class FileSettingsStore implements SettingsStore {
         'fastFinish': values['fastFinish'] ?? false,
         'leftHanded': values['leftHanded'] ?? false,
         'wasteOnLeft': values['wasteOnLeft'] ?? false,
+        'debug': values['debug'] ?? false,
       }),
     );
   }
@@ -140,6 +153,16 @@ class FileSettingsStore implements SettingsStore {
   Future<void> saveWasteOnLeft(bool wasteOnLeft) async {
     final values = await _load();
     values['wasteOnLeft'] = wasteOnLeft;
+    await _save(values);
+  }
+
+  @override
+  Future<bool> loadDebug() async => (await _load())['debug']!;
+
+  @override
+  Future<void> saveDebug(bool debug) async {
+    final values = await _load();
+    values['debug'] = debug;
     await _save(values);
   }
 }

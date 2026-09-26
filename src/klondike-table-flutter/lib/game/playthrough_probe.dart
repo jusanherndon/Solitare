@@ -53,13 +53,17 @@ class ProbeReport {
     this.stuckNoLoss = false,
     this.lossWhileNewTablePlay = false,
     this.lossWhileAnyTablePlay = false,
+    this.lossWhileStillWinnable = false,
+    this.rescuePlay,
     this.peelFinishBeforeAllFaceUp = false,
     this.allFaceUpNeedsTableau = false,
     this.pingPongHints = false,
     this.unreachableStockPlay = false,
     this.terminal,
+    Map<String, int>? remainingPlayKinds,
     List<String>? notes,
-  }) : notes = notes ?? [];
+  }) : remainingPlayKinds = remainingPlayKinds ?? {},
+       notes = notes ?? [];
 
   final int seed;
   final DrawType drawType;
@@ -71,6 +75,11 @@ class ProbeReport {
   final bool stuckNoLoss;
   final bool lossWhileNewTablePlay;
   final bool lossWhileAnyTablePlay;
+
+  /// Auto-lose fired, but a legal table play Hint skipped can still reach a win.
+  final bool lossWhileStillWinnable;
+  final String? rescuePlay;
+  final Map<String, int> remainingPlayKinds;
   final bool peelFinishBeforeAllFaceUp;
   final bool allFaceUpNeedsTableau;
   final bool pingPongHints;
@@ -231,6 +240,163 @@ String describePlay(GameState state, HintPlay play) {
       '${play.onto.area.name}${play.onto.index}';
 }
 
+/// Why a legal table play is not an active Hint when auto-lose fires.
+String classifyRemainingPlay(GameState state, HintPlay play) {
+  final pile = getPile(state, play.from);
+  if (play.cardIndex < 0 || play.cardIndex >= pile.length) return 'other';
+  final card = pile[play.cardIndex];
+  if (play.from.area == PileArea.foundation &&
+      play.onto.area == PileArea.foundation) {
+    return 'foundationToFoundation';
+  }
+  if (play.from.area == PileArea.foundation &&
+      play.onto.area == PileArea.tableau &&
+      card.rank == 1) {
+    return 'foundationAceDown';
+  }
+  if (play.from.area == PileArea.foundation &&
+      play.onto.area == PileArea.tableau) {
+    return 'foundationPull';
+  }
+  if (play.from.area == PileArea.tableau &&
+      play.onto.area == PileArea.tableau) {
+    final onto = getPile(state, play.onto);
+    if (play.cardIndex == 0 &&
+        pile.isNotEmpty &&
+        pile.first.rank == 13 &&
+        onto.isEmpty) {
+      return 'kingEmptyHop';
+    }
+    if (play.cardIndex > 0 &&
+        pile[play.cardIndex - 1].faceUp &&
+        canStackOnTableau(pile[play.cardIndex], pile[play.cardIndex - 1])) {
+      return 'builtTableauShift';
+    }
+  }
+  final hinted = legalHintPlays(state);
+  if (hinted.contains(play) &&
+      !hintCycle(state).contains(play) &&
+      _playIsNew(state, play)) {
+    return 'reverseStop';
+  }
+  return 'other';
+}
+
+int _rescueKindRank(String kind) => switch (kind) {
+  'builtTableauShift' => 0,
+  'foundationPull' => 1,
+  'other' => 2,
+  'reverseStop' => 3,
+  'foundationAceDown' => 4,
+  'foundationToFoundation' => 5,
+  'kingEmptyHop' => 6,
+  _ => 7,
+};
+
+List<HintPlay> _remainingNewTablePlays(GameState state) {
+  final plays = [
+    for (final play in legalTablePlays(state))
+      if (_playIsNew(state, play)) play,
+  ];
+  plays.sort((a, b) {
+    final kindCmp = _rescueKindRank(
+      classifyRemainingPlay(state, a),
+    ).compareTo(_rescueKindRank(classifyRemainingPlay(state, b)));
+    if (kindCmp != 0) return kindCmp;
+    return _playKey(a).compareTo(_playKey(b));
+  });
+  return plays;
+}
+
+GameMeta _dropPlay(GameMeta meta, HintPlay play) => reduceMeta(
+  meta,
+  GameMetaAction(
+    DropAction(play.onto, from: play.from, cardIndex: play.cardIndex),
+  ),
+);
+
+class LossRescue {
+  const LossRescue({required this.stillWinnable, this.play, this.kind});
+
+  final bool stillWinnable;
+  final String? play;
+  final String? kind;
+}
+
+/// From a position auto-lose marked as a **loss**, try legal table plays Hint
+/// would not show, then keep following Hint / Stock. A win here is premature.
+LossRescue rescueFromLoss(
+  GameMeta meta, {
+  int skippedBudget = 6,
+  int maxNodes = 15000,
+}) {
+  var nodes = 0;
+  final seen = <String>{};
+
+  bool walk(GameMeta current, int skippedLeft) {
+    if (++nodes > maxNodes) return false;
+    final state = current.present;
+    if (state.won || isWin(state.foundations)) return true;
+    if (!seen.add(boardKey(state))) return false;
+
+    if (!isLoss(state)) {
+      if (hasActiveHint(state)) {
+        final cycle = hintCycle(state);
+        if (cycle.isNotEmpty) {
+          final play = cycle.first;
+          final preview = applyDrop(
+            state,
+            play.onto,
+            play.from,
+            play.cardIndex,
+          );
+          if (!state.seenFaceUp.contains(faceUpTableKey(preview))) {
+            return walk(_dropPlay(current, play), skippedLeft);
+          }
+        }
+      }
+      if (state.stock.isNotEmpty || state.waste.isNotEmpty) {
+        return walk(
+          reduceMeta(current, const GameMetaAction(DrawAction())),
+          skippedLeft,
+        );
+      }
+    }
+
+    if (skippedLeft <= 0) return false;
+    var tried = 0;
+    for (final play in _remainingNewTablePlays(state)) {
+      if (++tried > 12) break;
+      final next = _dropPlay(current, play);
+      if (boardKey(next.present) == boardKey(state)) continue;
+      if (walk(next, skippedLeft - 1)) return true;
+    }
+    return false;
+  }
+
+  if (meta.present.won || isWin(meta.present.foundations)) {
+    return const LossRescue(stillWinnable: true);
+  }
+  final rootPlays = _remainingNewTablePlays(meta.present);
+  if (rootPlays.isEmpty) return const LossRescue(stillWinnable: false);
+
+  seen.add(boardKey(meta.present));
+  var tried = 0;
+  for (final play in rootPlays) {
+    if (++tried > 12) break;
+    final next = _dropPlay(meta, play);
+    if (boardKey(next.present) == boardKey(meta.present)) continue;
+    if (walk(next, skippedBudget - 1)) {
+      return LossRescue(
+        stillWinnable: true,
+        play: describePlay(meta.present, play),
+        kind: classifyRemainingPlay(meta.present, play),
+      );
+    }
+  }
+  return const LossRescue(stillWinnable: false);
+}
+
 /// Follow the first **new** Hint, else tap Stock. Record Hint / Loss / Finish.
 ProbeReport probeGame(
   int seed, {
@@ -255,6 +421,9 @@ ProbeReport probeOn(GameMeta meta, {int seed = 0, int maxSteps = 8000}) {
   var stuckNoLoss = false;
   var lossWhileNewTablePlay = false;
   var lossWhileAnyTablePlay = false;
+  var lossWhileStillWinnable = false;
+  String? rescuePlay;
+  final remainingPlayKinds = <String, int>{};
   var peelFinishBeforeAllFaceUp = false;
   var allFaceUpNeedsTableau = false;
   var pingPongHints = false;
@@ -266,18 +435,40 @@ ProbeReport probeOn(GameMeta meta, {int seed = 0, int maxSteps = 8000}) {
       final tablePlays = legalTablePlays(state);
       if (tablePlays.isNotEmpty) {
         lossWhileAnyTablePlay = true;
-        if (tablePlays.any((play) => _playIsNew(state, play))) {
+        final newPlays = [
+          for (final play in tablePlays)
+            if (_playIsNew(state, play)) play,
+        ];
+        if (newPlays.isNotEmpty) {
           lossWhileNewTablePlay = true;
-          final hinted = legalHintPlays(state).toSet();
+          for (final play in newPlays) {
+            final kind = classifyRemainingPlay(state, play);
+            remainingPlayKinds[kind] = (remainingPlayKinds[kind] ?? 0) + 1;
+          }
           final skipped = [
-            for (final play in tablePlays)
-              if (_playIsNew(state, play) && !hinted.contains(play))
-                describePlay(state, play),
+            for (final play in newPlays)
+              '${describePlay(state, play)} '
+                  '(${classifyRemainingPlay(state, play)})',
           ];
           notes.add(
-            'loss while a non-Hint table play still leaves an unseen '
-            'face-up table: ${skipped.take(5).join('; ')}',
+            'auto-lose while a legal table play remains: '
+            '${skipped.take(5).join('; ')}',
           );
+          final rescue = rescueFromLoss(current);
+          if (rescue.stillWinnable) {
+            lossWhileStillWinnable = true;
+            rescuePlay = rescue.play;
+            notes.add(
+              'auto-lose was premature: remaining play still wins'
+              '${rescue.play == null ? '' : ' via ${rescue.play}'}'
+              '${rescue.kind == null ? '' : ' (${rescue.kind})'}',
+            );
+          } else {
+            notes.add(
+              'auto-lose remaining plays did not reach a win under '
+              'Hint-follow plus skipped table plays',
+            );
+          }
         } else {
           notes.add('loss while only repeat table plays remain');
         }
@@ -294,6 +485,9 @@ ProbeReport probeOn(GameMeta meta, {int seed = 0, int maxSteps = 8000}) {
       stuckNoLoss: stuckNoLoss,
       lossWhileNewTablePlay: lossWhileNewTablePlay,
       lossWhileAnyTablePlay: lossWhileAnyTablePlay,
+      lossWhileStillWinnable: lossWhileStillWinnable,
+      rescuePlay: rescuePlay,
+      remainingPlayKinds: remainingPlayKinds,
       peelFinishBeforeAllFaceUp: peelFinishBeforeAllFaceUp,
       allFaceUpNeedsTableau: allFaceUpNeedsTableau,
       pingPongHints: pingPongHints,

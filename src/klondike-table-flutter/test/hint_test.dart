@@ -177,27 +177,56 @@ void main() {
     );
   });
 
-  test('Hint does not shift a Tableau run that is already stacked', () {
-    final state = board(
-      tableau: [
-        [c('spades', 8), c('hearts', 7)],
-        [c('clubs', 8)],
-        [],
-        [],
-        [],
-        [],
-        [],
-      ],
-    );
-    expect(
-      hintCycle(state).any(
-        (p) =>
-            p.from == const PileRef.tableau(0) &&
-            p.onto == const PileRef.tableau(1),
-      ),
-      isFalse,
-    );
-  });
+  test(
+    'Hint last-resort prefers the leftmost Foundation pull that unlocks a draw',
+    () {
+      final state = board(
+        stock: [c('clubs', 2, faceUp: false)],
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('spades', 4)],
+          [c('clubs', 4)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(
+        hintCycle(state).first,
+        HintPlay(
+          from: const PileRef.foundation(0),
+          cardIndex: 2,
+          onto: const PileRef.tableau(0),
+        ),
+      );
+    },
+  );
+
+  test(
+    'Hint does not last-resort a Tableau rehome that cannot uncover a play',
+    () {
+      final state = board(
+        tableau: [
+          [c('spades', 8), c('hearts', 7)],
+          [c('clubs', 8)],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(hintCycle(state), isEmpty);
+      expect(hasActiveHint(state), isFalse);
+    },
+  );
 
   test(
     'Hint does shift a stacked Tableau run when it frees a Foundation play',
@@ -458,6 +487,7 @@ void main() {
         final cycle = hintCycle(meta.present);
         if (cycle.isEmpty) break;
         final play = cycle.first;
+        if (!legalHintPlays(meta.present).contains(play)) break;
         meta = reduceMeta(
           meta,
           GameMetaAction(
@@ -545,6 +575,7 @@ void main() {
         final cycle = hintCycle(meta.present);
         if (cycle.isEmpty) break;
         final play = cycle.first;
+        if (!legalHintPlays(meta.present).contains(play)) break;
         meta = reduceMeta(
           meta,
           GameMetaAction(
@@ -559,33 +590,101 @@ void main() {
       }
       expect(meta.present.foundations[1].last.suit, 'spades');
       expect(meta.present.foundations[1].last.rank, 3);
-      expect(hintCycle(meta.present), isEmpty);
+      expect(
+        hintCycle(meta.present).where(legalHintPlays(meta.present).contains),
+        isEmpty,
+      );
     },
   );
 
-  test('Hint does not pull a Foundation 3 onto Tableau with no waiting 2', () {
-    final state = board(
-      foundations: [
-        [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
-        [],
-        [],
-        [],
-      ],
-      tableau: [
-        [c('spades', 4)],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-      ],
-    );
-    expect(
-      hintCycle(state).any((p) => p.from.area == PileArea.foundation),
-      isFalse,
-    );
-  });
+  test(
+    'Hint last-resort pulls a Foundation 3 when that unlocks a Stock play',
+    () {
+      final state = board(
+        stock: [c('clubs', 2, faceUp: false)],
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('spades', 4)],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(
+        hintCycle(state).any(
+          (p) =>
+              p.from == const PileRef.foundation(0) &&
+              p.onto == const PileRef.tableau(0),
+        ),
+        isTrue,
+      );
+      expect(hasActiveHint(state), isTrue);
+    },
+  );
+
+  test(
+    'Hint does not last-resort pull a Foundation 3 that unlocks nothing',
+    () {
+      final state = board(
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('spades', 4)],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(
+        hintCycle(state).any((p) => p.from.area == PileArea.foundation),
+        isFalse,
+      );
+      expect(hasActiveHint(state), isFalse);
+    },
+  );
+
+  test(
+    'Hint does not last-resort pull a Foundation 3 while Stock still holds a play',
+    () {
+      final state = board(
+        stock: [c('clubs', 1, faceUp: false)],
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('spades', 4)],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      expect(
+        hintCycle(state).any((p) => p.from.area == PileArea.foundation),
+        isFalse,
+      );
+    },
+  );
 
   test(
     'Hint does not send a pulled Foundation card back up after later draws',
@@ -647,7 +746,7 @@ void main() {
   );
 
   test(
-    'Hint does not pull a just-played Foundation card back down after later draws',
+    'Hint can pull a just-played Foundation card after an unplayable draw',
     () {
       final opening = board(
         stock: [
@@ -688,14 +787,8 @@ void main() {
           p.from == const PileRef.foundation(0) &&
           p.onto == const PileRef.tableau(0);
       expect(hintCycle(meta.present).any(pullsClubs4), isFalse);
-      for (var i = 0; i < 6; i++) {
-        meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
-        expect(
-          hintCycle(meta.present).any(pullsClubs4),
-          isFalse,
-          reason: '4♣ pull after draw ${i + 1}',
-        );
-      }
+      meta = reduceMeta(meta, const GameMetaAction(DrawAction()));
+      expect(hintCycle(meta.present).any(pullsClubs4), isTrue);
     },
   );
 
@@ -729,6 +822,76 @@ void main() {
         hintCycle(state).any((p) => p.from == const PileRef.tableau(0)),
         isTrue,
       );
+    },
+  );
+
+  test(
+    'Hint still shows a loop-stopped new play when leftover Stock cannot play',
+    () {
+      final opening = board(
+        stock: [c('clubs', 9, faceUp: false)],
+        tableau: [
+          [c('hearts', 1)],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      final state = opening.copyWith(
+        seenFaceUp: {faceUpTableKey(opening)},
+        hintLoopStops: [
+          HintLoopStop(
+            cardId: 'hearts-1',
+            from: const PileRef.foundation(1),
+            onto: const PileRef.tableau(0),
+          ),
+        ],
+      );
+      expect(hasActiveHint(state), isTrue);
+      expect(
+        hintCycle(state).any((p) => p.from == const PileRef.tableau(0)),
+        isTrue,
+      );
+    },
+  );
+
+  test(
+    'Hint does not last-resort a loop-stopped Tableau rehome that unlocks nothing',
+    () {
+      final opening = board(
+        stock: [c('clubs', 9, faceUp: false)],
+        tableau: [
+          [c('spades', 8), c('hearts', 7)],
+          [c('clubs', 8)],
+          [c('diamonds', 13)],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      final state = opening.copyWith(
+        seenFaceUp: {faceUpTableKey(opening)},
+        hintLoopStops: [
+          HintLoopStop(
+            cardId: 'hearts-7',
+            from: const PileRef.tableau(1),
+            onto: const PileRef.tableau(0),
+          ),
+        ],
+      );
+      expect(
+        hintCycle(state).any(
+          (p) =>
+              p.from == const PileRef.tableau(0) &&
+              p.onto == const PileRef.tableau(1),
+        ),
+        isFalse,
+      );
+      expect(hasActiveHint(state), isFalse);
     },
   );
 }

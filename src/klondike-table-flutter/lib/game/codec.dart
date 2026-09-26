@@ -33,6 +33,7 @@ Map<String, Object?> _stateJson(GameState s) => {
   'drawType': s.drawType.name,
   'seenFaceUp': s.seenFaceUp.toList(),
   'hintLoopStops': [for (final stop in s.hintLoopStops) _loopStopJson(stop)],
+  'seed': s.seed,
 };
 
 Map<String, Object?> _loopStopJson(HintLoopStop stop) => {
@@ -93,6 +94,7 @@ GameState _state(Map<String, dynamic> j) => GameState(
     for (final s in (j['hintLoopStops'] as List<dynamic>? ?? const []))
       _loopStop(s as Map<String, dynamic>),
   ],
+  seed: j['seed'] as int?,
 );
 
 String encodeMeta(GameMeta meta) => jsonEncode({

@@ -2,6 +2,7 @@
 library;
 
 import 'deal.dart';
+import 'hint.dart';
 import 'plays.dart';
 import 'rules.dart';
 
@@ -56,7 +57,8 @@ class _Board {
       won = state.won,
       drawType = state.drawType,
       seenFaceUp = state.seenFaceUp,
-      hintLoopStops = state.hintLoopStops;
+      hintLoopStops = state.hintLoopStops,
+      seed = state.seed;
 
   List<PlayingCard> stock;
   List<PlayingCard> waste;
@@ -67,6 +69,7 @@ class _Board {
   DrawType drawType;
   Set<String> seenFaceUp;
   List<HintLoopStop> hintLoopStops;
+  int? seed;
 
   GameState freeze() => GameState(
     stock: stock,
@@ -78,6 +81,7 @@ class _Board {
     drawType: drawType,
     seenFaceUp: seenFaceUp,
     hintLoopStops: hintLoopStops,
+    seed: seed,
   );
 
   List<PlayingCard> pileOf(PileRef pile) {
@@ -213,7 +217,7 @@ GameState applyAutoMove(GameState state, PileRef from, int? cardIndex) {
     }
   }
 
-  final play = autoMovePlay(state, from, idx);
+  final play = autoMoveHintPlay(state, from, idx);
   if (play == null) {
     return state.copyWith(selection: null);
   }
@@ -274,6 +278,36 @@ GameState reduce(GameState state, GameAction action) {
       return applyAutoMove(state, pile, cardIndex);
     case ClearSelectionAction():
       return state.copyWith(selection: null);
+  }
+}
+
+bool cardCanPlayOnTable(PlayingCard card, GameState state) {
+  for (var i = 0; i < 4; i++) {
+    if (canStackOnFoundation(card, state.foundations[i])) return true;
+  }
+  for (var i = 0; i < 7; i++) {
+    final pile = state.tableau[i];
+    final target = pile.isEmpty ? null : pile.last;
+    if (canStackOnTableau(card, target)) return true;
+  }
+  return false;
+}
+
+String _stockWasteKey(GameState state) =>
+    '${state.stock.map((c) => c.id).join(',')}|${state.waste.map((c) => c.id).join(',')}';
+
+/// True when draw or recycle can turn up a Waste top that plays on this table.
+bool stockOrWasteCanPlay(GameState state) {
+  var cursor = state;
+  final seen = <String>{};
+  while (true) {
+    if (!seen.add(_stockWasteKey(cursor))) return false;
+    if (cursor.waste.isNotEmpty &&
+        cardCanPlayOnTable(cursor.waste.last, state)) {
+      return true;
+    }
+    if (cursor.stock.isEmpty && cursor.waste.isEmpty) return false;
+    cursor = draw(cursor);
   }
 }
 

@@ -43,10 +43,8 @@ List<PlayingCard> shuffle(List<PlayingCard> deck, int seed) {
 
 /// Standard Klondike deal: Tableau piles 1–7, tops face-up; rest face-down Stock.
 GameState dealGame({int? seed, DrawType drawType = DrawType.drawOne}) {
-  final deck = shuffle(
-    buildDeck(),
-    seed ?? DateTime.now().millisecondsSinceEpoch,
-  );
+  final used = seed ?? DateTime.now().millisecondsSinceEpoch;
+  final deck = shuffle(buildDeck(), used);
   var i = 0;
   final tableau = <List<PlayingCard>>[];
   for (var col = 0; col < 7; col++) {
@@ -63,6 +61,14 @@ GameState dealGame({int? seed, DrawType drawType = DrawType.drawOne}) {
     foundations: const [[], [], [], []],
     tableau: tableau,
     drawType: drawType,
+    seed: used,
   );
   return dealt.copyWith(seenFaceUp: {faceUpTableKey(dealt)});
+}
+
+String debugGameLine(GameState state, {int undos = 0}) {
+  final seed = state.seed;
+  final type = state.drawType == DrawType.drawThree ? 'Draw-three' : 'Draw-one';
+  final seedPart = seed == null ? 'Seed unknown' : 'Seed $seed';
+  return '$seedPart · $type · Undo $undos';
 }

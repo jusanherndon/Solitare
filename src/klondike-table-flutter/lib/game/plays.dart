@@ -82,6 +82,7 @@ List<HintPlay> legalHintPlays(GameState state) {
 }
 
 /// First useful play for this source. Foundation destinations before Tableau.
+/// Last-resort Auto-move uses Hint's cycle, not this list.
 HintPlay? autoMovePlay(GameState state, PileRef from, int cardIndex) {
   for (final play in legalHintPlays(state)) {
     if (play.from.sameAs(from) && play.cardIndex == cardIndex) return play;
@@ -135,4 +136,67 @@ bool _foundationPullHelps(GameState state, PlayingCard pulled, PileRef onto) {
     return true;
   }
   return false;
+}
+
+int _movingLength(GameState state, HintPlay play) =>
+    _moving(state, play.from, play.cardIndex).length;
+
+int _kingHomeRank(GameState state, HintPlay play) {
+  final moving = _moving(state, play.from, play.cardIndex);
+  if (moving.isEmpty) return 9;
+  if (play.onto.area != PileArea.tableau) return 8;
+  final dest = state.tableau[play.onto.index];
+  if (dest.isEmpty && moving.first.rank == 13) return 0;
+  if (dest.isNotEmpty && dest.last.rank == 13) return 1;
+  return 5;
+}
+
+/// Plays Hint otherwise hides that can still change the table: Tableau-run
+/// rehomes (not King-empty hops) and a Foundation card other than an Ace
+/// onto Tableau.
+List<HintPlay> lastResortHintPlays(GameState state) {
+  final plays = <HintPlay>[];
+
+  for (var i = 0; i < 4; i++) {
+    final pile = state.foundations[i];
+    if (pile.isEmpty) continue;
+    final card = pile.last;
+    if (card.rank == 1) continue;
+    final from = PileRef.foundation(i);
+    final moving = [card];
+    for (var t = 0; t < 7; t++) {
+      final onto = PileRef.tableau(t);
+      if (!canMoveOnto(moving, onto, state)) continue;
+      if (_foundationPullHelps(state, card, onto)) continue;
+      plays.add(HintPlay(from: from, cardIndex: pile.length - 1, onto: onto));
+    }
+  }
+
+  for (var i = 0; i < 7; i++) {
+    final pile = state.tableau[i];
+    for (var idx = pile.length - 1; idx >= 1; idx--) {
+      if (!tableauRunIsLegal(pile, idx)) continue;
+      final from = PileRef.tableau(i);
+      if (!_skipBuiltTableauShift(state, from, idx)) continue;
+      final moving = _moving(state, from, idx);
+      if (moving.isEmpty) continue;
+      for (var t = 0; t < 7; t++) {
+        if (t == i) continue;
+        final onto = PileRef.tableau(t);
+        if (!canMoveOnto(moving, onto, state)) continue;
+        plays.add(HintPlay(from: from, cardIndex: idx, onto: onto));
+      }
+    }
+  }
+
+  plays.sort((a, b) {
+    final king = _kingHomeRank(state, a).compareTo(_kingHomeRank(state, b));
+    if (king != 0) return king;
+    final len = _movingLength(state, b).compareTo(_movingLength(state, a));
+    if (len != 0) return len;
+    final fromCmp = a.from.index.compareTo(b.from.index);
+    if (fromCmp != 0) return fromCmp;
+    return a.onto.index.compareTo(b.onto.index);
+  });
+  return plays;
 }

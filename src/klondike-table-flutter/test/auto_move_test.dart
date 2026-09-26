@@ -119,6 +119,61 @@ void main() {
   });
 
   test(
+    'Auto-move last-resort pulls a Foundation 3 when that unlocks a Stock play',
+    () {
+      final next = auto(
+        board(
+          stock: [c('clubs', 2, faceUp: false)],
+          foundations: [
+            [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+            [],
+            [],
+            [],
+          ],
+          tableau: [
+            [c('spades', 4)],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+          ],
+        ),
+        const PileRef.foundation(0),
+      );
+      expect(next.foundations[0].last.rank, 2);
+      expect(next.tableau[0].last.rank, 3);
+    },
+  );
+
+  test(
+    'Auto-move does not last-resort pull a Foundation 3 that unlocks nothing',
+    () {
+      final state = board(
+        foundations: [
+          [c('hearts', 1), c('hearts', 2), c('hearts', 3)],
+          [],
+          [],
+          [],
+        ],
+        tableau: [
+          [c('spades', 4)],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      );
+      final next = auto(state, const PileRef.foundation(0));
+      expect(next.foundations[0].last.rank, 3);
+      expect(next.tableau[0].single.rank, 4);
+    },
+  );
+
+  test(
     'Auto-move does shift a stacked Tableau run when it frees a Foundation',
     () {
       final next = auto(

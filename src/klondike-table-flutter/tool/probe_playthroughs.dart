@@ -68,12 +68,19 @@ void _printReport(ProbeReport report) {
     if (report.stuckNoLoss) 'stuckNoLoss',
     if (report.lossWhileNewTablePlay) 'lossWhileNewTablePlay',
     if (report.lossWhileAnyTablePlay) 'lossWhileAnyTablePlay',
+    if (report.lossWhileStillWinnable) 'lossWhileStillWinnable',
     if (report.peelFinishBeforeAllFaceUp) 'peelFinishBeforeAllFaceUp',
     if (report.allFaceUpNeedsTableau) 'allFaceUpNeedsTableau',
     if (report.pingPongHints) 'pingPongHints',
     if (report.unreachableStockPlay) 'unreachableStockPlay',
   ];
   if (flags.isNotEmpty) stdout.writeln('  flags: ${flags.join(', ')}');
+  if (report.remainingPlayKinds.isNotEmpty) {
+    stdout.writeln('  remainingPlayKinds: ${report.remainingPlayKinds}');
+  }
+  if (report.rescuePlay != null) {
+    stdout.writeln('  rescuePlay: ${report.rescuePlay}');
+  }
   for (final note in report.notes) {
     stdout.writeln('  - $note');
   }
@@ -98,6 +105,9 @@ class _Summary {
   var stuckNoLoss = 0;
   var lossWhileNewTablePlay = 0;
   var lossWhileAnyTablePlay = 0;
+  var lossWhileStillWinnable = 0;
+  final remainingPlayKinds = <String, int>{};
+  var genuineLoss = 0;
   var peelFinishBeforeAllFaceUp = 0;
   var allFaceUpNeedsTableau = 0;
   var pingPongHints = 0;
@@ -130,6 +140,16 @@ class _Summary {
       lossWhileAnyTablePlay++;
       _keep('lossWhileAnyTablePlay', report);
     }
+    if (report.lossWhileStillWinnable) {
+      lossWhileStillWinnable++;
+      _keep('lossWhileStillWinnable', report);
+    }
+    if (report.outcome == ProbeOutcome.loss && !report.lossWhileStillWinnable) {
+      genuineLoss++;
+    }
+    report.remainingPlayKinds.forEach((kind, count) {
+      remainingPlayKinds[kind] = (remainingPlayKinds[kind] ?? 0) + count;
+    });
     if (report.peelFinishBeforeAllFaceUp) {
       peelFinishBeforeAllFaceUp++;
       _keep('peelFinishBeforeAllFaceUp', report);
@@ -197,6 +217,21 @@ class _Summary {
       )
       ..writeln('- loss while a new table play remains: $lossWhileNewTablePlay')
       ..writeln('- loss while any table play remains: $lossWhileAnyTablePlay')
+      ..writeln(
+        '- auto-lose but a remaining play still wins (premature): '
+        '$lossWhileStillWinnable',
+      )
+      ..writeln(
+        '- auto-lose with no remaining winning line (genuine): $genuineLoss',
+      );
+    if (remainingPlayKinds.isNotEmpty) {
+      buf.writeln('- remaining play kinds at auto-lose (play counts):');
+      final kinds = remainingPlayKinds.keys.toList()..sort();
+      for (final kind in kinds) {
+        buf.writeln('  - $kind: ${remainingPlayKinds[kind]}');
+      }
+    }
+    buf
       ..writeln('- Finish overlay offered: $finishOffered')
       ..writeln('- peel-Finish possible: $peelOffered')
       ..writeln(
@@ -246,6 +281,7 @@ class _Summary {
           buf.writeln(
             '  - seed=${report.seed} ${report.outcome.name} '
             'steps=${report.steps}'
+            '${report.rescuePlay == null ? '' : ' rescue=${report.rescuePlay}'}'
             '${report.notes.isEmpty ? '' : ' — ${report.notes.first}'}',
           );
         }

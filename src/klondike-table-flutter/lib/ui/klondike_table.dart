@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+import '../game/deal.dart';
+import '../game/debug_log.dart';
 import '../game/finish.dart';
 import '../game/hint.dart';
 import '../game/history.dart';
@@ -27,6 +29,7 @@ class KlondikeTable extends StatefulWidget {
     this.fastFinish = false,
     this.leftHanded = false,
     this.wasteOnLeft = false,
+    this.debug = false,
   });
 
   final GameMeta meta;
@@ -38,6 +41,7 @@ class KlondikeTable extends StatefulWidget {
   final bool fastFinish;
   final bool leftHanded;
   final bool wasteOnLeft;
+  final bool debug;
 
   static const finishFlight = Duration(milliseconds: 650);
   static const fastFinishFlight = Duration(milliseconds: 325);
@@ -324,6 +328,26 @@ class KlondikeTableState extends State<KlondikeTable>
                     ),
                   );
                 },
+              ),
+            if (widget.debug)
+              Positioned(
+                left: metrics.insets.left + 12,
+                right: metrics.insets.right + 12,
+                top: metrics.insets.top + 4,
+                child: IgnorePointer(
+                  child: Text(
+                    [
+                      debugGameLine(_state, undos: widget.meta.past.length),
+                      ?debugLastMove(widget.meta),
+                    ].join('\n'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Color(0xFFFFE082),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
               ),
             if (_flightPlay != null)
               AnimatedBuilder(
