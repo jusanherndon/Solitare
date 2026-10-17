@@ -31,3 +31,9 @@ v1 always opens on a dedicated **start screen**. An unfinished Game does not ski
 **Table chrome.** **Undo**, **New Game**, and **Start**. **Start** goes to the start screen with no confirm; the unfinished Game and Undo stack stay. Resume is how they return.
 
 **New Game.** Confirms only when an unfinished Game would be discarded — from the table, or from the start screen while Resume is showing. No confirm on first launch or after a win. A confirmed New Game deals fresh and starts a new Undo stack (`02`: New Game cannot be undone).
+
+## Comments
+
+### agent — 2026-10-17
+
+Superseded for the app shell by [Solitaire Collection](../../solitaire-collection/map.md). The app opens on the **Collection screen**. This screen is **Klondike start**, title **Klondike**. Settings and Winning deal stay on it. Where **Start** lands is [Where does Start land, and how do you get back to the Collection screen?](../../solitaire-collection/issues/01-leave-klondike-start.md).

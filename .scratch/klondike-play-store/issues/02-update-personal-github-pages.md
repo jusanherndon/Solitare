@@ -15,9 +15,9 @@ Work happens in **https://github.com/jusanherndon/jusanherndon.github.io** (`mas
 
 ## Question
 
-Can we update the owner’s personal GitHub Pages site so it is current and links to the Klondike Solitaire privacy policy used by the store listings and About screen?
+Can we update the owner’s personal GitHub Pages site so it is current and links to the Solitaire Collection privacy policy used by the store listings and About screen?
 
-The site has not been updated in a long time. Source is still the old Theindex.tk pages (`index.html`, `Projects.html`, `Resume.html`, `Contactform.html`). Listings and About already point at `https://jusanherndon.github.io/Solitare/privacy/` (ticket `01` publishes that page). This ticket is the personal homepage: refresh it and add a clear link to that policy (and to Klondike Solitaire if a projects list remains).
+The site has not been updated in a long time. Source is still the old Theindex.tk pages (`index.html`, `Projects.html`, `Resume.html`, `Contactform.html`). Listings and About already point at `https://jusanherndon.github.io/Solitare/privacy/` (ticket `01` publishes that page). This ticket is the personal homepage: refresh it and add a clear link to that policy (and to Solitaire Collection if a projects list remains).
 
 Do not change the locked policy URL from #9. Do not use “For Kids” / “For Children” wording unless [Does Play list Klondike Solitaire as including children?](issues/05-play-target-audience-children.md) says otherwise.
 

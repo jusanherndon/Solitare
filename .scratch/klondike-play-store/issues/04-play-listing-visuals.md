@@ -16,6 +16,8 @@ Parked — owner is not ready to lock listing visuals yet.
 
 What Play listing visuals does v1 use: 512×512 store icon (32-bit PNG with alpha), 1024×500 feature graphic (JPEG or 24-bit PNG, no alpha), and at least two phone screenshots (preferably three at ≥1080×1920) showing the Game in use?
 
+The name on the feature graphic is **Solitaire Collection**. Screenshots show Klondike in play. Do not show Spider or a variant that is not in the build.
+
 React to the Flutter table prototype (`src/klondike-table-flutter`). Screenshots must show Tableau, Foundations, Stock, and Waste in play — not a splash only. Phones only; no tablet/TV/Wear classes. Apple 6.9″ screenshot sizes are out of scope here.
 
 ## Comments

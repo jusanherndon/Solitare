@@ -17,14 +17,14 @@ Cover short description (Play ≤80), full description (both ≤4000), Apple key
 
 ## Answer
 
-Store name remains **Klondike Solitaire**. English only. No “kids,” “children,” or Family/Kids category on this ticket ([Does Play list Klondike Solitaire as including children?](issues/05-play-target-audience-children.md) still decides Play’s child audience).
+Store name is **Solitaire Collection**. English only. No “kids,” “children,” or Family/Kids category on this ticket ([Does Play list Klondike Solitaire as including children?](issues/05-play-target-audience-children.md) still decides Play’s child audience).
 
-**Play short description** (67 characters):
-`Free Klondike Solitaire. Draw-one, undo, resume. No ads, no account.`
+**Play short description** (70 characters):
+`Free Solitaire Collection. Klondike, undo, resume. No ads, no account.`
 
 **Full description** (both stores):
 
-Klondike Solitaire is a free, classic card Game for phones. No account, no ads, no in-app purchases.
+Solitaire Collection is a free card app for phones. Klondike is the variant you can play. No account, no ads, no in-app purchases.
 
 Draw one from the Stock. Build the four Foundations Ace to King. Tableau builds down in alternating colors. Recycle the Waste as often as you need.
 
@@ -38,3 +38,9 @@ English. Portrait and landscape. Phones only.
 **Support:** contact `jherndon111@gmail.com`. Support URL `https://jusanherndon.github.io/Solitare/privacy/` (the public policy page, once `01` publishes it).
 
 **Category:** Game / Card on both stores. Not Casino. Not Apple Family or Kids.
+
+## Comments
+
+### agent — 2026-10-17
+
+Store name is **Solitaire Collection**. The short description and the opening sentence use that name. The Klondike rules paragraphs stay until another variant ships. Privacy facts are unchanged. See [Solitaire Collection](../../solitaire-collection/map.md).

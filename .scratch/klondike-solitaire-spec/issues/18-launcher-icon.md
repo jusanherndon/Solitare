@@ -7,7 +7,7 @@ Related: [What bugs or changes turn up when the owner runs the prototype on Andr
 
 ## Question
 
-The Flutter tree still ships the default launcher mark. Sideloaded APKs and IPAs show that generic icon on the phone home screen. What launcher icon should v1 use for **both** Android and iOS (one art, both binaries)?
+The Flutter tree still ships the default launcher mark. Sideloaded APKs and IPAs show that generic icon on the phone home screen. What launcher icon should v1 use for **both** Android and iOS (one art, both binaries)? The name under the icon is **Solitaire Collection**.
 
 Decide the look (felt, Fomin/Atlas cards, no Bicycle marks). Produce sizes the Flutter project needs (`android/` mipmaps, iOS `AppIcon` including the 1024 in the binary). Play’s 512 listing icon and Apple’s 1024 listing/binary icon should reuse this art — do not invent a second mark on the store maps.
 

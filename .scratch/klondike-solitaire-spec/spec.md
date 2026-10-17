@@ -1,12 +1,12 @@
-# Klondike Solitaire — v1 spec
+# Solitaire Collection — v1 spec
 
-A free, no-account, no-ads English Game for phones. One shared Flutter codebase for both stores. Store name: **Klondike Solitaire**.
+**Solitaire Collection** is a free, no-account, no-ads English app for phones. Klondike is the variant you can play. One shared Flutter codebase for both stores. Store name: **Solitaire Collection**.
 
 This file is the implementable spec. Decisions live in the tickets this map closed; this document compiles them. Vocabulary is `CONTEXT.md`. Do not reopen those tickets while implementing.
 
 **Look sources.** Table: `src/klondike-table-flutter` ([How should the Klondike table look and play on a phone in portrait and landscape?](issues/01-klondike-table-look-and-play.md)). Table chrome: same tree, **B — Thumb dock** ([How should Undo, New Game, and Start look?](../klondike-round-2-mechanics/issues/01-table-chrome-look.md)). Chrome screens: same tree, **A — Felt banner**, on branch `prototype/chrome-screens-look` ([How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md)).
 
-Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Playtest mechanic changes are locked on [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
+The collection shape and the listing name are locked on [Solitaire Collection](../solitaire-collection/map.md). Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Playtest mechanic changes are locked on [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md). Building the Collection screen is a later map.
 
 ## Product
 
@@ -17,7 +17,9 @@ Store listing, privacy hosting, and enrollment are [Post Klondike Solitaire to t
 
 ## Out of scope
 
-- Other Solitaire variants; house rules
+- Variants other than Klondike, including Spider — each is its own later map. The Collection screen lists only Klondike
+- Building the Collection screen and Klondike start in the Flutter tree — a later map, before either store listing
+- House rules
 - Score, timer, statistics, daily challenges, themes, sound
 - Tablets; languages other than English
 - Store listing, privacy-policy hosting, enrollment, store uploads
@@ -67,21 +69,21 @@ Tapping Hint during the ghost cancels it and does not start the next; the cycle 
 
 **Undo** is unlimited in the current Game: every successful move, draw, Stock recycle, and auto-move, back to the opening Tableau. A Stock tap is one draw — in draw-three, Undo returns every card that tap moved, not one card of the fan. Selection-only taps do not stack. New Game cannot be undone; it starts a fresh Undo stack. **Finish** (the action) cannot be undone.
 
-**Resume** restores an unfinished Game (Stock, Waste, Foundations, Tableau, face-up state, draw type, seen face-up tables, Hint loop-stops, **Finish** overlay or the Continue opted-out flag) and the Undo stack from the start screen. Do not restore a tap-selection, an in-progress drag, or an in-progress Finish animation. Persist on-device. A win or a loss ends the Game — Resume does not apply. The restored Game keeps the type it started with even if **Settings** now says the other.
+**Resume** restores an unfinished Game (Stock, Waste, Foundations, Tableau, face-up state, draw type, seen face-up tables, Hint loop-stops, **Finish** overlay or the Continue opted-out flag) and the Undo stack from **Klondike start**. Do not restore a tap-selection, an in-progress drag, or an in-progress Finish animation. Persist on-device. A win or a loss ends the Game — Resume does not apply. The restored Game keeps the type it started with even if **Settings** now says the other.
 
 Source: [What are the v1 rules for Undo, resume, tap, and drag?](issues/02-undo-resume-tap-drag.md), superseded on launch by the start screen below; [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md); [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
 
 ## Screens and chrome
 
-v1 always opens on a dedicated **start screen**. An unfinished Game does not skip it. Resume is a start-screen action, not an automatic launch.
+The app opens on the **Collection screen**, titled **Solitaire Collection**. It lists the variants the player can start. Klondike is the only one. Spider is not shown. An unfinished Game does not skip this screen and does not start by itself.
 
-**Start screen.** Title **Klondike Solitaire**. Actions: **New Game**, **Winning deal**, **Resume**, **Settings**, **About**. Resume is hidden unless an unfinished Game exists (first launch, and after a win or a loss). No table behind this screen. Back from About or Settings returns here.
+**Klondike start.** Reached by choosing Klondike. Title **Klondike**. Actions: **New Game**, **Winning deal**, **Resume**, **Settings**, **About**. Resume is hidden unless an unfinished Game exists (first launch, and after a win or a loss). No table behind this screen. Back from About or Settings returns here. **Resume** is a Klondike-start action, not an automatic launch.
 
 **Settings.** Felt banner like About (no table behind). A **Start** chrome button top-left. Controls: **Draw three**, off by default (**draw-one**); **Left-handed**, off by default (Stock and Waste on the right); **Waste on left**, off by default (Waste to the right of Stock); **Debug**, off by default. Persist on the phone, independent of Resume. No confirm on a toggle. **Draw three** applies only to the next **New Game** or **Winning deal**; the type is fixed when the deal starts. **Left-handed** and **Waste on left** apply as soon as they return to the table. **Debug** shows the current deal seed, draw type, and Undo depth, and lets you copy that seed, deal a seed from the clipboard, copy a Game snapshot, load a snapshot, or copy the move log (each successful play, Draw, Recycle, and **Finish** Foundation play on the Undo path, tagged Hint / last-resort / not Hint) — enough to recreate a mid-Game table and show which plays Hint would have offered.
 
 **About** (this inventory, in this order):
 
-1. **Klondike Solitaire**
+1. **Solitaire Collection**
 2. **Justin Herndon**
 3. **Version** — the version the binary reports
 4. **Support:** `jherndon111@gmail.com` — tappable, opens mail
@@ -92,11 +94,11 @@ v1 always opens on a dedicated **start screen**. An unfinished Game does not ski
 
 Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, no “For Kids” / “For Children.”
 
-**Table chrome.** **Hint**, **Undo**, **New Game**, and **Start**, that order, in a bottom thumb dock — four large gold-bordered tiles. Not top-right. **Start** goes to the start screen with no confirm; the unfinished Game and Undo stack stay. Resume is how they return. Hint is dimmed when it has nothing to show.
+**Table chrome.** **Hint**, **Undo**, **New Game**, and **Start**, that order, in a bottom thumb dock — four large gold-bordered tiles. Not top-right. Where **Start** lands, and how the player gets from **Klondike start** back to the **Collection screen**, is open on [Where does Start land, and how do you get back to the Collection screen?](../solitaire-collection/issues/01-leave-klondike-start.md). Until that answer, **Start** still leaves the table with no confirm and the unfinished Game and Undo stack stay. Resume is how they return. Hint is dimmed when it has nothing to show.
 
-**New Game.** Confirms only when an unfinished Game would be discarded — from the table, or from the start screen while Resume is showing. No confirm on first launch or after a win or a loss. A confirmed New Game deals a fresh random shuffle under the type in **Settings** and starts a new Undo stack.
+**New Game.** Confirms only when an unfinished Game would be discarded — from the table, or from **Klondike start** while Resume is showing. No confirm on first launch or after a win or a loss. A confirmed New Game deals a fresh random shuffle under the type in **Settings** and starts a new Undo stack.
 
-**Winning deal.** Same confirm as **New Game**. Hidden on the table during play. On the start screen, win overlay, and loss overlay, the button sits immediately next to **New Game**. After confirm (or with no confirm), deal from the pool for the type in **Settings** and start a new Undo stack. Cannot be undone back into the previous Game.
+**Winning deal.** Same confirm as **New Game**. Hidden on the table during play. On **Klondike start**, the win overlay, and the loss overlay, the button sits immediately next to **New Game**. After confirm (or with no confirm), deal from the pool for the type in **Settings** and start a new Undo stack. Cannot be undone back into the previous Game.
 
 **Win overlay.** Headline **You won!** Actions: **Start**, **New Game**, and **Winning deal**. No Undo. While **Debug** is on, **Copy moves** is also on this overlay so the Finish path can be copied before **New Game**.
 
@@ -104,13 +106,13 @@ Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, 
 
 **Loss overlay.** Headline **You lost.** Actions: **Start**, **New Game**, **Winning deal**, and **Undo** (back to the table, last move reversed). Undo is the only way back into that Game. While **Debug** is on, **Copy moves** is also on this overlay so the log can be shared without leaving.
 
-From a win or a loss, **Start** goes to the start screen (Resume hidden). **New Game** and **Winning deal** deal with no confirm.
+From a win or a loss, **Start** leaves the overlay (Resume hidden on **Klondike start**). Where it lands is the same open question as table **Start**. **New Game** and **Winning deal** deal with no confirm.
 
 Sources: [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md), [What else does the About screen show besides the Privacy Policy link?](issues/09-about-screen-contents.md), [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md), [What is a winning deal, and how do you start one?](../klondike-round-2-mechanics/issues/02-winning-deal.md), [How does draw-three difficulty work?](../klondike-round-2-mechanics/issues/04-draw-three.md), [How does Hint work, and where does it sit?](../klondike-round-2-mechanics/issues/05-hint.md), [How should Undo, New Game, and Start look?](../klondike-round-2-mechanics/issues/01-table-chrome-look.md), [When is a Game a loss?](../klondike-round-2-mechanics/issues/03-loss-check.md), [When all cards are face-up and a win is possible, how does the Game finish onto the Foundations?](../klondike-round-2-mechanics/issues/07-win-finish.md).
 
 ## Look
 
-Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep green fill, gold border. Screen chrome (start, About, overlays) uses rounded dark fill and a light border; a filled / primary button uses a deeper green fill and gold border.
+Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep green fill, gold border. Screen chrome (Klondike start, About, overlays) uses rounded dark fill and a light border; a filled / primary button uses a deeper green fill and gold border.
 
 **Table — layout A**, in both portrait and landscape (same arrangement when rotated, not a second layout).
 
@@ -123,7 +125,7 @@ Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep g
 
 **Cards.** Ship Dmitry Fomin’s English-pattern SVG faces and Atlas card back, CC0 1.0 — not Bicycle art, not a Rider Back, not Bellot LGPL. Jokers are not used. Prefer the blue-and-brown Atlas back ([research](../../docs/research/public-domain-card-assets.md)).
 
-**Start (felt banner).** Cream title. Stacked chrome buttons: **New Game** (filled), **Winning deal** next to it, **Resume** when visible, **Settings**, **About**. Portrait: title and buttons stacked in the middle of the felt. Landscape: title on the left, the same button stack on the right. No table behind.
+**Klondike start (felt banner).** Cream title **Klondike**. Stacked chrome buttons: **New Game** (filled), **Winning deal** next to it, **Resume** when visible, **Settings**, **About**. Portrait: title and buttons stacked in the middle of the felt. Landscape: title on the left, the same button stack on the right. No table behind. The **Collection screen** has no look locked yet.
 
 **About (felt banner).** Cream body type, gold underlined tappable rows. A **Start** chrome button top-left. No table behind.
 

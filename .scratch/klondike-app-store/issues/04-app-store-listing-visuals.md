@@ -16,6 +16,8 @@ Parked — owner is not ready to lock listing visuals yet.
 
 What App Store listing visuals does v1 use: 1024×1024 app icon in the binary, and a 6.9″ iPhone screenshot set (1–10 images, JPEG/PNG, no alpha; portrait 1260×2736, 1290×2796, or 1320×2868) showing the Game in use?
 
+The home-screen name is **Solitaire Collection**. Screenshots show Klondike in play. Do not show Spider or a variant that is not in the build.
+
 React to the Flutter table prototype (`src/klondike-table-flutter`). Screenshots must show Tableau, Foundations, Stock, and Waste in play — not a splash only. Phones only; no iPad screenshot class. Play feature graphic is out of scope here.
 
 ## Comments

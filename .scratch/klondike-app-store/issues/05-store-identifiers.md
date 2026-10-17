@@ -9,9 +9,9 @@ The Flutter prototype currently uses `com.solitare.klondike_table` with a TODO t
 
 ## Question
 
-What bundle ID (Apple) and application ID (Play) does v1 Klondike Solitaire use?
+What bundle ID (Apple) and application ID (Play) does **Solitaire Collection** use?
 
-Decide the reverse-DNS string (and Apple SKU if it should differ from the bundle ID). It must be unique, stable, and suitable to ship — not a prototype leftover unless that leftover is intentionally the shipping id. Record the iOS SKU (internal, not customer-visible) if it is not the same string.
+Decide the reverse-DNS string (and Apple SKU if it should differ from the bundle ID). It must be unique, stable, and suitable to ship — not a prototype leftover unless that leftover is intentionally the shipping id. The id is for the collection app, not a Klondike-only package. Record the iOS SKU (internal, not customer-visible) if it is not the same string.
 
 Play: the package name is **fixed** once the first artifact is uploaded (closed-test AAB counts). Lock this before that upload.
 

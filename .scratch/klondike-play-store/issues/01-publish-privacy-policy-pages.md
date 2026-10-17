@@ -15,7 +15,7 @@ Can we publish the locked privacy policy as public HTML on GitHub Pages at `http
 
 ## Done when
 
-- Repo contains the policy HTML (or Markdown that builds to HTML) matching the #9 wording constraints: Klondike Solitaire published by Justin Herndon; no personal data leaves the device; resume and Undo on-device only; no analytics/ads/crash SDKs; nothing to delete remotely; contact jherndon111@gmail.com.
+- Repo contains the policy HTML (or Markdown that builds to HTML) matching the #9 wording constraints, with the app name **Solitaire Collection** published by Justin Herndon. Data practices stay as in #9: no personal data leaves the device; resume and Undo on-device only; no analytics/ads/crash SDKs; nothing to delete remotely; contact jherndon111@gmail.com. Do not add a new data practice for future variants.
 - GitHub Pages is enabled for this repo and the URL returns HTTPS HTML (not PDF), publicly, without login or geo-block.
 - The live page is clearly labeled as a privacy policy and names the app and publisher.
 - A comment on this ticket links the live URL and the source path in the repo.

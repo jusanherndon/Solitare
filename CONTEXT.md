@@ -1,8 +1,16 @@
-# Klondike Solitaire
+# Solitaire Collection
 
-A free, no-account, on-device Klondike Game for phones. This glossary is the language for the spec.
+A free, no-account, on-device app for phones that holds solitaire variants. Klondike is the variant you can play. This glossary is the language for the spec.
 
 ## Language
+
+**Variant**:
+A kind of solitaire the app can hold. Klondike is a variant. Draw-one and draw-three are types of a Klondike Game, not variants.
+_Avoid_: game, mode, ruleset
+
+**Collection screen**:
+The screen the app opens to, titled Solitaire Collection. It lists the variants the player can start. Klondike is the only one.
+_Avoid_: home, menu, title screen, start screen
 
 **Game**:
 One deal of Klondike: Stock, Waste, four Foundations, and seven Tableau piles, from the opening layout until New Game, a win, or a loss.
@@ -29,15 +37,15 @@ Reversal of the last successful move, draw, Stock recycle, or auto-move in the c
 _Avoid_: rewind, back
 
 **Resume**:
-Restoring an unfinished Game, including the Undo stack, from the start screen. Selection and in-progress drag are not part of Resume. A win or a loss is not unfinished — Resume does not apply.
+Restoring an unfinished Game, including the Undo stack, from the Klondike start. Selection and in-progress drag are not part of Resume. A win or a loss is not unfinished — Resume does not apply.
 _Avoid_: save, checkpoint, continue (as the feature name)
 
-**Start screen**:
-The dedicated screen the app opens to, not the Klondike table.
-_Avoid_: home screen, home, menu, title screen
+**Klondike start**:
+The screen for starting a Klondike Game, reached from the Collection screen. Each variant has its own start screen. This one is only Klondike’s.
+_Avoid_: Start screen, home screen, home, menu, title screen
 
 **Settings**:
-The screen reached from the start screen that holds options for the next deal. Not on the table.
+The screen reached from the Klondike start that holds options for the next deal. Not on the table.
 _Avoid_: options, preferences, settings menu
 
 **Draw-one**:

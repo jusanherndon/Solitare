@@ -27,3 +27,9 @@ v1 About is this inventory, in this order:
 8. **Card art:** Dmitry Fomin, English-pattern faces and Atlas back, CC0 1.0 — not required by the license; credited anyway
 
 Nothing else on this screen: no personal site, no how-to-play, no rate-the-app, no “For Kids” / “For Children.” How you reach About is [What start screen does the app open to, and what does Settings contain?](issues/11-start-and-settings-screens.md). Do not build this screen in the app until that start screen exists.
+
+## Comments
+
+### agent — 2026-10-17
+
+The first line is the app name **Solitaire Collection**, not Klondike Solitaire. Privacy facts are unchanged. See [Solitaire Collection](../../solitaire-collection/map.md).
