@@ -1,7 +1,7 @@
 # What bugs or changes turn up when the owner playtests round 2 on Android?
 
 Type: task
-Status: open
+Status: resolved
 Blocked by: 06
 
 From [What bugs or changes turn up when the owner runs the prototype on Android?](../../klondike-solitaire-spec/issues/17-android-playtest.md). Last ticket on [Round 2 of making the app mechanics](../map.md) — wait until the other open work is done and the round 2 decisions are playable in `src/klondike-table-flutter`.
@@ -81,3 +81,11 @@ A reverse-stop no longer blocks **You lost.** while Hint is hiding that reverse.
 ### agent — 2026-09-20
 
 Compared to xcode-settings commit `34588e2`: Hint reverse-stop stays. The Tableau-run-shift loss gate is dropped so **You lost.** can fire again.
+
+### jusanherndon — 2026-10-17
+
+Further testing on the phone. Round 2 feels accomplished. Close the map.
+
+## Answer
+
+Owner playtested round 2 and reports the destination is done. Earlier comments on this ticket (layout flip, **Waste on left**, Hint reverse-stop, unlabeled empty Waste, draw-three **loss**) were already shipped. No further bugs or wanted changes. Nothing left to patch or file.

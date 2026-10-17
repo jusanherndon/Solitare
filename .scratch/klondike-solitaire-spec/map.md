@@ -2,20 +2,20 @@
 
 Migrated from: https://github.com/jusanherndon/Solitare/issues/1
 
-Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Playtest-driven mechanic changes continue on [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
+Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire to the App Store](../klondike-app-store/map.md) and [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md). Mechanic round 2 is done: [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
 ## Destination
 
 A written spec for Klondike Solitaire — a free, no-account, no-ads English Game for phones — covering the features in the app and how it looks, complete enough that a later session can implement it. Phones only, portrait and landscape. This map does not ship the app or list it on a store.
 
-**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 is the other map. Leftover on this map: launcher icon.
+**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 destination is also met ([Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md)). Leftover on this map: launcher icon.
 
 ## Notes
 
 - Domain: Klondike. Read `CONTEXT.md` before working a ticket. Use `/grilling`, `/domain-modeling`, `/research`, and `/prototype` as the ticket type requires.
 - Passion project; the owner is new to app development. One shared codebase for both stores. Store name: Klondike Solitaire. Toolkit is Flutter (owner override of the #2 Expo research after comparing prototypes).
 - Classic playing cards; prefer public-domain art. Tap and drag. Undo and resume. Draw-one is the locked default on this map; draw-three lives on [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
-- Plan, don't do: produce decisions for the spec, not the implementation. Store posting is the other two maps. Mechanic playtest follow-up is [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
+- Plan, don't do: produce decisions for the spec, not the implementation. Store posting is the other two maps. Mechanic playtest follow-up is closed: [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
 
 ## Open tickets
 
@@ -43,7 +43,7 @@ Local files under `issues/`. GitHub numbers are the pre-migration issues (closed
 - [When no legal move remains, what ending screen does v1 show?](issues/14-no-moves-ending-screen.md) — Cheap no-move check (no Tableau/Foundation play, Stock and Waste empty). Separate win and loss overlays; table visible behind; You won! / You lost. Win: Start + New Game. Loss: those plus Undo. Win and loss end the Game — no Resume.
 - [How should the start, About, win, and loss screens look on a phone?](issues/15-chrome-screens-look.md) — Felt banner (variant A): felt + table chrome buttons; centered gold win card with sparkles; lower greyscale loss card with dust. Source: `src/klondike-table-flutter` on `prototype/chrome-screens-look`.
 - [Write the v1 spec from the closed decisions?](issues/16-write-spec.md) — Compiled [spec.md](spec.md) from the closed tickets; implement from there.
-- [What bugs or changes turn up when the owner runs the prototype on Android?](issues/17-android-playtest.md) — Playtest notes captured; mechanic follow-up is [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md).
+- [What bugs or changes turn up when the owner runs the prototype on Android?](issues/17-android-playtest.md) — Playtest notes captured; mechanic follow-up is [Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md), destination met.
 
 ## Not yet specified
 
