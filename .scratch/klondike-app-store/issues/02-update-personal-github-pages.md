@@ -1,7 +1,7 @@
 # Update jusanherndon.github.io for the Klondike privacy policy link
 
 Type: task
-Status: claimed
+Status: resolved
 Blocked by: 01
 GitHub: (none — was spec `10`)
 
@@ -27,3 +27,17 @@ Do not change the locked policy URL from #9. Do not use “For Kids” / “For 
 - `https://jusanherndon.github.io/` (HTTPS, public, no login) includes a visible link to `https://jusanherndon.github.io/Solitare/privacy/` once `01` is live.
 - A comment on this ticket links the live homepage and the commit/PR in the github.io repo.
 - The sibling ticket on [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md) is resolved with the same answer.
+
+## Answer
+
+Yes. The old project, resume, contact, and stylesheet files are gone from `jusanherndon/jusanherndon.github.io` (`d03c6ec`). `index.html` no longer links to them. The homepage links to `https://jusanherndon.github.io/Solitare/privacy/`.
+
+Live: https://jusanherndon.github.io/ — that Privacy Policy link is on the page. Source change: [pull request 4](https://github.com/jusanherndon/jusanherndon.github.io/pull/4) (`7ed8f13`). The locked privacy URL is unchanged. No projects list remains, so the homepage does not add a Solitaire Collection project link.
+
+Same answer on the sibling ticket.
+
+## Comments
+
+### agent — 2026-11-27
+
+Owner removed the old site files. Homepage only needed the dead links dropped and the privacy-policy link added.
