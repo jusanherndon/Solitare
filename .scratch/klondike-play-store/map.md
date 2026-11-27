@@ -16,6 +16,7 @@ Split from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md).
 
 ## Decisions so far
 
+- [Publish the Klondike Solitaire privacy policy on GitHub Pages](issues/01-publish-privacy-policy-pages.md) — Live HTML at `https://jusanherndon.github.io/Solitare/privacy/`, from `Solitare/privacy/index.html` in `jusanherndon/jusanherndon.github.io`.
 - [What copy goes on the App Store and Play listings?](issues/03-store-listing-copy.md) — Store name **Solitaire Collection**. Play short names the collection and Klondike. Full description keeps the Klondike rules. Support `jherndon111@gmail.com` + privacy URL. Category Game/Card.
 - [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5) — Public privacy policy (listing + in-app), Data safety “no collection / no sharing,” IARC questionnaire, 512 icon + 1024×500 feature graphic + ≥2 screenshots; personal accounts created after 13 Nov 2023 need 12 closed testers for 14 days before production; new apps on or after 31 Aug 2026 must target API 36. Findings: `docs/research/store-listing-requirements.md`.
 - [What privacy policy does Klondike Solitaire publish, and where is it hosted?](https://github.com/jusanherndon/Solitare/issues/9) — GitHub Pages at `https://jusanherndon.github.io/Solitare/privacy/`; app name **Solitaire Collection** by Justin Herndon; no off-device personal data; About-screen link; contact jherndon111@gmail.com.

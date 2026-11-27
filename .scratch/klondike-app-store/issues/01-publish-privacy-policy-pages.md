@@ -1,7 +1,7 @@
 # Publish the Klondike Solitaire privacy policy on GitHub Pages
 
 Type: task
-Status: open
+Status: resolved
 GitHub: #15 — https://github.com/jusanherndon/Solitare/issues/15
 
 Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `08`.
@@ -22,3 +22,21 @@ Can we publish the locked privacy policy as public HTML on GitHub Pages at `http
 - The sibling ticket on [Post Klondike Solitaire to Google Play](../klondike-play-store/map.md) is resolved with the same answer.
 
 Not store submission and not the product app — the hosted policy artifact the listings and About screen will point at.
+
+## Answer
+
+Yes. `https://jusanherndon.github.io/Solitare/privacy/` returns public HTTPS HTML, with no login. The page is labeled Privacy Policy and names **Solitaire Collection**, published by Justin Herndon. Wording stays on the locked facts: no personal data leaves the device; resume and Undo stay on the device; no analytics, ads, or crash SDKs; nothing to delete remotely; contact jherndon111@gmail.com.
+
+Source: `Solitare/privacy/index.html` in [jusanherndon/jusanherndon.github.io](https://github.com/jusanherndon/jusanherndon.github.io), merged by [pull request 2](https://github.com/jusanherndon/jusanherndon.github.io/pull/2) (`a3d15bc`). That repo already publishes GitHub Pages from `master` `/`, which is what serves this URL. The Solitaire product repo does not host the page.
+
+Same answer on the sibling ticket.
+
+## Comments
+
+### agent — 2026-11-27
+
+The page is published from the personal site, not this repo. Source: `Solitare/privacy/index.html` in `jusanherndon/jusanherndon.github.io`, branch `privacy-policy`. Pull request: https://github.com/jusanherndon/jusanherndon.github.io/pull/2
+
+The page is labeled Privacy Policy and names **Solitaire Collection**, published by Justin Herndon. Wording stays on the locked facts: no personal data leaves the device; resume and Undo stay on the device; no analytics, ads, or crash SDKs; nothing to delete remotely; contact jherndon111@gmail.com.
+
+That pull request is merged. `https://jusanherndon.github.io/Solitare/privacy/` is live. The Solitare product-repo pull request for this page was closed and its branch deleted.

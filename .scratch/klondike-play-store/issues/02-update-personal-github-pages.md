@@ -1,7 +1,7 @@
 # Update jusanherndon.github.io for the Klondike privacy policy link
 
 Type: task
-Status: open
+Status: claimed
 Blocked by: 01
 GitHub: (none — was spec `10`)
 
