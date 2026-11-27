@@ -4,7 +4,7 @@ Type: prototype
 Status: open
 GitHub: #11 — https://github.com/jusanherndon/Solitare/issues/11
 
-Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `12` (Play slice). App Store assets live on [What App Store icon and 6.9″ screenshots does v1 use?](../klondike-app-store/issues/04-app-store-listing-visuals.md). Shared prototype branch `prototype/listing-visuals`.
+Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `12` (Play slice). App Store assets live on [What App Store icon and 6.9″ screenshots does v1 use?](../klondike-app-store/issues/04-app-store-listing-visuals.md). The rebuilt comparison is in `listing-visuals`. The App Store ticket locked the icon as Ace on felt; this ticket still decides the feature graphic and Play screenshots.
 
 Depends on [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5).
 Look-and-play is locked on [How should the Klondike table look and play on a phone in portrait and landscape?](../klondike-solitaire-spec/issues/01-klondike-table-look-and-play.md).

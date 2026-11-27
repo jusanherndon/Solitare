@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#1F6B45"/>
+  <g transform="translate(512 520) rotate(-8)">
+    <rect x="-250" y="-350" width="500" height="700" rx="46" fill="#F7F3EA" stroke="#CFC6B4" stroke-width="8"/>
+    <text x="-190" y="-210" fill="#1A1A1A" font-family="DejaVu Serif" font-size="150" font-weight="700">A</text>
+    <text x="-168" y="-70" fill="#1A1A1A" font-family="DejaVu Serif" font-size="110">♠</text>
+    <text x="40" y="250" fill="#1A1A1A" font-family="DejaVu Serif" font-size="280">♠</text>
+  </g>
+</svg>

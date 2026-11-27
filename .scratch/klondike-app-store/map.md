@@ -16,12 +16,14 @@ Split from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md).
 
 ## Decisions so far
 
+- [Can we enroll in the Apple Developer Program as an individual?](issues/06-apple-developer-enrollment.md) — Individual application submitted 27 November 2026. Not an organization.
 - [Publish the Klondike Solitaire privacy policy on GitHub Pages](issues/01-publish-privacy-policy-pages.md) — Live HTML at `https://jusanherndon.github.io/Solitare/privacy/`, from `Solitare/privacy/index.html` in `jusanherndon/jusanherndon.github.io`.
 - [Update jusanherndon.github.io for the Klondike privacy policy link](issues/02-update-personal-github-pages.md) — Homepage links to that privacy policy. Old project, resume, and contact links are gone.
 - [What copy goes on the App Store and Play listings?](issues/03-store-listing-copy.md) — Store name **Solitaire Collection**. Play short names the collection and Klondike. Full description keeps the Klondike rules. Keywords: cards/patience/offline. Support `jherndon111@gmail.com` + privacy URL. Category Game/Card.
 - [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5) — Public privacy policy (listing + in-app), App Privacy “we do not collect data,” honest age questionnaire (expect 4+, not Kids Category), 6.9″ screenshots + 1024 icon in the binary; individual enrollment 99 USD/year. Findings: `docs/research/store-listing-requirements.md`.
 - [What privacy policy does Klondike Solitaire publish, and where is it hosted?](https://github.com/jusanherndon/Solitare/issues/9) — GitHub Pages at `https://jusanherndon.github.io/Solitare/privacy/`; app name **Solitaire Collection** by Justin Herndon; no off-device personal data; About-screen link; contact jherndon111@gmail.com.
 - [How do we produce a store-signed iOS build from this Flutter project?](issues/07-flutter-ios-store-build.md) — Automatic signing + `flutter build ipa` → `build/ios/ipa/*.ipa` → Transporter. HTTPS-only: `ITSAppUsesNonExemptEncryption` = NO. Findings: `docs/research/flutter-ios-store-build.md`.
+- [What App Store icon and 6.9″ screenshots does v1 use?](issues/04-app-store-listing-visuals.md) — Icon is Ace on felt. Screenshots are portrait mid-Game, landscape mid-Game, and the opening deal, at 6.9″ size.
 
 ## Not yet specified
 

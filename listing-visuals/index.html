@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PROTOTYPE — listing visuals</title>
+  <link rel="stylesheet" href="listing.css" />
+</head>
+<body>
+  <!-- Three listing-visual families, switchable via ?variant=. Screenshots are the current Flutter table. -->
+  <p class="question">
+    <strong>What App Store icon and 6.9″ screenshots does v1 use?</strong>
+    Throwaway. Steal bits across A/B/C. The name is <strong>Solitaire Collection</strong>.
+    Screenshots are the current thumb-dock table, captured at 1320×2868 (portrait) and 2868×1320 (landscape).
+  </p>
+
+  <section class="stage" data-variant="A">
+    <h2>Icon — Ace on felt</h2>
+    <div class="icon-row">
+      <div class="icon-wrap">
+        <img class="icon ios" src="icons/a-ace-on-felt.svg" alt="Ace of spades on felt" />
+        <span>iOS squircle</span>
+      </div>
+      <div class="icon-wrap">
+        <img class="icon play" src="icons/a-ace-on-felt.svg" alt="" />
+        <span>Play rounded</span>
+      </div>
+      <div class="store">
+        <div class="store-head">
+          <img src="icons/a-ace-on-felt.svg" alt="" />
+          <div>
+            <h3>Solitaire Collection</h3>
+            <small>Justin Herndon · Game</small>
+          </div>
+        </div>
+        <p>Free Solitaire Collection. Klondike, undo, resume. No ads, no account.</p>
+      </div>
+    </div>
+    <h2>Feature graphic — table crop + name</h2>
+    <div class="graphic">
+      <img class="shot" src="shots/landscape-play.png" alt="Landscape table in play" />
+      <div class="shade"></div>
+      <div class="copy">
+        <h3>Solitaire Collection</h3>
+        <p>Klondike. Undo. Resume. No ads.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage" data-variant="B" hidden>
+    <h2>Icon — Corner crop</h2>
+    <div class="icon-row">
+      <div class="icon-wrap">
+        <img class="icon ios" src="icons/b-corner-crop.svg" alt="A and spade filling the icon" />
+        <span>iOS squircle</span>
+      </div>
+      <div class="icon-wrap">
+        <img class="icon play" src="icons/b-corner-crop.svg" alt="" />
+        <span>Play rounded</span>
+      </div>
+      <div class="store">
+        <div class="store-head">
+          <img src="icons/b-corner-crop.svg" alt="" />
+          <div>
+            <h3>Solitaire Collection</h3>
+            <small>Justin Herndon · Game</small>
+          </div>
+        </div>
+        <p>Free Solitaire Collection. Klondike, undo, resume. No ads, no account.</p>
+      </div>
+    </div>
+    <h2>Feature graphic — mark + copy, no table photo</h2>
+    <div class="graphic graphic-b">
+      <img class="big-icon" src="icons/b-corner-crop.svg" alt="" />
+      <div class="copy">
+        <h3>Solitaire Collection</h3>
+        <p>Free Klondike. Undo any move. Resume on this phone. No ads, no account.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage" data-variant="C" hidden>
+    <h2>Icon — Fan</h2>
+    <div class="icon-row">
+      <div class="icon-wrap">
+        <img class="icon ios" src="icons/c-fan.svg" alt="Three fanned cards on felt" />
+        <span>iOS squircle</span>
+      </div>
+      <div class="icon-wrap">
+        <img class="icon play" src="icons/c-fan.svg" alt="" />
+        <span>Play rounded</span>
+      </div>
+      <div class="store">
+        <div class="store-head">
+          <img src="icons/c-fan.svg" alt="" />
+          <div>
+            <h3>Solitaire Collection</h3>
+            <small>Justin Herndon · Game</small>
+          </div>
+        </div>
+        <p>Free Solitaire Collection. Klondike, undo, resume. No ads, no account.</p>
+      </div>
+    </div>
+    <h2>Feature graphic — cards only</h2>
+    <div class="graphic graphic-c">
+      <img class="fan" src="icons/c-fan.svg" alt="" />
+      <span class="caption">Solitaire Collection</span>
+    </div>
+  </section>
+
+  <section class="stage-shots">
+    <h2>Screenshots — current table (shared)</h2>
+    <div class="shots">
+      <figure class="shot-card">
+        <img src="shots/portrait-play.png" alt="Portrait mid-Game" />
+        <figcaption>Portrait mid-Game. Stock, Waste, Foundations, and Tableau, with the thumb dock.</figcaption>
+      </figure>
+      <figure class="shot-card">
+        <img src="shots/landscape-play.png" alt="Landscape mid-Game" />
+        <figcaption>Landscape mid-Game. Same deal, phone rotated.</figcaption>
+      </figure>
+      <figure class="shot-card">
+        <img src="shots/portrait-deal.png" alt="Portrait opening deal" />
+        <figcaption>Portrait opening deal. Drop this one if it reads as a splash.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="switcher" aria-label="Prototype variant switcher">
+    <button type="button" id="prev" aria-label="Previous variant">←</button>
+    <div class="label" id="variant-label">A — Ace on felt</div>
+    <button type="button" id="next" aria-label="Next variant">→</button>
+  </div>
+  <script src="listing.js"></script>
+</body>
+</html>
