@@ -174,7 +174,7 @@ Future<void> _shot(
     return data!.buffer.asUint8List();
   });
 
-  final out = Directory('../../prototype/listing-visuals/shots');
+  final out = Directory('../../listing-visuals/shots');
   out.createSync(recursive: true);
   File('${out.path}/$file').writeAsBytesSync(bytes!);
 }

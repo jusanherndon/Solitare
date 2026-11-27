@@ -1,6 +1,6 @@
-# PROTOTYPE — listing visuals
+# Listing visuals
 
-Throwaway. Not the shipped art. Answers: what App Store icon and 6.9″ screenshots v1 uses, from the current Flutter table. Store name is **Solitaire Collection**.
+The locked mark is **A — Ace on felt**. That art is the Android and iOS launcher icon. B and C stay here as the other families from the comparison. Store name is **Solitaire Collection**.
 
 Three families, `?variant=A|B|C`, bottom bar, or arrow keys:
 

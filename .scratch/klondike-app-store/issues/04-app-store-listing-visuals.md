@@ -4,7 +4,7 @@ Type: prototype
 Status: resolved
 GitHub: #11 — https://github.com/jusanherndon/Solitare/issues/11
 
-Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `12` (iOS slice). Play assets live on [What Play icon, feature graphic, and screenshots does v1 use?](../klondike-play-store/issues/04-play-listing-visuals.md). Rebuilt on `prototype/listing-visuals` from the current table.
+Moved from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md) `12` (iOS slice). Play assets live on [What Play icon, feature graphic, and screenshots does v1 use?](../klondike-play-store/issues/04-play-listing-visuals.md). Rebuilt in `listing-visuals` from the current table. The Ace on felt mark is also the Android and iOS launcher icon.
 
 Depends on [What do Apple and Google require to list a free no-account phone game?](https://github.com/jusanherndon/Solitare/issues/5).
 Look-and-play is locked on [How should the Klondike table look and play on a phone in portrait and landscape?](../klondike-solitaire-spec/issues/01-klondike-table-look-and-play.md).
@@ -20,13 +20,13 @@ React to the Flutter table prototype (`src/klondike-table-flutter`). Screenshots
 
 ## Answer
 
-**A — Ace on felt.** The 1024 mark is `prototype/listing-visuals/icons/a-ace-on-felt.svg`. The store name on that mock is **Solitaire Collection**.
+**A — Ace on felt.** The 1024 mark is `listing-visuals/icons/a-ace-on-felt.svg`. The same art, full-bleed, is the launcher icon in the Android mipmaps, the iOS AppIcon set (including the 1024), and the web icons. The store name on that mock is **Solitaire Collection**.
 
 Keep all three 6.9″ screenshots from the current thumb-dock table:
 
-- `prototype/listing-visuals/shots/portrait-play.png` — 1320×2868, mid-Game
-- `prototype/listing-visuals/shots/landscape-play.png` — 2868×1320, mid-Game
-- `prototype/listing-visuals/shots/portrait-deal.png` — 1320×2868, opening deal
+- `listing-visuals/shots/portrait-play.png` — 1320×2868, mid-Game
+- `listing-visuals/shots/landscape-play.png` — 2868×1320, mid-Game
+- `listing-visuals/shots/portrait-deal.png` — 1320×2868, opening deal
 
 They show Stock, Waste, Foundations, Tableau, and the thumb dock. Putting that mark into the IPA is [What launcher icon should the Android APK and iOS IPA use?](../klondike-solitaire-spec/issues/18-launcher-icon.md). The Play feature graphic stays on the Play ticket.
 

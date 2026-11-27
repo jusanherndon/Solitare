@@ -11,6 +11,6 @@ The Flutter tree still ships the default launcher mark. Sideloaded APKs and IPAs
 
 Decide the look (felt, Fomin/Atlas cards, no Bicycle marks). Produce sizes the Flutter project needs (`android/` mipmaps, iOS `AppIcon` including the 1024 in the binary). Play’s 512 listing icon and Apple’s 1024 listing/binary icon should reuse this art — do not invent a second mark on the store maps.
 
-The store listing locked **A — Ace on felt** on [What App Store icon and 6.9″ screenshots does v1 use?](../../klondike-app-store/issues/04-app-store-listing-visuals.md). Use that art for the 1024 in the binary. Do not invent a second mark.
+The store listing locked **A — Ace on felt** on [What App Store icon and 6.9″ screenshots does v1 use?](../../klondike-app-store/issues/04-app-store-listing-visuals.md). That art is the launcher icon in `android/` mipmaps and `ios/` AppIcon, including the 1024. Do not invent a second mark.
 
 Phones only. This is not store screenshots or the Play feature graphic. Installing an iOS build still waits on [Can we build and install the Klondike table prototype on iOS locally?](issues/07-ios-local-prototype-build.md); the art can still land in `ios/` without a Mac.
