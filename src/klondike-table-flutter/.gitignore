@@ -3,6 +3,7 @@
 .flutter-plugins-dependencies
 .idea/
 .build/
+.kotlin
 build/
 *.iml
 *.log
