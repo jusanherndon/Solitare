@@ -16,6 +16,7 @@ Split from [Klondike Solitaire spec](../klondike-solitaire-spec/map.md).
 
 ## Decisions so far
 
+- [Can we enroll in the Apple Developer Program as an individual?](issues/06-apple-developer-enrollment.md) — Individual application submitted 27 November 2026. Not an organization.
 - [Publish the Klondike Solitaire privacy policy on GitHub Pages](issues/01-publish-privacy-policy-pages.md) — Live HTML at `https://jusanherndon.github.io/Solitare/privacy/`, from `Solitare/privacy/index.html` in `jusanherndon/jusanherndon.github.io`.
 - [Update jusanherndon.github.io for the Klondike privacy policy link](issues/02-update-personal-github-pages.md) — Homepage links to that privacy policy. Old project, resume, and contact links are gone.
 - [What copy goes on the App Store and Play listings?](issues/03-store-listing-copy.md) — Store name **Solitaire Collection**. Play short names the collection and Klondike. Full description keeps the Klondike rules. Keywords: cards/patience/offline. Support `jherndon111@gmail.com` + privacy URL. Category Game/Card.
