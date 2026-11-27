@@ -8,7 +8,7 @@ Store listing, privacy hosting, and enrollment live on [Post Klondike Solitaire 
 
 A written spec for Klondike Solitaire — a free, no-account, no-ads English Game for phones — covering the features in the app and how it looks, complete enough that a later session can implement it. Phones only, portrait and landscape. This map does not ship the app or list it on a store.
 
-**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 destination is also met ([Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md)). Leftover on this map: launcher icon.
+**Status: destination met** for that written spec ([spec.md](spec.md)). Mechanic round 2 destination is also met ([Round 2 of making the app mechanics](../klondike-round-2-mechanics/map.md)). No open children.
 
 ## Notes
 
@@ -19,11 +19,11 @@ A written spec for Klondike Solitaire — a free, no-account, no-ads English Gam
 
 ## Open tickets
 
-Local files under `issues/`. GitHub numbers are the pre-migration issues (closed after this move).
-
-- `18` [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md) (`prototype`)
+None. Destination met.
 
 ## Decisions so far
+
+- [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md) — **A — Ace on felt**, full-bleed, name under the icon **Solitaire Collection**. Same art in Android mipmaps, iOS AppIcon (including the 1024), and web icons.
 
 <!-- the index — one line per closed ticket: enough to judge relevance, then zoom the link for the detail the ticket holds -->
 

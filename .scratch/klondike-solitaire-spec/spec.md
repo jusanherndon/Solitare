@@ -114,6 +114,8 @@ Sources: [What start screen does the app open to, and what does Settings contain
 
 Felt green (`#1F6B45`). Table chrome is a bottom thumb dock: large tiles, deep green fill, gold border. Screen chrome (Klondike start, About, overlays) uses rounded dark fill and a light border; a filled / primary button uses a deeper green fill and gold border.
 
+**Launcher.** The name under the icon is **Solitaire Collection**. The mark is **A — Ace on felt**, full-bleed (the phone masks the corners): `listing-visuals/icons/a-ace-on-felt-app.svg`, in the Android mipmaps, the iOS AppIcon set including the 1024, and the web icons. Same art as the store icon. Not a second mark. Source: [What launcher icon should the Android APK and iOS IPA use?](issues/18-launcher-icon.md).
+
 **Table — layout A**, in both portrait and landscape (same arrangement when rotated, not a second layout).
 
 - Top row, default: four Foundations on the left, Stock then Waste on the right, with a gap between Foundations and Stock.

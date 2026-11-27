@@ -1,11 +1,11 @@
 {
-    "name": "klondike_table",
-    "short_name": "klondike_table",
+    "name": "Solitaire Collection",
+    "short_name": "Solitaire Collection",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1F6B45",
+    "theme_color": "#1F6B45",
+    "description": "Solitaire Collection",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
